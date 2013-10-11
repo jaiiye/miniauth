@@ -1,0 +1,13 @@
+package org.miniauth.oauth.crypto;
+
+import org.miniauth.exception.AuthSignatureException;
+import org.miniauth.exception.InvalidCredentialException;
+import org.miniauth.oauth.credential.AccessCredential;
+
+
+public interface OAuthSignatureAlgorithm
+{
+    String generate(String text, AccessCredential credential) throws AuthSignatureException, InvalidCredentialException;
+    boolean verify(String text, AccessCredential credential, String signature) throws AuthSignatureException, InvalidCredentialException;
+    
+}

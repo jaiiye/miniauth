@@ -1,6 +1,12 @@
+*~
 *.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
+.classpath
+.project
+.settings
+.externalToolBuilders
+target
+nomaven/lib/
+nomaven/scripts/build-java-local.xml
+nomaven/build/jar/
+nomaven/build/classes/
+nomaven/build/apidoc/

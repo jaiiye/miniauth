@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<project name="MiniAuthJars" basedir=".." default="all">
+    <property name="classesDir" value="java/classes"/>
+    <property name="apidocDir" value="java/apidoc"/>
+    <property name="output" value="java/jar"/>
+    <property name="version" value="0.0.1"/>
+
+
+	<property environment="myenv" />
+	<path id="tomcat.runtime.lib">
+	    <fileset dir="${myenv.CATALINA_HOME}/lib">
+	        <include name="*.jar"/>
+	    </fileset>
+	</path>
+
+
+	<target name="cleanMainClasses">
+        <delete failonerror="false">
+		    <fileset dir ="${classesDir}/main">
+	            <include name="**" />
+			</fileset>
+		</delete>
+    </target>
+	<target name="cleanOAuthClasses">
+        <delete failonerror="false">
+		    <fileset dir ="${classesDir}/oauth">
+	            <include name="**" />
+			</fileset>
+		</delete>
+    </target>
+	<target name="cleanWebClasses">
+        <delete failonerror="false">
+		    <fileset dir ="${classesDir}/web">
+	            <include name="**" />
+			</fileset>
+		</delete>
+    </target>
+	<target name="cleanAllClasses" depends="cleanMainClasses, cleanOAuthClasses, cleanWebClasses">
+        <delete failonerror="false">
+		    <fileset dir ="${classesDir}/all">
+	            <include name="**" />
+			</fileset>
+		</delete>
+    </target>
+
+	<target name="buildMainClasses" depends="cleanMainClasses">
+        <javac srcdir="java/main"
+                 destdir="${classesDir}/main"
+                 debug="on"
+                 source="1.7"
+        />
+    </target>
+	<target name="buildOAuthClasses" depends="cleanOAuthClasses">
+        <javac srcdir="java/oauth"
+                 destdir="${classesDir}/oauth"
+                 debug="on"
+                 source="1.7"
+        />
+    </target>
+	<target name="buildWebClasses" depends="cleanWebClasses">
+        <javac srcdir="java/web"
+                 destdir="${classesDir}/web"
+                 debug="on"
+                 source="1.7">
+        	<classpath refid="tomcat.runtime.lib"/>
+        </javac>
+    </target>
+	<target name="buildAllClasses" depends="cleanAllClasses, buildMainClasses, buildOAuthClasses, buildWebClasses">
+    </target>
+
+
+	
+    <target name="createOutputDir">
+        <mkdir dir="${output}"/>
+    </target>
+
+	<target name="createCoreJar" depends="buildMainClasses, createOutputDir">
+        <jar destfile="${output}/miniauth-core-${version}.jar"
+             basedir="${classesDir}/main"
+             includes="org/miniauth/**"
+        />
+    </target>
+    <target name="createOAuthJar" depends="buildOAuthClasses, createOutputDir">
+        <jar destfile="${output}/miniauth-oauth-${version}.jar"
+             basedir="${classesDir}/oauth"
+             includes="org/miniauth/oauth/**"
+        />
+    </target>
+    <target name="createWebJar" depends="buildWebClasses, createOutputDir">
+        <jar destfile="${output}/miniauth-web-${version}.jar"
+             basedir="${classesDir}/web"
+             includes="org/miniauth/web/**"
+        />
+    </target>
+
+	<target name="cleanAllClassesDir">
+        <delete failonerror="false">
+		    <fileset dir ="${classesDir}/all">
+	            <include name="**" />
+			</fileset>
+		</delete>
+    </target>
+	<target name="copyAllClasses" depends="cleanAllClassesDir, buildAllClasses">
+        <copy todir="${classesDir}/all" overwrite="true" flatten="false">
+		    <fileset dir ="${classesDir}/main">
+	            <include name="org/miniauth/**" />
+			</fileset>
+		    <fileset dir ="${classesDir}/oauth">
+	            <include name="org/miniauth/oauth/**" />
+			</fileset>
+        	<fileset dir ="${classesDir}/web">
+	            <include name="org/miniauth/web/**" />
+			</fileset>
+		</copy>
+    </target>
+    <target name="createAllJar" depends="copyAllClasses, createOutputDir">
+        <jar destfile="${output}/miniauth-all-${version}.jar"
+             basedir="${classesDir}/all"
+             includes="org/miniauth/**"
+        />
+    </target>
+
+	<target name="exportAllJars" depends="createCoreJar, createOAuthJar, createWebJar, createAllJar">
+
+	</target>
+
+	<target name="cleanApidocDir">
+        <delete failonerror="false">
+		    <fileset dir ="java/apidoc">
+	            <include name="**" />
+			</fileset>
+		</delete>
+    </target>
+	<target name="apidoc" depends="createAllJar, cleanApidocDir" description="Generate javadoc for all modules">
+	    <javadoc destdir="${apidocDir}">
+        	<classpath refid="tomcat.runtime.lib"/>
+    	    <packageset dir="java/main" defaultexcludes="yes">
+    	      <include name="org/miniauth/**"/>
+    	    </packageset>
+    	    <packageset dir="java/oauth" defaultexcludes="yes">
+    	      <include name="org/miniauth/oauth/**"/>
+    	    </packageset>
+    	    <packageset dir="java/web" defaultexcludes="yes">
+    	      <include name="org/miniauth/web/**"/>
+     	    </packageset>
+	        <doctitle><![CDATA[<h1>MiniAuth OAuth Library</h1>]]></doctitle>
+	        <bottom><![CDATA[<i>Copyright &#169; 2013 Harry Y. All Rights Reserved.</i>]]></bottom>
+	    </javadoc>
+	</target>
+
+    <target name="all" depends="exportAllJars, apidoc" />
+</project>

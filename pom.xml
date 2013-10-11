@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.miniauth</groupId>
+  <artifactId>miniauth</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>MiniAuth</name>
+  <description>MiniAuth OAuth signature library in Java</description>
+  <url>http://www.miniauth.org/</url>
+  <inceptionYear>2013</inceptionYear>
+  <licenses>
+    <license>
+      <name>The Do-No-Evil License, Version 1.0</name>
+      <url>http://www.noevils.org/licenses/donoevil-1.0.html</url>
+      <distribution>repo</distribution>
+      <comments>A no-strings-attached open source license.</comments>
+    </license>
+  </licenses>
+
+  <distributionManagement>
+    <site>
+      <id>miniauth.home</id>
+      <url>scp://www.miniauth.org/</url>
+    </site>
+  </distributionManagement>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+        <configuration>
+          <show>protected</show>
+          <nohelp>true</nohelp>
+        </configuration>
+      </plugin>
+<!--
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <locales>en,fr</locales>
+        </configuration>
+      </plugin>
+-->
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+        <configuration>
+<!--
+        <stylesheetfile>${basedir}/src/main/javadoc/stylesheet.css</stylesheetfile>
+-->
+          <show>public</show>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <modules>
+    <module>miniauth-core</module>
+    <module>miniauth-oauth</module>
+    <module>miniauth-web</module>
+<!--
+    <module>miniauth-site</module>
+-->
+  </modules>
+</project>
