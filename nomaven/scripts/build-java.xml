@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
-<project name="MiniAuthJars" basedir=".." default="all">
-    <property name="classesDir" value="java/classes"/>
-    <property name="apidocDir" value="java/apidoc"/>
-    <property name="output" value="java/jar"/>
-    <property name="version" value="0.0.1"/>
+<project name="MiniAuthJars" basedir="../.." default="all">
+    <property name="libDir" value="nomaven/lib"/>
+    <property name="classesDir" value="nomaven/build/classes"/>
+    <property name="apidocDir" value="nomaven/build/apidoc"/>
+    <property name="output" value="nomaven/build/jar"/>
+    <property name="version" value="0.1.0"/>
 
 
 	<property environment="myenv" />
@@ -14,9 +15,9 @@
 	</path>
 
 
-	<target name="cleanMainClasses">
+	<target name="cleanCoreClasses">
         <delete failonerror="false">
-		    <fileset dir ="${classesDir}/main">
+		    <fileset dir ="${classesDir}/core">
 	            <include name="**" />
 			</fileset>
 		</delete>
@@ -35,7 +36,7 @@
 			</fileset>
 		</delete>
     </target>
-	<target name="cleanAllClasses" depends="cleanMainClasses, cleanOAuthClasses, cleanWebClasses">
+	<target name="cleanAllClasses" depends="cleanCoreClasses, cleanOAuthClasses, cleanWebClasses">
         <delete failonerror="false">
 		    <fileset dir ="${classesDir}/all">
 	            <include name="**" />
@@ -43,56 +44,61 @@
 		</delete>
     </target>
 
-	<target name="buildMainClasses" depends="cleanMainClasses">
-        <javac srcdir="java/main"
-                 destdir="${classesDir}/main"
+    <target name="createOutputDir">
+        <mkdir dir="${classesDir}/core"/>
+        <mkdir dir="${classesDir}/oauth"/>
+        <mkdir dir="${classesDir}/web"/>
+        <mkdir dir="${output}"/>
+    </target>
+
+	<target name="buildCoreClasses" depends="cleanCoreClasses, createOutputDir">
+        <javac srcdir="miniauth-core/src/main/java"
+                 destdir="${classesDir}/core"
                  debug="on"
                  source="1.7"
         />
     </target>
-	<target name="buildOAuthClasses" depends="cleanOAuthClasses">
-        <javac srcdir="java/oauth"
+	<target name="buildOAuthClasses" depends="cleanOAuthClasses, createOutputDir">
+        <javac srcdir="miniauth-oauth/src/main/java"
+                 classpath="${classesDir}/core"
                  destdir="${classesDir}/oauth"
                  debug="on"
                  source="1.7"
         />
     </target>
-	<target name="buildWebClasses" depends="cleanWebClasses">
-        <javac srcdir="java/web"
+	<target name="buildWebClasses" depends="cleanWebClasses, createOutputDir">
+        <javac srcdir="miniauth-web/src/main/java"
+                 classpath="${classesDir}/core;${classesDir}/oauth"
                  destdir="${classesDir}/web"
                  debug="on"
                  source="1.7">
         	<classpath refid="tomcat.runtime.lib"/>
         </javac>
     </target>
-	<target name="buildAllClasses" depends="cleanAllClasses, buildMainClasses, buildOAuthClasses, buildWebClasses">
+	<target name="buildAllClasses" depends="cleanAllClasses, buildCoreClasses, buildOAuthClasses, buildWebClasses">
     </target>
 
 
-	
-    <target name="createOutputDir">
-        <mkdir dir="${output}"/>
-    </target>
-
-	<target name="createCoreJar" depends="buildMainClasses, createOutputDir">
+	<target name="createCoreJar" depends="buildCoreClasses">
         <jar destfile="${output}/miniauth-core-${version}.jar"
-             basedir="${classesDir}/main"
+             basedir="${classesDir}/core"
              includes="org/miniauth/**"
         />
     </target>
-    <target name="createOAuthJar" depends="buildOAuthClasses, createOutputDir">
+    <target name="createOAuthJar" depends="buildOAuthClasses">
         <jar destfile="${output}/miniauth-oauth-${version}.jar"
              basedir="${classesDir}/oauth"
              includes="org/miniauth/oauth/**"
         />
     </target>
-    <target name="createWebJar" depends="buildWebClasses, createOutputDir">
+    <target name="createWebJar" depends="buildWebClasses">
         <jar destfile="${output}/miniauth-web-${version}.jar"
              basedir="${classesDir}/web"
              includes="org/miniauth/web/**"
         />
     </target>
 
+    
 	<target name="cleanAllClassesDir">
         <delete failonerror="false">
 		    <fileset dir ="${classesDir}/all">
@@ -100,9 +106,12 @@
 			</fileset>
 		</delete>
     </target>
-	<target name="copyAllClasses" depends="cleanAllClassesDir, buildAllClasses">
+    <target name="createAllClassesDir">
+        <mkdir dir="${classesDir}/all"/>
+    </target>
+	<target name="copyAllClasses" depends="cleanAllClassesDir, createAllClassesDir, buildAllClasses">
         <copy todir="${classesDir}/all" overwrite="true" flatten="false">
-		    <fileset dir ="${classesDir}/main">
+		    <fileset dir ="${classesDir}/core">
 	            <include name="org/miniauth/**" />
 			</fileset>
 		    <fileset dir ="${classesDir}/oauth">
@@ -126,21 +135,26 @@
 
 	<target name="cleanApidocDir">
         <delete failonerror="false">
-		    <fileset dir ="java/apidoc">
+		    <fileset dir ="${apidocDir}">
 	            <include name="**" />
 			</fileset>
 		</delete>
     </target>
-	<target name="apidoc" depends="createAllJar, cleanApidocDir" description="Generate javadoc for all modules">
+
+    <target name="createApidocDir">
+        <mkdir dir="${apidocDir}"/>
+    </target>
+
+	<target name="apidoc" depends="createAllJar, cleanApidocDir, createApidocDir" description="Generate javadoc for all modules">
 	    <javadoc destdir="${apidocDir}">
         	<classpath refid="tomcat.runtime.lib"/>
-    	    <packageset dir="java/main" defaultexcludes="yes">
+    	    <packageset dir="miniauth-core/src/main/java" defaultexcludes="yes">
     	      <include name="org/miniauth/**"/>
     	    </packageset>
-    	    <packageset dir="java/oauth" defaultexcludes="yes">
+    	    <packageset dir="miniauth-oauth/src/main/java" defaultexcludes="yes">
     	      <include name="org/miniauth/oauth/**"/>
     	    </packageset>
-    	    <packageset dir="java/web" defaultexcludes="yes">
+    	    <packageset dir="miniauth-web/src/main/java" defaultexcludes="yes">
     	      <include name="org/miniauth/web/**"/>
      	    </packageset>
 	        <doctitle><![CDATA[<h1>MiniAuth OAuth Library</h1>]]></doctitle>
