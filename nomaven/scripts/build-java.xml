@@ -162,5 +162,7 @@
 	    </javadoc>
 	</target>
 
+    <target name="clean" depends="cleanAllClasses, createAllClassesDir, cleanApidocDir" />
+
     <target name="all" depends="exportAllJars, apidoc" />
 </project>
