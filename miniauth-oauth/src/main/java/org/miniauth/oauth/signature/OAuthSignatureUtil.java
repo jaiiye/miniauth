@@ -3,6 +3,7 @@ package org.miniauth.oauth.signature;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +21,7 @@ import org.miniauth.oauth.core.ParameterTransmissionType;
 import org.miniauth.oauth.core.SignatureMethod;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
 import org.miniauth.util.Base64Util;
+import org.miniauth.util.FormParamUtil;
 
 
 public final class OAuthSignatureUtil
@@ -200,6 +202,19 @@ public final class OAuthSignatureUtil
     }
     
     
+    // Builds a URL encoded param string so that it can be included in an Authorization header (or, query/form param).
+    public static String buildOAuthParamString(Map<String,Object> oauthParams) throws MiniAuthException
+    {
+        return buildOAuthParamString(new OAuthParamMap(oauthParams));
+    }
+    public static String buildOAuthParamString(OAuthParamMap oauthParamMap) throws MiniAuthException
+    {
+        if(oauthParamMap == null) {
+            return null;
+        }
+        return oauthParamMap.buildUrlEncodedParamString();
+    }    
+
     
     
     @Deprecated

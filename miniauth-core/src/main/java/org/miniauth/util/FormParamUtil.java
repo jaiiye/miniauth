@@ -22,11 +22,13 @@ public final class FormParamUtil
     private FormParamUtil() {}
 
     // http://tools.ietf.org/html/rfc5849#section-3.5.2
+    // returns true, if contentType is url encoded form and formBody is not multipart..
     public static boolean isUsableForAuth(String contentType, String formBody)
     {
         if(contentType == null || !contentType.equals("application/x-www-form-urlencoded")) {
             return false;
         }
+        // TBD:...
         
         return true;
     }
@@ -75,7 +77,7 @@ public final class FormParamUtil
     
     
     // It builds a string of (encoded) key-value pairs concatenated using "=" and "&".
-    // This method can be used for building query params or form params, or even OAuth Authorization header, etc.
+    // This method can be used for building query params or form params, etc.
     // Note how "=" is added or not added depending on the param string/array is the null or empty.
     public static String buildUrlEncodedFormParamString(Map<String,String[]> params) throws MiniAuthException
     {

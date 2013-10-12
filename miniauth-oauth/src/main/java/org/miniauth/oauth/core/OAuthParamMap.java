@@ -6,7 +6,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.miniauth.MiniAuthException;
+import org.miniauth.oauth.credential.AccessIdentity;
+import org.miniauth.oauth.credential.OAuthAccessIdentity;
+import org.miniauth.oauth.util.OAuthAuthorizationHeaderUtil;
+import org.miniauth.util.FormParamUtil;
 
+
+/**
+ * A "bean" class for encapsulating OAuth parameters.
+ * Cf. http://tools.ietf.org/html/rfc5849#section-3.5.1
+ */
 public final class OAuthParamMap implements Serializable
 {
     private static final Logger log = Logger.getLogger(OAuthParamMap.class.getName());
@@ -22,12 +32,28 @@ public final class OAuthParamMap implements Serializable
 
     // Somewhat unusual "bean" implementation.
     // We use a map instead of individual fields.
+    // (By using a map, we can accommodate some extra fields as well such as "realm", etc.)
     private final Map<String,Object> paramMap;
 
     public OAuthParamMap()
     {
-        paramMap = new HashMap<>();
+        this(null);
     }
+    public OAuthParamMap(Map<String,Object> paramMap)
+    {
+        if(paramMap == null) {
+            paramMap = new HashMap<>();
+        }
+        // TBD: Validation???
+        this.paramMap = paramMap;
+    }
+    
+//    // TBD: How to make the returned map immutable???
+//    public Map<String,Object> getParamMap()
+//    {
+//        return paramMap;
+//    }
+
 
     //////////////////////////////////////////////////////
     // "Bean" interface
@@ -65,6 +91,7 @@ public final class OAuthParamMap implements Serializable
     }
     public void setSignatureMethod(String signatureMethod)
     {
+        // TBD: Validate ???
         paramMap.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, signatureMethod);
     }
 
@@ -132,6 +159,50 @@ public final class OAuthParamMap implements Serializable
     public Set<java.util.Map.Entry<String, Object>> entrySet()
     {
         return paramMap.entrySet();
+    }
+
+
+    //////////////////////////////////////////////////////
+    // OAuth related convenience methods
+    
+    public boolean isSignatureSet()
+    {
+        String signature = getSignature();
+        String signatureMethod = getSignatureMethod();
+        return (SignatureMethod.isValid(signatureMethod) && (signature != null && !signature.isEmpty()));
+    }
+
+    public AccessIdentity getAccessIdentity()
+    {
+        String consumerKey = getConsumerKey();
+        String accessToken = getToken();
+        AccessIdentity accessIdentity = new OAuthAccessIdentity(consumerKey, accessToken);
+        return accessIdentity;
+    }
+    public void setAccessIdentity(AccessIdentity accessIdentity)
+    {
+        if(accessIdentity != null) {
+            String consumerKey = accessIdentity.getConsumerKey();
+            String token = accessIdentity.getAccessToken();
+            setConsumerKey(consumerKey);
+            setToken(token);            
+        } else {
+            // ???
+        }
+    }
+    
+    public String buildUrlEncodedParamString() throws MiniAuthException
+    {
+        Map<String,String> params = new HashMap<>();
+        for(String key : paramMap.keySet()) {
+            Object val = paramMap.get(key);
+            if(val != null) {
+                params.put(key, val.toString());  // ???
+            }
+        }
+        String paramString = OAuthAuthorizationHeaderUtil.buildOAuthAuthorizationValueString(params);
+        // if(log.isLoggable(Level.FINER)) log.finer("paramString = " + paramString);
+        return paramString;
     }
 
 
