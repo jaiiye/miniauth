@@ -6,5 +6,7 @@
 
 /**
  * Top-level package for MiniAuth.
+ * Currently, the main implementation is in the OAuth module (for OAuth v1.0a).
+ * In the future, however, we may generalize the scope of MiniAuth to other auth types (such as OAuth2).
  */
 package org.miniauth;

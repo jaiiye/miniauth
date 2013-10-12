@@ -6,5 +6,6 @@
 
 /**
  * Top-level package for MiniAuth OAuth module.
+ * OAuth module includes the "main" classes for generating/verifying OAuth signatures.
  */
 package org.miniauth.oauth;

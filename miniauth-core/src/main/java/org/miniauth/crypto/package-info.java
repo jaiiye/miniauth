@@ -7,5 +7,7 @@
 /**
  * Crypto-related utility classes.
  * It includes the three basic signature algorithm implementations required by OAuth v1.
+ * (This really belongs to OAuth package,
+ *  but we may generalize MiniAuth to include auth methods other than OAuth.)
  */
 package org.miniauth.crypto;
