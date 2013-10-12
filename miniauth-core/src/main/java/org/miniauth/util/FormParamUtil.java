@@ -2,15 +2,15 @@ package org.miniauth.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
-import org.miniauth.exception.BadRequestException;
 import org.miniauth.exception.InternalErrorException;
 // import org.miniauth.oauth.core.OAuthConstants;
 
@@ -31,7 +31,7 @@ public final class FormParamUtil
         return true;
     }
 
-    public static Map<String,String[]> getFormParams(String contentType, String formBody) throws MiniAuthException
+    public static Map<String,String[]> getUrlEncodedFormParams(String contentType, String formBody) throws MiniAuthException
     {
         if(contentType == null || !contentType.equals("application/x-www-form-urlencoded")) {
             return null;
@@ -73,6 +73,47 @@ public final class FormParamUtil
         return paramMap;
     }
     
+    
+    // It builds a string of (encoded) key-value pairs concatenated using "=" and "&".
+    // This method can be used for building query params or form params, or even OAuth Authorization header, etc.
+    // Note how "=" is added or not added depending on the param string/array is the null or empty.
+    public static String buildUrlEncodedFormParamString(Map<String,String[]> params) throws MiniAuthException
+    {
+        if(params == null) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        try {
+            Iterator<String> it = params.keySet().iterator();
+            while(it.hasNext()) {
+                String k = it.next();
+                String encKey = URLEncoder.encode(k, "UTF-8");
+                String[] values = params.get(k);
+                if(values == null || values.length == 0) {
+                    // ???
+                    //sb.append(encKey).append("=");
+                    sb.append(encKey);
+                } else {
+                    for(String v : values) {
+                        sb.append(encKey);
+                        if(v != null) {
+                            sb.append("=");
+                            if(! v.isEmpty()) {
+                                String encVal = URLEncoder.encode(v, "UTF-8");
+                                sb.append(encVal);
+                            }
+                        }
+                    }
+                }
+                if(it.hasNext()) {
+                    sb.append("&");
+                }
+            }
+        } catch (UnsupportedEncodingException e) {
+            throw new InternalErrorException("URL encoding error.", e);
+        }
+        return sb.toString();
+    }
     
 
 }
