@@ -4,7 +4,7 @@
 
   <groupId>org.miniauth</groupId>
   <artifactId>miniauth</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>MiniAuth</name>
@@ -33,10 +33,9 @@
   </properties>
 
   <scm>
-    <connection>scm:git:ssh://git@github.com:harrywye/miniauth.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com:harrywye/miniauth.git</developerConnection>
+    <connection>scm:git:ssh://github.com/harrywye/miniauth.git</connection>
+    <developerConnection>scm:git:ssh://github.com/harrywye/miniauth.git</developerConnection>
     <url>https://github.com/harrywye/miniauth</url>
-    <tag>miniauth-0.1.0</tag>
   </scm>
 
   <build>
