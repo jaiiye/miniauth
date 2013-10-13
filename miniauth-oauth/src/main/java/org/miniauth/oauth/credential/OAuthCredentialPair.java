@@ -2,6 +2,12 @@ package org.miniauth.oauth.credential;
 
 import java.io.Serializable;
 
+import org.miniauth.credential.AccessCredential;
+import org.miniauth.credential.AccessIdentity;
+import org.miniauth.credential.ConsumerCredential;
+import org.miniauth.credential.CredentialPair;
+import org.miniauth.credential.TokenCredential;
+
 
 public class OAuthCredentialPair implements CredentialPair, Serializable
 {

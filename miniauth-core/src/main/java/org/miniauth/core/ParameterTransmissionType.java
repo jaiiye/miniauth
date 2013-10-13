@@ -1,4 +1,4 @@
-package org.miniauth.oauth.core;
+package org.miniauth.core;
 
 
 // http://tools.ietf.org/html/rfc5849#section-3.5

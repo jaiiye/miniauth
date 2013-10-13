@@ -6,10 +6,10 @@ import java.util.logging.Logger;
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.AuthScheme;
 import org.miniauth.core.HttpHeader;
+import org.miniauth.core.ParameterTransmissionType;
 import org.miniauth.exception.BadRequestException;
 import org.miniauth.exception.UnauthorizedException;
 import org.miniauth.oauth.core.OAuthConstants;
-import org.miniauth.oauth.core.ParameterTransmissionType;
 import org.miniauth.util.AuthHeaderUtil;
 
 

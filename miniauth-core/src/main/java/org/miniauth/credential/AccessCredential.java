@@ -1,4 +1,4 @@
-package org.miniauth.oauth.credential;
+package org.miniauth.credential;
 
 
 // Access credential/password stored on the server.

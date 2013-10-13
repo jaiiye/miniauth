@@ -6,8 +6,9 @@ import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.BaseURIInfo;
+import org.miniauth.credential.AccessCredential;
+import org.miniauth.oauth.core.OAuthParamMap;
 import org.miniauth.oauth.core.SignatureMethod;
-import org.miniauth.oauth.credential.AccessCredential;
 import org.miniauth.oauth.crypto.OAuthSignatureAlgorithm;
 import org.miniauth.oauth.crypto.OAuthSignatureAlgorithmFactory;
 
@@ -50,6 +51,15 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase
 
         if(log.isLoggable(Level.FINE)) log.fine("signature = " + signature);
         return signature;
+    }
+    
+    
+    // TBD:
+    public OAuthParamMap generateOAuthParamMap(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    {
+        
+        
+        return null;
     }
     
     

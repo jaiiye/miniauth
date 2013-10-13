@@ -1,8 +1,8 @@
 package org.miniauth.oauth.crypto;
 
+import org.miniauth.credential.AccessCredential;
 import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.exception.InvalidCredentialException;
-import org.miniauth.oauth.credential.AccessCredential;
 
 
 public interface OAuthSignatureAlgorithm

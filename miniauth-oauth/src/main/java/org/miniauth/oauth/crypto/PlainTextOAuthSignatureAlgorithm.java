@@ -1,10 +1,10 @@
 package org.miniauth.oauth.crypto;
 
+import org.miniauth.credential.AccessCredential;
 import org.miniauth.crypto.PlainTextSignatureAlgorithm;
 import org.miniauth.crypto.SignatureAlgorithm;
 import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.exception.InvalidCredentialException;
-import org.miniauth.oauth.credential.AccessCredential;
 
 
 public class PlainTextOAuthSignatureAlgorithm extends AbstractOAuthSignatureAlgorithm implements OAuthSignatureAlgorithm

@@ -13,11 +13,11 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.CryptoAlgorithm;
+import org.miniauth.core.ParameterTransmissionType;
 import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.exception.BadRequestException;
 import org.miniauth.oauth.core.OAuthConstants;
 import org.miniauth.oauth.core.OAuthParamMap;
-import org.miniauth.oauth.core.ParameterTransmissionType;
 import org.miniauth.oauth.core.SignatureMethod;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
 import org.miniauth.util.Base64Util;

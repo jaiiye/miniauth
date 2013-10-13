@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.miniauth.oauth.credential.AccessIdentity;
+import org.miniauth.credential.AccessIdentity;
 
 
 // This is not really a "pool"

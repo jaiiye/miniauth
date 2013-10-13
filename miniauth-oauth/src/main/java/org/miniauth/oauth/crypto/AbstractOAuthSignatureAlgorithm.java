@@ -3,11 +3,11 @@ package org.miniauth.oauth.crypto;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.miniauth.credential.AccessCredential;
 import org.miniauth.crypto.SignatureAlgorithm;
 import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.exception.InternalErrorException;
 import org.miniauth.exception.InvalidCredentialException;
-import org.miniauth.oauth.credential.AccessCredential;
 import org.miniauth.oauth.signature.OAuthSignatureGenerator;
 import org.miniauth.oauth.util.PercentEncoder;
 

@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
-import org.miniauth.oauth.credential.AccessIdentity;
+import org.miniauth.credential.AccessIdentity;
 import org.miniauth.oauth.credential.OAuthAccessIdentity;
 import org.miniauth.oauth.util.OAuthAuthorizationHeaderUtil;
 import org.miniauth.util.FormParamUtil;

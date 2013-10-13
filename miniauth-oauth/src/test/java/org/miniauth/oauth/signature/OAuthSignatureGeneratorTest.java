@@ -11,14 +11,14 @@ import org.junit.Test;
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.BaseURIInfo;
 import org.miniauth.core.HttpMethod;
-import org.miniauth.oauth.credential.AccessCredential;
-import org.miniauth.oauth.credential.ConsumerCredential;
-import org.miniauth.oauth.credential.CredentialPair;
+import org.miniauth.credential.AccessCredential;
+import org.miniauth.credential.ConsumerCredential;
+import org.miniauth.credential.CredentialPair;
+import org.miniauth.credential.TokenCredential;
 import org.miniauth.oauth.credential.OAuthAccessCredential;
 import org.miniauth.oauth.credential.OAuthConsumerCredential;
 import org.miniauth.oauth.credential.OAuthCredentialPair;
 import org.miniauth.oauth.credential.OAuthTokenCredential;
-import org.miniauth.oauth.credential.TokenCredential;
 
 public class OAuthSignatureGeneratorTest
 {

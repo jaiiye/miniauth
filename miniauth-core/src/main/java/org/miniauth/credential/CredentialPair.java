@@ -1,4 +1,5 @@
-package org.miniauth.oauth.credential;
+package org.miniauth.credential;
+
 
 
 // Consumer + Token.

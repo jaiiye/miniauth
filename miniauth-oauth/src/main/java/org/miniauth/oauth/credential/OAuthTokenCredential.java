@@ -2,6 +2,8 @@ package org.miniauth.oauth.credential;
 
 import java.io.Serializable;
 
+import org.miniauth.credential.TokenCredential;
+
 
 public final class OAuthTokenCredential implements TokenCredential, Serializable
 {
