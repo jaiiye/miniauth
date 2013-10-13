@@ -20,6 +20,19 @@
   <url>http://www.miniauth.org</url>
   <inceptionYear>2013</inceptionYear>
 
+<!-- 
+  <repositories>
+    <repository>
+      <id>miniauth.mvn-repo</id>
+      <url>https://raw.github.com/harrywye/miniauth/mvn-repo/</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+ -->
+
   <distributionManagement>
     <site>
       <id>miniauth.oauth</id>
