@@ -5,12 +5,12 @@
   <parent>
     <groupId>org.miniauth</groupId>
     <artifactId>miniauth</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.1.0</version>
   </parent>
 
   <groupId>org.miniauth</groupId>
   <artifactId>miniauth-web</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.1.0</version>
 <!--
   <version>0.1.0-SNAPSHOT-${maven.build.timestamp}</version>
 -->
@@ -38,19 +38,19 @@
     <dependency>
       <groupId>org.miniauth</groupId>
       <artifactId>miniauth-core</artifactId>
-      <version>0.1.1-SNAPSHOT</version>
+      <version>0.1.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.miniauth</groupId>
       <artifactId>miniauth-oauth</artifactId>
-      <version>0.1.1-SNAPSHOT</version>
+      <version>0.1.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.miniauth</groupId>
       <artifactId>miniauth-oauth2</artifactId>
-      <version>0.1.1-SNAPSHOT</version>
+      <version>0.1.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
