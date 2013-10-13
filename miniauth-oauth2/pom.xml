@@ -8,10 +8,12 @@
     <version>0.1.1-SNAPSHOT</version>
   </parent>
 
+<!-- 
   <groupId>org.miniauth</groupId>
+-->
   <artifactId>miniauth-oauth2</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
 <!--
+  <version>0.1.1-SNAPSHOT</version>
   <version>0.1.0-SNAPSHOT-${maven.build.timestamp}</version>
 -->
 

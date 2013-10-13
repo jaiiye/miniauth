@@ -82,6 +82,7 @@
 <!-- 
           <tagNameFormat>@{project.groupId}-@{project.version}</tagNameFormat>
 -->
+          <tagNameFormat>v@{project.version}</tagNameFormat>
           <preparationGoals>clean verify</preparationGoals>
           <goals>deploy</goals>
 <!-- 
