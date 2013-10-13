@@ -20,13 +20,6 @@
     </license>
   </licenses>
 
-  <distributionManagement>
-    <site>
-      <id>miniauth.home</id>
-      <url>scp://www.miniauth.org/</url>
-    </site>
-  </distributionManagement>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
@@ -37,6 +30,18 @@
     <developerConnection>scm:git:ssh://git@github.com/harrywye/miniauth.git</developerConnection>
     <url>https://github.com/harrywye/miniauth</url>
   </scm>
+
+  <distributionManagement>
+    <repository>
+        <id>internal.repo</id>
+        <name>Temporary Staging Repository</name>
+        <url>file://${project.build.directory}/mvn-repo</url>
+    </repository>
+    <site>
+      <id>miniauth.home</id>
+      <url>scp://www.miniauth.org/</url>
+    </site>
+  </distributionManagement>
 
   <build>
     <plugins>
@@ -76,6 +81,9 @@
 -->
           <preparationGoals>clean verify</preparationGoals>
           <goals>deploy</goals>
+<!-- 
+          <goals>deploy site-deploy</goals>
+-->
         </configuration>
       </plugin>
     </plugins>
