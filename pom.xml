@@ -36,7 +36,6 @@
     <connection>scm:git:ssh://git@github.com:harrywye/miniauth.git</connection>
     <developerConnection>scm:git:ssh://git@github.com:harrywye/miniauth.git</developerConnection>
     <url>https://github.com/harrywye/miniauth</url>
-    <tag>miniauth-0.1.0</tag>
   </scm>
 
   <build>
