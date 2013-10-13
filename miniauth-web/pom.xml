@@ -43,8 +43,14 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.miniauth.oauth</groupId>
+      <groupId>org.miniauth</groupId>
       <artifactId>miniauth-oauth</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.miniauth</groupId>
+      <artifactId>miniauth-oauth2</artifactId>
       <version>0.1.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>

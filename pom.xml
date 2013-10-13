@@ -90,9 +90,7 @@
   <modules>
     <module>miniauth-core</module>
     <module>miniauth-oauth</module>
+    <module>miniauth-oauth2</module>
     <module>miniauth-web</module>
-<!--
-    <module>miniauth-site</module>
--->
   </modules>
 </project>
