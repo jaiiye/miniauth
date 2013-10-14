@@ -37,6 +37,37 @@ The two higher level APIs will be done in the near future.
 
 
 
+Modules
+---
+
+Initially, `MiniAuth` started as a single module (for OAuth v1.0a). 
+We are currently in the process of refactoring the code to extend the scope of the library to include different authentication methods.
+
+
+### Core Module ###
+
+This module is used for shared/common classes among different authentication methods.
+ 
+
+### OAuth Module ###
+
+This is the original part of the library.
+It includes the OAuth signature generation/verification methods, among other things.
+
+
+### OAuth2 Module ###
+
+Place holder. OAuth2 is order of magnitude simpler than OAuth.
+This module will not be very useful unless we decide to include full OAuth client implementation in `MiniAuth`.
+
+
+### Web Module ###
+
+Place holder. The name is a bit misleading, but this module will be used to include "wrapper" classes
+so that `MiniAuth` can be easily used in the servlet-based Web framework/applications.
+
+
+
 API
 ---
 
