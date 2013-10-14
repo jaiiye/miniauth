@@ -20,6 +20,22 @@
     </license>
   </licenses>
 
+  <developers>
+    <developer>
+      <id>harry</id>
+      <name>Harry Y</name>
+      <email>harrywye@gmail.com</email>
+      <url>http://www.harrywye.com/</url>
+      <organization>Aery Software</organization>
+      <organizationUrl>http://www.aerysoft.com/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>-7</timezone>
+    </developer>
+  </developers>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
