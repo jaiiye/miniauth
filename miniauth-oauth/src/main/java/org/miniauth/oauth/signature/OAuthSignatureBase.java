@@ -127,8 +127,18 @@ public abstract class OAuthSignatureBase
         SortedSet<String> sortedKeys = new TreeSet<String>(byteComparator);
         sortedKeys.addAll(paramMap.keySet());
         for(String eKey : sortedKeys) {
+            // ????
+            // TBD:
+            // How to tell if we need to filter out "realm" or not ???
+            // ....
+            // Note: key = eKey for "oauth_signature" and "realm". 
+            if(OAuthConstants.PARAM_OAUTH_SIGNATURE.equals(eKey) || OAuthConstants.PARAM_REALM.equals(eKey)) {
+                // exclude these...
+                continue;
+            }
+
             List<String> eValues = paramMap.get(eKey);
-            if(eValues.isEmpty()) {
+            if(eValues == null || eValues.isEmpty()) {
                 sb.append(eKey).append("=").append("&");
             } else {
                 Collections.sort(eValues, byteComparator);

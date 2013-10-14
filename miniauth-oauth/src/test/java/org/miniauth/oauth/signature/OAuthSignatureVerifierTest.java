@@ -63,7 +63,7 @@ public class OAuthSignatureVerifierTest
 
         Map<String,String[]> queryParams = new HashMap<>();
         queryParams.put("b5", new String[]{"=%3D"});
-        queryParams.put("a3", new String[]{"a"});
+        // queryParams.put("a3", new String[]{"a"});
         queryParams.put("c@", new String[]{});
         queryParams.put("a2", new String[]{"r b"});
         
