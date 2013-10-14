@@ -7,6 +7,7 @@ import org.miniauth.core.CryptoAlgorithm;
 
 
 // http://tools.ietf.org/html/rfc5849
+// TBD: Move this to the core module???
 public final class SignatureMethod
 {
     public static final String HMAC_SHA1 = "HMAC-SHA1";

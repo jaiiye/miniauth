@@ -2,20 +2,73 @@ package org.miniauth.oauth.builder;
 
 import java.net.URI;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.miniauth.MiniAuthException;
 import org.miniauth.builder.AuthStringBuilder;
+import org.miniauth.core.BaseURIInfo;
+import org.miniauth.core.ParameterTransmissionType;
+import org.miniauth.credential.AccessCredential;
+import org.miniauth.credential.AuthCredentialConstants;
+import org.miniauth.oauth.common.OAuthParamMap;
+import org.miniauth.oauth.credential.OAuthAccessCredential;
+import org.miniauth.oauth.signature.OAuthSignatureGenerator;
+import org.miniauth.oauth.util.ParameterTransmissionUtil;
 
 
 public class OAuthAuthStringBuilder implements AuthStringBuilder
 {
+    private static final Logger log = Logger.getLogger(OAuthAuthStringBuilder.class.getName());
+
+    // Lazy initialized.
+    private OAuthSignatureGenerator oauthSignatureGenerator = null;
+    private OAuthSignatureGenerator getOAuthSignatureGenerator()
+    {
+        if(oauthSignatureGenerator == null) {
+            oauthSignatureGenerator = new OAuthSignatureGenerator();
+        }
+        return oauthSignatureGenerator;
+    }
+    
+    public OAuthAuthStringBuilder()
+    {
+    }
+    
 
     @Override
     public String generateAuthorizationString(
-            Map<String, String> authCredential, String httpMethod, URI baseURI,
-            Map<String, String[]> requestParams)
+            String transmissionType, Map<String, String> authCredential, String httpMethod,
+            URI baseURI, Map<String, String[]> requestParams) throws MiniAuthException
     {
-        // TBD
-        return null;
+        String consumerSecret = null;
+        String tokenSecret = null;
+        if(authCredential != null) {
+            if(authCredential.containsKey(AuthCredentialConstants.CONSUMER_SECRET)) {
+                consumerSecret = authCredential.get(AuthCredentialConstants.CONSUMER_SECRET);
+            }
+            if(authCredential.containsKey(AuthCredentialConstants.TOKEN_SECRET)) {
+                tokenSecret = authCredential.get(AuthCredentialConstants.TOKEN_SECRET);
+            }
+        }
+        AccessCredential credential = new OAuthAccessCredential(consumerSecret, tokenSecret);
+        BaseURIInfo uriInfo = new BaseURIInfo(baseURI);
+        OAuthParamMap oauthParamMap = getOAuthSignatureGenerator().generateOAuthParamMap(credential, httpMethod, uriInfo, requestParams);
+
+        if(! ParameterTransmissionUtil.isTransmissionTypeValid(transmissionType)) {
+            transmissionType = ParameterTransmissionUtil.getDefaultTransmissionType();
+        }
+        String paramString = oauthParamMap.buildUrlEncodedParamString(transmissionType);
+        
+        String authString = null;
+        if(ParameterTransmissionType.HEADER.equals(transmissionType)) {
+            authString = "OAuth " + paramString;
+        } else {
+            authString = paramString;
+        }
+
+        if(log.isLoggable(Level.FINER)) log.finer("authString = " + authString);
+        return authString;
     }
 
 }

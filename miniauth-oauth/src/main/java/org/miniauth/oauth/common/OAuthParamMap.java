@@ -1,16 +1,20 @@
-package org.miniauth.oauth.core;
+package org.miniauth.oauth.common;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.credential.AccessIdentity;
+import org.miniauth.oauth.core.OAuthConstants;
+import org.miniauth.oauth.core.SignatureMethod;
 import org.miniauth.oauth.credential.OAuthAccessIdentity;
-import org.miniauth.oauth.util.OAuthAuthorizationHeaderUtil;
-import org.miniauth.util.FormParamUtil;
+import org.miniauth.oauth.util.OAuthAuthorizationValueUtil;
+import org.miniauth.oauth.util.ParameterTransmissionUtil;
+import org.miniauth.util.ParamMapUtil;
 
 
 /**
@@ -41,11 +45,29 @@ public final class OAuthParamMap implements Serializable
     }
     public OAuthParamMap(Map<String,Object> paramMap)
     {
+        this(paramMap, true);  // default true. ???
+    }
+    // if copyOAuthParamOnly is set to true, two things happen.
+    // (1) we "clone" the input map (rather than just copying its reference).
+    // (2) we filter out all non-OAuth params.
+    public OAuthParamMap(Map<String,Object> paramMap, boolean copyOAuthParamOnly)
+    {
         if(paramMap == null) {
-            paramMap = new HashMap<>();
+            this.paramMap = new HashMap<>();
+        } else {
+            if(copyOAuthParamOnly) {
+                this.paramMap = new HashMap<>();
+                for(String p : OAuthConstants.getAllOAuthParams()) {
+                    Object val = paramMap.get(p);
+                    if(val != null) {
+                        paramMap.put(p, val);
+                    }
+                }
+            } else {
+                // TBD: Validation???
+                this.paramMap = paramMap;
+            }
         }
-        // TBD: Validation???
-        this.paramMap = paramMap;
     }
     
 //    // TBD: How to make the returned map immutable???
@@ -193,15 +215,13 @@ public final class OAuthParamMap implements Serializable
     
     public String buildUrlEncodedParamString() throws MiniAuthException
     {
-        Map<String,String> params = new HashMap<>();
-        for(String key : paramMap.keySet()) {
-            Object val = paramMap.get(key);
-            if(val != null) {
-                params.put(key, val.toString());  // ???
-            }
-        }
-        String paramString = OAuthAuthorizationHeaderUtil.buildOAuthAuthorizationValueString(params);
-        // if(log.isLoggable(Level.FINER)) log.finer("paramString = " + paramString);
+        return buildUrlEncodedParamString(ParameterTransmissionUtil.getDefaultTransmissionType());
+    }
+    public String buildUrlEncodedParamString(String transmissionType) throws MiniAuthException
+    {
+        Map<String,String> params = ParamMapUtil.convertObjectValueMapToStringValueMap(paramMap);
+        String paramString = OAuthAuthorizationValueUtil.buildOAuthAuthorizationValueString(params, transmissionType); 
+        if(log.isLoggable(Level.FINER)) log.finer("paramString = " + paramString);
         return paramString;
     }
 

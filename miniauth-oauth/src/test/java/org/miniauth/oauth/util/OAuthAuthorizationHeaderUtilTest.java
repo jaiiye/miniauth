@@ -36,7 +36,7 @@ public class OAuthAuthorizationHeaderUtilTest
 
         String str = null;
         try {
-            str = OAuthAuthorizationHeaderUtil.buildOAuthAuthorizationValueString(params);
+            str = OAuthAuthorizationValueUtil.buildOAuthAuthorizationValueString(params);
             System.out.println("Param str = " + str);
         } catch (MiniAuthException e) {
             e.printStackTrace();

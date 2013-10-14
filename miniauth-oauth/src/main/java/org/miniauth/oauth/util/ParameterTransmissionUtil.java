@@ -19,6 +19,25 @@ public final class ParameterTransmissionUtil
 
     private ParameterTransmissionUtil() {}
 
+    
+    public static boolean isTransmissionTypeValid(String type)
+    {
+        if(ParameterTransmissionType.HEADER.equals(type) 
+                || ParameterTransmissionType.FORM.equals(type)
+                || ParameterTransmissionType.QUERY.equals(type)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // temporary
+    public static String getDefaultTransmissionType()
+    {
+        return ParameterTransmissionType.HEADER;
+    }
+    
+
     // Note:
     // Oauth params should be in one and only one of the param set {oauth headers, form params, query params}.
     // ....

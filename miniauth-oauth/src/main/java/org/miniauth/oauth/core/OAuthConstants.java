@@ -6,10 +6,7 @@ import java.util.Set;
 
 public final class OAuthConstants
 {
-    // OAuth? OAuth2?
-    public static final String PARAM_REALM = "realm";
-    public static final String PARAM_OAUTH_CALLBACK = "oauth_callback";
-
+    // OAuth means OAuth version 1.0a.
     public static final String PARAM_OAUTH_CONSUMER_KEY = "oauth_consumer_key";
     public static final String PARAM_OAUTH_TOKEN = "oauth_token";
     public static final String PARAM_OAUTH_SIGNATURE = "oauth_signature";
@@ -18,6 +15,8 @@ public final class OAuthConstants
     public static final String PARAM_OAUTH_TIMESTAMP = "oauth_timestamp";
     public static final String PARAM_OAUTH_VERSION = "oauth_version";     // always "1.0"
 
+    public static final String PARAM_REALM = "realm";
+    public static final String PARAM_OAUTH_CALLBACK = "oauth_callback";
     public static final String PARAM_OAUTH_TOKEN_VERIFIER = "oauth_verifier";
     // ...
     
@@ -35,7 +34,17 @@ public final class OAuthConstants
         // etc. ??
     }
  
+    private static final Set<String> sAllOAuthParams;
+    static {
+        sAllOAuthParams = new HashSet<>(sOAuthParams);
+        sAllOAuthParams.add(PARAM_REALM);
+        // ???
+        sAllOAuthParams.add(PARAM_OAUTH_CALLBACK);
+        sAllOAuthParams.add(PARAM_OAUTH_TOKEN_VERIFIER);
+        // etc. ???
+    }
     
+
     private OAuthConstants() {}
 
     
@@ -45,6 +54,16 @@ public final class OAuthConstants
         // TBD: which is better???
         // return param.startsWith("oauth_");
         return sOAuthParams.contains(param);
+    }
+
+    // Read only.
+    public static Set<String> getOAuthParams()
+    {
+        return sOAuthParams;
+    }
+    public static Set<String> getAllOAuthParams()
+    {
+        return sAllOAuthParams;
     }
 
     

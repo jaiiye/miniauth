@@ -3,6 +3,8 @@ package org.miniauth.builder;
 import java.net.URI;
 import java.util.Map;
 
+import org.miniauth.MiniAuthException;
+
 
 public interface AuthStringBuilder
 {
@@ -12,6 +14,6 @@ public interface AuthStringBuilder
     //    as well as all query params (and single part url-encoded form params?).
     // requestParams should contain necessary auth credentials as well (relevant to given auth method)????
     //    --> Or, just use AuthCredential
-    String generateAuthorizationString(Map<String,String> authCredential, String httpMethod, URI baseURI, Map<String,String[]> requestParams);
+    String generateAuthorizationString(String transmissionType, Map<String,String> authCredential, String httpMethod, URI baseURI, Map<String,String[]> requestParams) throws MiniAuthException;
 
 }

@@ -1,6 +1,5 @@
 package org.miniauth.oauth.signature;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,13 +15,8 @@ import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.BaseURIInfo;
-import org.miniauth.core.UriScheme;
-import org.miniauth.credential.AccessCredential;
 import org.miniauth.exception.BadRequestException;
 import org.miniauth.oauth.core.OAuthConstants;
-import org.miniauth.oauth.core.SignatureMethod;
-import org.miniauth.oauth.crypto.OAuthSignatureAlgorithm;
-import org.miniauth.oauth.crypto.OAuthSignatureAlgorithmFactory;
 import org.miniauth.oauth.util.PercentEncoder;
 
 
@@ -57,6 +51,11 @@ public abstract class OAuthSignatureBase
     // It's the caller's responsibility to pass in the proper params.
     protected String buildSignatureBaseString(String httpMethod, BaseURIInfo uriInfo, Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
+        Map<String,String[]> requestParams = OAuthSignatureUtil.mergeRequestParameters(authHeaders, formParams, queryParams);
+        return buildSignatureBaseString(httpMethod, uriInfo, requestParams);
+    }
+    protected String buildSignatureBaseString(String httpMethod, BaseURIInfo uriInfo, Map<String,String[]> requestParams) throws MiniAuthException
+    {
 //        // tbd
 //        // String httpMethod = uriInfo.getHttpMethod();
 //        String urlScheme = uriInfo.getUriScheme();
@@ -78,7 +77,8 @@ public abstract class OAuthSignatureBase
         String encBaseUriString = PercentEncoder.encode(baseUriString);
         sb.append(encBaseUriString).append("&");
         
-        String requestParamString = normalizeRequestParameters(authHeaders, formParams, queryParams);
+        // String requestParamString = normalizeRequestParameters(authHeaders, formParams, queryParams);
+        String requestParamString = normalizeRequestParameters(requestParams);
         sb.append(requestParamString);
         
         String signatureBaseString = sb.toString();
@@ -105,7 +105,91 @@ public abstract class OAuthSignatureBase
 //        return baseUriString;
 //    }
 
+
     protected String normalizeRequestParameters(Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    {
+        Map<String,String[]> requestParams = OAuthSignatureUtil.mergeRequestParameters(authHeaders, formParams, queryParams);
+        return normalizeRequestParameters(requestParams);
+    }
+    protected String normalizeRequestParameters(Map<String,String[]> requestParams) throws MiniAuthException
+    {
+        // Note: Percent encoding is done before sorting...
+        Map<String,List<String>> paramMap = percentEncodeRequestParams(requestParams);
+        if(paramMap == null) {
+            // ???
+            return null;
+        }
+
+        // Sort by the keys (and by the values for the same keys).
+        Comparator<String> byteComparator = new BytewiseComparator();
+        StringBuilder sb = new StringBuilder();
+        // SortedSet<String> sortedKeys = new TreeSet<String>(paramMap.keySet());
+        SortedSet<String> sortedKeys = new TreeSet<String>(byteComparator);
+        sortedKeys.addAll(paramMap.keySet());
+        for(String eKey : sortedKeys) {
+            List<String> eValues = paramMap.get(eKey);
+            if(eValues.isEmpty()) {
+                sb.append(eKey).append("=").append("&");
+            } else {
+                Collections.sort(eValues, byteComparator);
+                for(String eVal : eValues) {
+                    // Can eVal be null at this point???
+                    //  (empty string is ok.)
+                    sb.append(eKey).append("=").append(eVal).append("&");
+                }
+            }            
+        }
+
+        String paramString = null;
+        int buffLen = sb.length();
+        if(buffLen > 0 && sb.charAt(buffLen-1) == '&') {
+            paramString = sb.substring(0, buffLen-1);
+        } else {
+            paramString = sb.toString();
+        }
+        if(log.isLoggable(Level.FINER)) log.finer("paramString = " + paramString);
+
+        return paramString;
+    }
+     
+    protected Map<String,List<String>> percentEncodeRequestParams(Map<String,String[]> requestParams) throws MiniAuthException
+    {
+        Map<String,List<String>> paramMap = null;
+        if(requestParams != null) {
+            paramMap = new HashMap<>();
+            for(String k : requestParams.keySet()) {
+                // Note: OAuthSignatureUtil.mergeRequestParameters() should have filtered out the signature and realm params.
+//                // TBD:
+//                // If "realm" is present in the "Authorization" header, we need to remove it.
+//                //    but, otherwise we should not remove it...
+//                // How to do that??????
+//                // if(OAuthConstants.PARAM_OAUTH_SIGNATURE.equals(k) || OAuthConstants.PARAM_REALM.equals(k)) {
+//                if(OAuthConstants.PARAM_OAUTH_SIGNATURE.equals(k)) {
+//                    // exclude these...
+//                    continue;
+//                }
+                String encodedKey = PercentEncoder.encode(k);
+                String[] values = requestParams.get(k);
+                List<String> encodedList = null;
+                if(values != null) {
+                    encodedList = new ArrayList<>();
+                    for(String v : values) {
+                        String encodedValue = PercentEncoder.encode(v);
+                        encodedList.add(encodedValue);
+                    }
+                }
+                paramMap.put(encodedKey, encodedList);
+            }
+        }
+        return paramMap;
+    }
+
+    // Percent-encode and merge all params.
+    // Not being used... But, do not delete this..
+    // Note below how authHeaders are handled slightly differently than formParams and queryParams...
+    // TBD: the version of method that take merged requestParams cannot do this....
+    // --> Cf. OAuthSignatureUtil.mergeRequestParameters().
+    private Map<String,List<String>> percentEncodeAndMergeRequestParams(Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
 //        Map<String,String> superMap = new HashMap<>();
 //        if(authHeaders != null) {
@@ -201,37 +285,8 @@ public abstract class OAuthSignatureBase
             }
         }
 
-        Comparator<String> byteComparator = new BytewiseComparator();
-        StringBuilder sb = new StringBuilder();
-        // SortedSet<String> sortedKeys = new TreeSet<String>(paramMap.keySet());
-        SortedSet<String> sortedKeys = new TreeSet<String>(byteComparator);
-        sortedKeys.addAll(paramMap.keySet());
-        for(String eKey : sortedKeys) {
-            List<String> eValues = paramMap.get(eKey);
-            if(eValues.isEmpty()) {
-                sb.append(eKey).append("=").append("&");
-            } else {
-                Collections.sort(eValues, byteComparator);
-                for(String eVal : eValues) {
-                    // Can eVal be null at this point???
-                    //  (empty string is ok.)
-                    sb.append(eKey).append("=").append(eVal).append("&");
-                }
-            }            
-        }
-
-        String paramString = null;
-        int buffLen = sb.length();
-        if(buffLen > 0 && sb.charAt(buffLen-1) == '&') {
-            paramString = sb.substring(0, buffLen-1);
-        } else {
-            paramString = sb.toString();
-        }
-        if(log.isLoggable(Level.FINER)) log.finer("paramString = " + paramString);
-
-        return paramString;
+        return paramMap;
     }
-     
     
-    
+
 }

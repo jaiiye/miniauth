@@ -13,5 +13,6 @@ public final class ParameterTransmissionType
     // ...
    
     private ParameterTransmissionType() {}
+    
 
 }

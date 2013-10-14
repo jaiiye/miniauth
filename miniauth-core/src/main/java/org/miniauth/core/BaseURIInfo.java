@@ -22,6 +22,11 @@ public final class BaseURIInfo
     {
         this(null, null, null, -1, null);
     }
+    public BaseURIInfo(URI uri) 
+    {
+        // TBD: check if uri != null ???
+        this(uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(), uri.getPath());
+    }
     public BaseURIInfo(String uriScheme, String userInfo, String host, int port, String path)
     {
         super();

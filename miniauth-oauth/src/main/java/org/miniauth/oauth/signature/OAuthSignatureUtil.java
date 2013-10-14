@@ -3,7 +3,9 @@ package org.miniauth.oauth.signature;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,12 +18,13 @@ import org.miniauth.core.CryptoAlgorithm;
 import org.miniauth.core.ParameterTransmissionType;
 import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.exception.BadRequestException;
+import org.miniauth.oauth.common.OAuthParamMap;
 import org.miniauth.oauth.core.OAuthConstants;
-import org.miniauth.oauth.core.OAuthParamMap;
 import org.miniauth.oauth.core.SignatureMethod;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
 import org.miniauth.util.Base64Util;
 import org.miniauth.util.FormParamUtil;
+import org.miniauth.util.ParamMapUtil;
 
 
 public final class OAuthSignatureUtil
@@ -72,10 +75,16 @@ public final class OAuthSignatureUtil
         return params;
     }
 
+    
+    
     public static String getOAuthSignatureMethod(Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
+        // Note: we call getOAuthParams() not mergeRequestParameters()...
         Map<String,String[]> params = getOAuthParams(authHeaders, formParams, queryParams);
-        
+        return getOAuthSignatureMethod(params);
+    }
+    public static String getOAuthSignatureMethod(Map<String,String[]> params) throws MiniAuthException
+    {
         String signatureMethod = null;
         if(params != null) {
             String[] valArray = params.get(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD);
@@ -91,6 +100,7 @@ public final class OAuthSignatureUtil
     // If validation fails, it throws exception (rather than returning false).
     public static OAuthParamMap validateOAuthParams(Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
+        // Note: we call getOAuthParams() not mergeRequestParameters()...
         Map<String,String[]> authParams = getOAuthParams(authHeaders, formParams, queryParams);
         return validateOAuthParams(authParams);
     }
@@ -216,35 +226,66 @@ public final class OAuthSignatureUtil
     }    
 
     
-    
-    @Deprecated
-    public static String computeHmacSHA1(String text, String key) throws AuthSignatureException
+    // Merge params without percent encoding...
+    public static Map<String,String[]> mergeRequestParameters(Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
-        String signature = null;
-        try {
-            // get an hmac_sha1 key from the raw key bytes
-            SecretKeySpec signingKey = new SecretKeySpec(key.getBytes("UTF-8"), CryptoAlgorithm.HMAC_SHA1_ALGORITHM);
-    
-            // get an hmac_sha1 Mac instance and initialize with the signing key
-            Mac mac = Mac.getInstance(CryptoAlgorithm.HMAC_SHA1_ALGORITHM);
-            mac.init(signingKey);
-    
-            // compute the hmac on input data bytes
-            byte[] rawHmac = mac.doFinal(text.getBytes("UTF-8"));
-    
-            // base64-encode the hmac
-            signature = Base64Util.encodeBase64(rawHmac);
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException e) {
-            throw new AuthSignatureException("Failed to generate HMAC.", e);
+        Map<String,List<String>> paramMap = new HashMap<>();
+        if(authHeaders != null) {
+            for(String key : authHeaders.keySet()) {
+                if(OAuthConstants.PARAM_OAUTH_SIGNATURE.equals(key) || OAuthConstants.PARAM_REALM.equals(key)) {
+                    // exclude these...
+                    continue;
+                }
+                String[] values = authHeaders.get(key);
+                List<String> valueList = paramMap.get(key);
+                if(valueList == null) {
+                    valueList = new ArrayList<>();
+                    paramMap.put(key, valueList);
+                }
+                // valueList.addAll(Arrays.asList(values));
+                for(String v : values) {
+                    valueList.add(v);
+                }
+            }
         }
-        return signature;
-    }
-    
-    @Deprecated
-    public static boolean verifyHmacSHA1(String text, String key, String signature) throws AuthSignatureException
-    {
-        String expectedSignature = computeHmacSHA1(text, key);
-        return expectedSignature.equals(signature);
+        if(formParams != null) {
+            for(String key : formParams.keySet()) {
+                if(OAuthConstants.PARAM_OAUTH_SIGNATURE.equals(key)) {
+                    // exclude this..
+                    continue;
+                }
+                String[] values = formParams.get(key);
+                List<String> valueList = paramMap.get(key);
+                if(valueList == null) {
+                    valueList = new ArrayList<>();
+                    paramMap.put(key, valueList);
+                }
+                // valueList.addAll(Arrays.asList(values));
+                for(String v : values) {
+                    valueList.add(v);
+                }
+            }
+        }
+        if(queryParams != null) {
+            for(String key : queryParams.keySet()) {
+                if(OAuthConstants.PARAM_OAUTH_SIGNATURE.equals(key)) {
+                    // exclude this..
+                    continue;
+                }
+                String[] values = queryParams.get(key);
+                List<String> valueList = paramMap.get(key);
+                if(valueList == null) {
+                    valueList = new ArrayList<>();
+                    paramMap.put(key, valueList);
+                }
+                // valueList.addAll(Arrays.asList(values));
+                for(String v : values) {
+                    valueList.add(v);
+                }
+            }
+        }
+        Map<String,String[]> requestParams = ParamMapUtil.convertStringListMapToStringArrayMap(paramMap);
+        return requestParams;
     }
     
     
