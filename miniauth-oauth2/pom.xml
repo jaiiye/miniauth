@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.miniauth</groupId>
+    <groupId>org.aerysoft.miniauth</groupId>
     <artifactId>miniauth</artifactId>
     <version>0.1.1-SNAPSHOT</version>
   </parent>
 
 <!-- 
-  <groupId>org.miniauth</groupId>
+  <groupId>org.aerysoft.miniauth</groupId>
 -->
   <artifactId>miniauth-oauth2</artifactId>
 <!--
@@ -31,7 +31,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.miniauth</groupId>
+      <groupId>org.aerysoft.miniauth</groupId>
       <artifactId>miniauth-core</artifactId>
       <version>0.1.1-SNAPSHOT</version>
       <scope>compile</scope>
