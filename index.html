@@ -11,6 +11,94 @@
     Please check out the project on GitHub:
     <a href="https://github.com/harrywye/miniauth">https://github.com/harrywye/miniauth</a>.
     </p>
+  <div id="readme" class="blob instapaper_body">
+    <article class="markdown-body entry-content" itemprop="mainContentOfPage"><h1>
+<a name="miniauth" class="anchor" href="#miniauth"><span class="octicon octicon-link"></span></a>miniauth</h1>
+
+<p><em>MiniAuth OAuth signature library in Java</em></p>
+
+<h2>
+<a name="what-is-it" class="anchor" href="#what-is-it"><span class="octicon octicon-link"></span></a>What is it?</h2>
+
+<p><code>MiniAuth</code> is a stand-alone Java library for generating / verifying OAuth signatures (for OAuth 1.0a).</p>
+
+<ul>
+<li>It has no dependency on third party libraries other than JDK (JDK7, see the note below).</li>
+<li>It is light weight. It does not include full features of OAuth (like "OAuth dance", etc.). </li>
+<li>The core library (core and oauth modules) does not even use <em>javax.servlet</em> packages.</li>
+<li>The main purpose of the library is
+
+<ol>
+<li>To make request signing less painful on the client side. (Acquiring a user's access token is outside the scope of MiniAuth).</li>
+<li>To facilitate easy verification of OAuth signed request on the server side (without having to use a full OAuth server/provider library).</li>
+</ol>
+</li>
+</ul><h2>
+<a name="how-to-use-it" class="anchor" href="#how-to-use-it"><span class="octicon octicon-link"></span></a>How to use it?</h2>
+
+<p>If you use Maven, you can build and (locally) install the <code>MiniAuth</code> library using standard Maven goals. 
+Note that the project artefacts (jar files) have not been uploaded to any central Maven repository.
+If you don't use Maven, then there is an ant script under <code>nomaven/scripts</code>.</p>
+
+<h2>
+<a name="high-level-api-design" class="anchor" href="#high-level-api-design"><span class="octicon octicon-link"></span></a>High Level API Design</h2>
+
+<p>We have three "levels" of APIs, from low to high:</p>
+
+<ol>
+<li>OAuth (v1) signature generation / verification utils, including crypto support, etc.</li>
+<li>Generic auth support layer, including generating HTTP "Authorization: " headers, etc.</li>
+<li>Integration of auth into the <em>javax.servlet</em> framework.</li>
+</ol><p>Currently, only the lowest level (OAuth signature-related API) has been implemented.
+The two higher level APIs will be done in the near future.</p>
+
+<h2>
+<a name="modules" class="anchor" href="#modules"><span class="octicon octicon-link"></span></a>Modules</h2>
+
+<p>Initially, <code>MiniAuth</code> started as a single module (for OAuth v1.0a). 
+We are currently in the process of refactoring the code to extend the scope of the library to include different authentication methods.
+Please refer to the POM files for module depedencies.</p>
+
+<h4>
+<a name="core-module" class="anchor" href="#core-module"><span class="octicon octicon-link"></span></a>Core Module</h4>
+
+<p>This module is used for shared/common classes among different authentication methods.</p>
+
+<h4>
+<a name="oauth-module" class="anchor" href="#oauth-module"><span class="octicon octicon-link"></span></a>OAuth Module</h4>
+
+<p>This was the original core part of the library.
+(The <code>MiniAuth</code> project started because I needed a simple library to verify OAuth signatures in my server applications.)
+This module includes the OAuth signature generation/verification methods, among other things.</p>
+
+<h4>
+<a name="oauth2-module" class="anchor" href="#oauth2-module"><span class="octicon octicon-link"></span></a>OAuth2 Module</h4>
+
+<p>Place holder. OAuth2 is order of magnitude simpler than OAuth. 
+(For one thing, it does not require signing requests.)
+This module will not be very useful unless we decide to include full OAuth client implementation in <code>MiniAuth</code>.</p>
+
+<h4>
+<a name="web-module" class="anchor" href="#web-module"><span class="octicon octicon-link"></span></a>Web Module</h4>
+
+<p>Place holder. The name is a bit misleading, but this module will be used to include "wrapper" classes
+so that <code>MiniAuth</code> can be easily used in the servlet-based Web framework/applications.</p>
+
+<h2>
+<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
+
+<p>(Coming soon...)</p>
+
+<h2>
+<a name="notes-on-the-use-of-jdk7" class="anchor" href="#notes-on-the-use-of-jdk7"><span class="octicon octicon-link"></span></a>Notes on the Use of JDK7</h2>
+
+<p><code>MiniAuth</code> uses some of the JDK7 features such as "Switch with string values", "Multi-catch block", "Diamond operator", and "Try with resources", etc.
+If you need to use an earlier version of JDK, then you may have to check out the source code and modify some parts.
+You can easily change the JDK version in the main POM file or nomaven ant script. (Look for "1.7" if you are not familiar with Maven or Ant.)</p></article>
+
+
+  </div>
+
   </body>
 </html>
 
