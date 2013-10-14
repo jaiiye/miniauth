@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.aerysoft.miniauth</groupId>
     <artifactId>miniauth</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
   </parent>
 
 <!-- 
@@ -13,7 +13,7 @@
 -->
   <artifactId>miniauth-web</artifactId>
 <!--
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
   <version>0.1.0-SNAPSHOT-${maven.build.timestamp}</version>
 -->
 
@@ -40,19 +40,19 @@
     <dependency>
       <groupId>org.aerysoft.miniauth</groupId>
       <artifactId>miniauth-core</artifactId>
-      <version>0.1.1-SNAPSHOT</version>
+      <version>0.2.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.aerysoft.miniauth</groupId>
       <artifactId>miniauth-oauth</artifactId>
-      <version>0.1.1-SNAPSHOT</version>
+      <version>0.2.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.aerysoft.miniauth</groupId>
       <artifactId>miniauth-oauth2</artifactId>
-      <version>0.1.1-SNAPSHOT</version>
+      <version>0.2.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
