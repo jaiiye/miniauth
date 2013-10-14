@@ -7,7 +7,7 @@ _MiniAuth OAuth signature library in Java_
 What is it?
 ---
 
-MiniAuth is a stand-alone Java library for generating / verifying OAuth signatures (for OAuth 1.0a).
+`MiniAuth` is a stand-alone Java library for generating / verifying OAuth signatures (for OAuth 1.0a).
    * It has no dependency on third party libraries other than JDK (JDK7, see the note below).
    * It is light weight. It does not include full features of OAuth (like "OAuth dance", etc.). 
    * The core library (core and oauth modules) does not even use _javax.servlet_ packages.
@@ -44,24 +44,26 @@ Initially, `MiniAuth` started as a single module (for OAuth v1.0a).
 We are currently in the process of refactoring the code to extend the scope of the library to include different authentication methods.
 
 
-### Core Module ###
+#### Core Module ####
 
 This module is used for shared/common classes among different authentication methods.
  
 
-### OAuth Module ###
+#### OAuth Module ####
 
-This is the original part of the library.
-It includes the OAuth signature generation/verification methods, among other things.
+This is the original core part of the library.
+(The `MiniAuth` project started because I needed a simple library to verify OAuth signatures in my server applications.)
+This module includes the OAuth signature generation/verification methods, among other things.
 
 
-### OAuth2 Module ###
+#### OAuth2 Module ####
 
-Place holder. OAuth2 is order of magnitude simpler than OAuth.
+Place holder. OAuth2 is order of magnitude simpler than OAuth. 
+(For one thing, it does not require signing requests.)
 This module will not be very useful unless we decide to include full OAuth client implementation in `MiniAuth`.
 
 
-### Web Module ###
+#### Web Module ####
 
 Place holder. The name is a bit misleading, but this module will be used to include "wrapper" classes
 so that `MiniAuth` can be easily used in the servlet-based Web framework/applications.
