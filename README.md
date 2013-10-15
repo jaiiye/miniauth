@@ -12,7 +12,7 @@ What is it?
    * It is light weight. It does not include full features of OAuth (like "OAuth dance", etc.). 
    * The core library (core and oauth modules) does not even use _javax.servlet_ packages.
    * The main purpose of the library is
-       1. To make request signing less painful on the client side. (Acquiring a user's access token is outside the scope of MiniAuth).
+       1. To make request signing less painful on the client side. (Acquiring a user's access token is outside the scope of MiniAuth, at least, at this point.)
        1. To facilitate easy verification of OAuth signed request on the server side (without having to use a full OAuth server/provider library).
 
 
@@ -42,26 +42,26 @@ Modules
 
 Initially, `MiniAuth` started as a single module (for OAuth v1.0a). 
 We are currently in the process of refactoring the code to extend the scope of the library to include different authentication methods.
-Please refer to the POM files for module depedencies.
+Please refer to the POM files for module dependencies.
 
 
-#### Core Module ####
+#### [1] Core Module ####
 This module is used for shared/common classes among different authentication methods.
  
 
-#### OAuth Module ####
+#### [2] OAuth Module ####
 This was the original core part of the library.
 (The `MiniAuth` project started because I needed a simple library to verify OAuth signatures in my server applications.)
 This module includes the OAuth signature generation/verification methods, among other things.
 
 
-#### OAuth2 Module ####
+#### [3] OAuth2 Module ####
 Place holder. OAuth2 is order of magnitude simpler than OAuth. 
 (For one thing, it does not require signing requests.)
 This module will not be very useful unless we decide to include full OAuth client implementation in `MiniAuth`.
 
 
-#### Web Module ####
+#### [4] Web Module ####
 Place holder. The name is a bit misleading, but this module will be used to include "wrapper" classes
 so that `MiniAuth` can be easily used in the servlet-based Web framework/applications.
 
