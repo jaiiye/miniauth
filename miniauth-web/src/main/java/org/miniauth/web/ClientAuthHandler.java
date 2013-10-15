@@ -1,12 +1,14 @@
 package org.miniauth.web;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
 
+import org.miniauth.MiniAuthException;
 import org.miniauth.credential.AccessIdentity;
 
 
 // Client-side auth handler.
 public interface ClientAuthHandler extends AuthHandler
 {
-    HttpServletRequest prepareRequest(AccessIdentity accessIdentity, HttpServletRequest request);
+    // request is an "in-out" param.
+    boolean prepareRequest(AccessIdentity accessIdentity, ServletRequest request) throws MiniAuthException;
 }

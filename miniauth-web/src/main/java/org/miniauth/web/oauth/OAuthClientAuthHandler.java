@@ -1,7 +1,8 @@
 package org.miniauth.web.oauth;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
 
+import org.miniauth.MiniAuthException;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.web.ClientAuthHandler;
 
@@ -14,11 +15,11 @@ public class OAuthClientAuthHandler extends OAuthAuthHandler implements ClientAu
     }
 
     @Override
-    public HttpServletRequest prepareRequest(AccessIdentity accessIdentity,
-            HttpServletRequest request)
+    public boolean prepareRequest(AccessIdentity accessIdentity,
+            ServletRequest request) throws MiniAuthException
     {
         // TODO Auto-generated method stub
-        return null;
+        return false;
     }
     
     

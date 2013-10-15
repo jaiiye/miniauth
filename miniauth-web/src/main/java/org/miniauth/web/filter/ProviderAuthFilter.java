@@ -12,14 +12,28 @@ import javax.servlet.ServletResponse;
 
 
 // To be used on the "server side" implementation.
-public class ProviderAuthFilter implements Filter
+// Place holder...
+public abstract class ProviderAuthFilter implements Filter
 {
     private static final Logger log = Logger.getLogger(ProviderAuthFilter.class.getName());
 
     // TBD
     private FilterConfig config = null;
-    private String authMethod = null;
+    private String authScheme = null;
 
+    protected final FilterConfig getConfig()
+    {
+        return this.config;
+    }
+
+    protected final String getAuthScheme()
+    {
+        return this.authScheme;
+    }
+    protected final void setAuthScheme(String authScheme)
+    {
+        this.authScheme = authScheme;
+    }
 
     @Override
     public void destroy()
@@ -32,7 +46,7 @@ public class ProviderAuthFilter implements Filter
     {
         this.config = config;
         // TBD:
-        // set authMethod here... (e.g., from config, etc....)
+        // set authScheme here... (e.g., from config, etc....)
         // ...
         
     }
@@ -41,13 +55,12 @@ public class ProviderAuthFilter implements Filter
     public void doFilter(ServletRequest req, ServletResponse res,
             FilterChain chain) throws IOException, ServletException
     {
-        if(authMethod == null) {
+        if(authScheme == null) {
             chain.doFilter(req, res);
             return;
         }
 
         // TBD:
-        // Verify request oauth signature, etc...
         // ...
         
     }

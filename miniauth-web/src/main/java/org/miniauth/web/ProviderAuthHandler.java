@@ -1,12 +1,13 @@
 package org.miniauth.web;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
 
+import org.miniauth.MiniAuthException;
 import org.miniauth.credential.CredentialPair;
 
 
 // Server-side auth handler.
 public interface ProviderAuthHandler extends AuthHandler
 {
-    HttpServletRequest verifyRequest(CredentialPair credentialPair, HttpServletRequest request);
+    boolean verifyRequest(CredentialPair credentialPair, ServletRequest request) throws MiniAuthException;
 }

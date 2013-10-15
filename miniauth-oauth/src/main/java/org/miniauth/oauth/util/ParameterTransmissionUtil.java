@@ -46,7 +46,7 @@ public final class ParameterTransmissionUtil
     {
         if(headers != null && headers.containsKey(HttpHeader.AUTHORIZATION) ) {  // TBD: what if the auth header is not oauth????
             String authScheme = AuthHeaderUtil.getAuthScheme(headers);
-            if(AuthScheme.OAuth.equals(authScheme)) {
+            if(AuthScheme.OAUTH.equals(authScheme)) {
                 return ParameterTransmissionType.HEADER;
             } else {
                 // What does this mean???

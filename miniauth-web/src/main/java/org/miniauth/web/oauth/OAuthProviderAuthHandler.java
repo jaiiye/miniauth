@@ -1,7 +1,8 @@
 package org.miniauth.web.oauth;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
 
+import org.miniauth.MiniAuthException;
 import org.miniauth.credential.CredentialPair;
 import org.miniauth.web.ProviderAuthHandler;
 
@@ -15,15 +16,13 @@ public class OAuthProviderAuthHandler extends OAuthAuthHandler implements Provid
 
     
     @Override
-    public HttpServletRequest verifyRequest(CredentialPair credentialPair,
-            HttpServletRequest request)
+    public boolean verifyRequest(CredentialPair credentialPair, ServletRequest request) throws MiniAuthException
     {
         // TODO Auto-generated method stub
-        return null;
+        return false;
     }
 
-    
-    
+
     
     
 }
