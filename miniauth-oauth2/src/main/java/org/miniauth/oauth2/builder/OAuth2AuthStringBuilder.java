@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.builder.AuthStringBuilder;
+import org.miniauth.core.AuthScheme;
 import org.miniauth.credential.AuthCredentialConstants;
 import org.miniauth.exception.InvalidCredentialException;
 
@@ -35,7 +36,7 @@ public class OAuth2AuthStringBuilder implements AuthStringBuilder
             // TBD: check requestParams ???
             throw new InvalidCredentialException("Access token is not provided.");
         }
-        String authString = "Bearer " + accessToken;
+        String authString = AuthScheme.getAuthorizationHeaderAuthScheme(AuthScheme.OAUTH2) + " " + accessToken;
         if(log.isLoggable(Level.FINER)) log.finer("authString = " + authString);
         return authString;
     }

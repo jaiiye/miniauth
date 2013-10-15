@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.builder.AuthStringBuilder;
+import org.miniauth.core.AuthScheme;
 import org.miniauth.core.BaseURIInfo;
 import org.miniauth.core.ParameterTransmissionType;
 import org.miniauth.credential.AccessCredential;
@@ -62,7 +63,7 @@ public class OAuthAuthStringBuilder implements AuthStringBuilder
         
         String authString = null;
         if(ParameterTransmissionType.HEADER.equals(transmissionType)) {
-            authString = "OAuth " + paramString;
+            authString = AuthScheme.getAuthorizationHeaderAuthScheme(AuthScheme.OAUTH) + " " + paramString;
         } else {
             authString = paramString;
         }

@@ -18,6 +18,8 @@ public class OAuthProviderAuthHandler extends OAuthAuthHandler implements Provid
     @Override
     public boolean verifyRequest(CredentialPair credentialPair, ServletRequest request) throws MiniAuthException
     {
+        
+        
         // TODO Auto-generated method stub
         return false;
     }
