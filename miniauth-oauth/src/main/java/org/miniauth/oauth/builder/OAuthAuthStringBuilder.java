@@ -40,7 +40,7 @@ public class OAuthAuthStringBuilder implements AuthStringBuilder
     @Override
     public String generateAuthorizationString(
             String transmissionType, Map<String, String> authCredential, String httpMethod,
-            URI baseURI, Map<String, String[]> requestParams) throws MiniAuthException
+            URI baseURI, Map<String,String> authHeader, Map<String, String[]> formParams, Map<String, String[]> queryParams) throws MiniAuthException
     {
         String consumerSecret = null;
         String tokenSecret = null;
@@ -54,7 +54,7 @@ public class OAuthAuthStringBuilder implements AuthStringBuilder
         }
         AccessCredential credential = new OAuthAccessCredential(consumerSecret, tokenSecret);
         BaseURIInfo uriInfo = new BaseURIInfo(baseURI);
-        OAuthParamMap oauthParamMap = getOAuthSignatureGenerator().generateOAuthParamMap(credential, httpMethod, uriInfo, requestParams);
+        OAuthParamMap oauthParamMap = getOAuthSignatureGenerator().generateOAuthParamMap(credential, httpMethod, uriInfo, authHeader, formParams, queryParams);
 
         if(! ParameterTransmissionUtil.isTransmissionTypeValid(transmissionType)) {
             transmissionType = ParameterTransmissionUtil.getDefaultTransmissionType();

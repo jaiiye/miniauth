@@ -48,14 +48,14 @@ public class OAuthSignatureVerifierTest
         String consumerKey = "9djdj82h48djs9d2";
         String accessToken = "kkk9d7dh3k39sjv7";
         
-        Map<String,String[]> authHeaders = new HashMap<>();
-        authHeaders.put("oauth_consumer_key", new String[]{consumerKey});
-        authHeaders.put("oauth_token", new String[]{accessToken});
-        authHeaders.put("oauth_signature_method", new String[]{"HMAC-SHA1"});
-        authHeaders.put("oauth_timestamp", new String[]{"137131201"});
-        authHeaders.put("oauth_nonce", new String[]{"7d8f3e4a"});
-        authHeaders.put("realm", new String[]{"Example"});
-        authHeaders.put("oauth_signature", new String[]{"should not be included in the signature base string"});
+        Map<String,String> authHeader = new HashMap<>();
+        authHeader.put("oauth_consumer_key", consumerKey);
+        authHeader.put("oauth_token", accessToken);
+        authHeader.put("oauth_signature_method", "HMAC-SHA1");
+        authHeader.put("oauth_timestamp", "137131201");
+        authHeader.put("oauth_nonce", "7d8f3e4a");
+        authHeader.put("realm", "Example");
+        authHeader.put("oauth_signature", "should not be included in the signature base string");
         
         Map<String,String[]> formParams = new HashMap<>();
         formParams.put("c2", new String[]{});
@@ -77,16 +77,16 @@ public class OAuthSignatureVerifierTest
         String signature = null;
         try {
             OAuthSignatureGenerator oAuthSignatureGenerator = new OAuthSignatureGenerator();
-            signature = oAuthSignatureGenerator.generate(accessCredential, httpMethod, uriInfo, authHeaders, formParams, queryParams);
+            signature = oAuthSignatureGenerator.generate(accessCredential, httpMethod, uriInfo, authHeader, formParams, queryParams);
             System.out.println("signature = " + signature);
         } catch (MiniAuthException e) {
             e.printStackTrace();
         }
 
-        authHeaders.put("oauth_signature", new String[]{signature});
+        authHeader.put("oauth_signature", signature);
 
         try {
-            boolean verfied = oAuthSignatureVerifier.verify(credential, httpMethod, uriInfo, authHeaders, formParams, queryParams);
+            boolean verfied = oAuthSignatureVerifier.verify(credential, httpMethod, uriInfo, authHeader, formParams, queryParams);
             System.out.println("verfied = " + verfied);
         } catch (MiniAuthException e) {
             e.printStackTrace();

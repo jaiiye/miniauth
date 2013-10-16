@@ -42,10 +42,10 @@ public final class ParameterTransmissionUtil
     // Oauth params should be in one and only one of the param set {oauth headers, form params, query params}.
     // ....
     
-    public static String getOAuthParameterTransmissionType(Map<String,String[]> headers, Map<String,String[]> form, Map<String,String[]> query) throws MiniAuthException 
+    public static String getOAuthParameterTransmissionType(Map<String,String> header, Map<String,String[]> form, Map<String,String[]> query) throws MiniAuthException 
     {
-        if(headers != null && headers.containsKey(HttpHeader.AUTHORIZATION) ) {  // TBD: what if the auth header is not oauth????
-            String authScheme = AuthHeaderUtil.getAuthScheme(headers);
+        if(header != null && header.containsKey(HttpHeader.AUTHORIZATION) ) {  // TBD: what if the auth header is not oauth????
+            String authScheme = AuthHeaderUtil.getAuthScheme(header);
             if(AuthScheme.OAUTH.equals(authScheme)) {
                 return ParameterTransmissionType.HEADER;
             } else {
@@ -65,9 +65,9 @@ public final class ParameterTransmissionUtil
         throw new UnauthorizedException("Auth credential not found.");
     }
 
-    public static String getTransmissionType(Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException 
+    public static String getTransmissionType(Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException 
     {
-        if(authHeaders != null && !authHeaders.isEmpty()) {
+        if(authHeader != null && !authHeader.isEmpty()) {
             return ParameterTransmissionType.HEADER;
         } else if(formParams != null && formParams.containsKey(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD) ) {  // using an arbitrary oauth param.   // form-urlencoded ??? The caller should have checked this??? if it's not single-part & url-encoded form, the input "form" should be null????
             // temporary

@@ -24,7 +24,7 @@ public class BasicAuthStringBuilder implements AuthStringBuilder
     @Override
     public String generateAuthorizationString(
             String transmissionType, Map<String, String> authCredential, String httpMethod,
-            URI baseURI, Map<String, String[]> requestParams) throws MiniAuthException
+            URI baseURI, Map<String,String> authHeader, Map<String, String[]> formParams, Map<String, String[]> queryParams) throws MiniAuthException
     {
         // Note: transmissionType is ignored for Basic.
         //       It is always "header".

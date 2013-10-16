@@ -30,12 +30,7 @@ public class OAuthSignatureVerifier extends OAuthSignatureBase
     // oauthParams must include oauth_signature.
     // It returns true if signature is verfied against the given auth credential
     // Otherwise, it throws MiniAuthAuthException (rather than returning false). 
-    public boolean verify(CredentialPair credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
-    {
-        Map<String,String[]> requestParams = OAuthSignatureUtil.mergeRequestParameters(authHeaders, formParams, queryParams);
-        return verify(credential, httpMethod, uriInfo, requestParams);
-    }
-    public boolean verify(CredentialPair credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String[]> requestParams) throws MiniAuthException
+    public boolean verify(CredentialPair credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
         // Steps:
         // validate params
@@ -54,8 +49,7 @@ public class OAuthSignatureVerifier extends OAuthSignatureBase
         // ...
         
         
-        // OAuthParamMap oauthParamMap = OAuthSignatureUtil.validateOAuthParams(authHeaders, formParams, queryParams);
-        OAuthParamMap oauthParamMap = OAuthSignatureUtil.validateOAuthParams(requestParams);
+        OAuthParamMap oauthParamMap = OAuthSignatureUtil.validateOAuthParams(authHeader, formParams, queryParams);
         String signatureMethod = oauthParamMap.getSignatureMethod();
         
         if(SignatureMethod.requiresNonceAndTimestamp(signatureMethod)) {
@@ -82,7 +76,7 @@ public class OAuthSignatureVerifier extends OAuthSignatureBase
             verified = oauthSignatureAlgorithm.verify(null, accessCredential, signature);
         } else {
             // String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeaders, formParams, queryParams);
-            String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, requestParams);
+            String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeader, formParams, queryParams);
             verified = oauthSignatureAlgorithm.verify(signatureBaseString, accessCredential, signature);
         }
 

@@ -6,5 +6,7 @@
 
 /**
  * MiniAuth Core module Builder package.
+ * A "builder" creates an auth string that can be used as "Authorization token",
+ *    based on the auth scheme and the client/user auth credentials.
  */
 package org.miniauth.builder;

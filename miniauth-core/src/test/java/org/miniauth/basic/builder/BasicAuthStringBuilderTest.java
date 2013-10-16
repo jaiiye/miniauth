@@ -38,7 +38,7 @@ public class BasicAuthStringBuilderTest
         
         String authString = null;
         try {
-            authString = basicAuthStringBuilder.generateAuthorizationString(null, authCredential, null, null, null);
+            authString = basicAuthStringBuilder.generateAuthorizationString(null, authCredential, null, null, null, null, null);
             System.out.println("authString = " + authString);
         } catch (MiniAuthException e) {
             e.printStackTrace();

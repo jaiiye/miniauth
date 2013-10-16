@@ -1,8 +1,5 @@
 package org.miniauth.oauth.signature;
 
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,20 +7,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
 import org.miniauth.MiniAuthException;
-import org.miniauth.core.CryptoAlgorithm;
 import org.miniauth.core.ParameterTransmissionType;
-import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.exception.ValidationException;
 import org.miniauth.oauth.common.OAuthParamMap;
 import org.miniauth.oauth.core.OAuthConstants;
 import org.miniauth.oauth.core.SignatureMethod;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
-import org.miniauth.util.Base64Util;
-import org.miniauth.util.FormParamUtil;
 import org.miniauth.util.ParamMapUtil;
 
 
@@ -46,28 +36,48 @@ public final class OAuthSignatureUtil
         return false;
     }
 
-    public static Map<String,String[]> getOAuthParams(Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    public static Map<String,String> getOAuthParams(Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
-        Map<String,String[]> params = null;
-        String ptType = ParameterTransmissionUtil.getTransmissionType(authHeaders, formParams, queryParams);
+        Map<String,String> params = null;
+        String ptType = ParameterTransmissionUtil.getTransmissionType(authHeader, formParams, queryParams);
         switch(ptType) {
         case ParameterTransmissionType.HEADER:
-            params = authHeaders;
-            if(containsAnyOAuthParam(formParams) || containsAnyOAuthParam(queryParams)) {
-                throw new ValidationException("OAuth paras found in multiple parameter transmission modes.");
-            }
+            params = authHeader;
+//            if(containsAnyOAuthParam(formParams) || containsAnyOAuthParam(queryParams)) {
+//                throw new ValidationException("OAuth params found in multiple parameter transmission modes.");
+//            }
             break;  
         case ParameterTransmissionType.FORM:
-            params = formParams;
-            if(containsAnyOAuthParam(authHeaders) || containsAnyOAuthParam(queryParams)) {
-                throw new ValidationException("OAuth paras found in multiple parameter transmission modes.");
+//            params = formParams;
+//            if(containsAnyOAuthParam(authHeader) || containsAnyOAuthParam(queryParams)) {
+//                throw new ValidationException("OAuth params found in multiple parameter transmission modes.");
+//            }
+            params = new HashMap<>();
+            for(String k : formParams.keySet()) {
+                if(OAuthConstants.isOAuthParam(k)) {
+                    String[] valArr = formParams.get(k);
+                    if(valArr == null || valArr.length != 1) {
+                        throw new ValidationException("Multiple values found for the OAuth param: " + k);
+                    }
+                    params.put(k, valArr[0]);
+                }
             }
             break;  
         case ParameterTransmissionType.QUERY:
         // default:  // ???
-            params = queryParams;
-            if(containsAnyOAuthParam(authHeaders) || containsAnyOAuthParam(formParams)) {
-                throw new ValidationException("OAuth paras found in multiple parameter transmission modes.");
+//            params = queryParams;
+//            if(containsAnyOAuthParam(authHeader) || containsAnyOAuthParam(formParams)) {
+//                throw new ValidationException("OAuth params found in multiple parameter transmission modes.");
+//            }
+            params = new HashMap<>();
+            for(String q : queryParams.keySet()) {
+                if(OAuthConstants.isOAuthParam(q)) {
+                    String[] valArr = queryParams.get(q);
+                    if(valArr == null || valArr.length != 1) {
+                        throw new ValidationException("Multiple values found for the OAuth param: " + q);
+                    }
+                    params.put(q, valArr[0]);
+                }
             }
             break;  
         }
@@ -77,20 +87,19 @@ public final class OAuthSignatureUtil
 
     
     
-    public static String getOAuthSignatureMethod(Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    public static String getOAuthSignatureMethod(Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
         // Note: we call getOAuthParams() not mergeRequestParameters()...
-        Map<String,String[]> params = getOAuthParams(authHeaders, formParams, queryParams);
-        return getOAuthSignatureMethod(params);
+        Map<String,String> oauthParams = getOAuthParams(authHeader, formParams, queryParams);
+        return getOAuthSignatureMethod(oauthParams);
     }
-    public static String getOAuthSignatureMethod(Map<String,String[]> params) throws MiniAuthException
+    public static String getOAuthSignatureMethod(Map<String,String> oauthParams) throws MiniAuthException
     {
         String signatureMethod = null;
-        if(params != null) {
-            String[] valArray = params.get(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD);
-            signatureMethod = valArray[0];
+        if(oauthParams != null) {
+            signatureMethod = oauthParams.get(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD);
         } else {
-            // throw exception ???
+            // throw exception ??? Just return null?
         }
         
         return signatureMethod;
@@ -98,52 +107,62 @@ public final class OAuthSignatureUtil
 
     // It returns the oauthParam map (instead of boolean, as the method name seems to imply).
     // If validation fails, it throws exception (rather than returning false).
-    public static OAuthParamMap validateOAuthParams(Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    // signatureRequired==false means we are validating request before the full request has been constructed.
+    // Normally (e.g., when validating request on the provider side), signatureRequired should be true.
+    public static OAuthParamMap validateOAuthParams(Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    {
+        return validateOAuthParams(authHeader, formParams, queryParams, true);
+    }
+    public static OAuthParamMap validateOAuthParams(Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams, boolean signatureRequired) throws MiniAuthException
     {
         // Note: we call getOAuthParams() not mergeRequestParameters()...
-        Map<String,String[]> authParams = getOAuthParams(authHeaders, formParams, queryParams);
-        return validateOAuthParams(authParams);
+        Map<String,String> authParams = getOAuthParams(authHeader, formParams, queryParams);
+        return validateOAuthParams(authParams, signatureRequired);
     }
-    public static OAuthParamMap validateOAuthParams(Map<String,String[]> authParams) throws MiniAuthException
+    public static OAuthParamMap validateOAuthParams(Map<String,String> authParams) throws MiniAuthException
+    {
+        return validateOAuthParams(authParams, true);
+    }
+    public static OAuthParamMap validateOAuthParams(Map<String,String> authParams, boolean signatureRequired) throws MiniAuthException
     {
         if(authParams == null || authParams.isEmpty()) {
             throw new ValidationException("OAuth param map is null/empty.");
         }
-        
+
         OAuthParamMap oauthParamMap = new OAuthParamMap();
         
         if(!authParams.containsKey(OAuthConstants.PARAM_OAUTH_CONSUMER_KEY)) {
             throw new ValidationException("OAuth consumer key is missing.");                
         } else {
-            String[] consumerKeys = authParams.get(OAuthConstants.PARAM_OAUTH_CONSUMER_KEY);
-            if(consumerKeys == null || consumerKeys.length != 1 || consumerKeys[0] == null || consumerKeys[0].isEmpty()) {
+            String consumerKey = authParams.get(OAuthConstants.PARAM_OAUTH_CONSUMER_KEY);
+            if(consumerKey == null || consumerKey.isEmpty()) {
                 throw new ValidationException("Invalid OAuth consumer key..");                
             } else {
-                oauthParamMap.put(OAuthConstants.PARAM_OAUTH_CONSUMER_KEY, consumerKeys[0]);
+                oauthParamMap.put(OAuthConstants.PARAM_OAUTH_CONSUMER_KEY, consumerKey);
             }
         }
 
         if(authParams.containsKey(OAuthConstants.PARAM_OAUTH_TOKEN)) {
-            String[] tokens = authParams.get(OAuthConstants.PARAM_OAUTH_TOKEN);
-            if(tokens == null || tokens.length != 1 || tokens[0].isEmpty()) {
+            String token = authParams.get(OAuthConstants.PARAM_OAUTH_TOKEN);
+            if(token == null || token.isEmpty()) {
                 throw new ValidationException("Invalid OAuth access token.");                
             } else {
-                oauthParamMap.put(OAuthConstants.PARAM_OAUTH_TOKEN, tokens[0]);
+                oauthParamMap.put(OAuthConstants.PARAM_OAUTH_TOKEN, token);
             }
         }
-        
+
         String signatureMethod = null;
         if(!authParams.containsKey(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD)) {
             throw new ValidationException("OAuth signature method is missing.");                
         } else {
-            String[] sigMethods = authParams.get(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD);
-            if(sigMethods == null || sigMethods.length != 1) {
+            String sigMethod = authParams.get(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD);
+            if(sigMethod == null || sigMethod.isEmpty()) {
                 throw new ValidationException("OAuth signature method param is invalid.");                
             } else {
-                signatureMethod = sigMethods[0];
-                if(! SignatureMethod.isValid(signatureMethod)) {
-                    throw new ValidationException("Invalid OAuth signature method.");                
+                if(! SignatureMethod.isValid(sigMethod)) {
+                    throw new ValidationException("Invalid OAuth signature method: " + sigMethod);                
                 } else {
+                    signatureMethod = sigMethod;
                     oauthParamMap.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, signatureMethod);
                 }
             }
@@ -153,20 +172,19 @@ public final class OAuthSignatureUtil
             throw new ValidationException("OAuth timestamp is missing.");                
         } else {
             if(authParams.containsKey(OAuthConstants.PARAM_OAUTH_TIMESTAMP)) {
-                String[] timestamps = authParams.get(OAuthConstants.PARAM_OAUTH_TIMESTAMP);
-                if(timestamps == null || timestamps.length != 1 || timestamps[0].isEmpty()) {
+                String timestampStr = authParams.get(OAuthConstants.PARAM_OAUTH_TIMESTAMP);
+                if(timestampStr == null || timestampStr.isEmpty()) {
                     throw new ValidationException("Invalid OAuth timestamp.");                
                 } else {
-                    String strTS = timestamps[0];
                     try {
-                        int ts = Integer.parseInt(strTS);
+                        int ts = Integer.parseInt(timestampStr);
                         if(ts <= 0) {
-                            throw new ValidationException("Non-positive OAuth timestamp.");                
+                            throw new ValidationException("Non-positive OAuth timestamp: " + timestampStr);                
                         } else {
                             oauthParamMap.put(OAuthConstants.PARAM_OAUTH_TIMESTAMP, ts);
                         }
                     } catch(NumberFormatException e) {
-                        throw new ValidationException("Invalid OAuth timestamp.", e); 
+                        throw new ValidationException("Invalid OAuth timestamp: " + timestampStr, e); 
                     }
                 }
             }
@@ -176,35 +194,39 @@ public final class OAuthSignatureUtil
             throw new ValidationException("OAuth nonce is missing.");                
         } else {
             if(authParams.containsKey(OAuthConstants.PARAM_OAUTH_NONCE)) {
-                String[] nonces = authParams.get(OAuthConstants.PARAM_OAUTH_NONCE);
-                if(nonces == null || nonces.length != 1 || nonces[0].isEmpty()) {
+                String nonce = authParams.get(OAuthConstants.PARAM_OAUTH_NONCE);
+                if(nonce == null || nonce.isEmpty()) {
                     throw new ValidationException("Invalid OAuth nonce.");       
                 } else {
-                    oauthParamMap.put(OAuthConstants.PARAM_OAUTH_NONCE, nonces[0]);
+                    oauthParamMap.put(OAuthConstants.PARAM_OAUTH_NONCE, nonce);
                 }
             }
         }
 
         if(authParams.containsKey(OAuthConstants.PARAM_OAUTH_VERSION)) {
-            String[] versions = authParams.get(OAuthConstants.PARAM_OAUTH_VERSION);
-            if(versions == null || versions.length != 1 || !versions[0].equals("1.0")) {
+            String version = authParams.get(OAuthConstants.PARAM_OAUTH_VERSION);
+            if(version == null || !version.equals(OAuthConstants.OAUTH_VERSION_STRING)) {
                 throw new ValidationException("Invalid OAuth version.");                
             } else {
-                oauthParamMap.put(OAuthConstants.PARAM_OAUTH_VERSION, versions[0]);
+                oauthParamMap.put(OAuthConstants.PARAM_OAUTH_VERSION, version);
             }
         }
         
         // signature?
-        // ...
         if(!authParams.containsKey(OAuthConstants.PARAM_OAUTH_SIGNATURE)) {
-            throw new ValidationException("OAuth signature is missing.");                
-        } else {
-            String[] signatures = authParams.get(OAuthConstants.PARAM_OAUTH_SIGNATURE);
-            if(signatures == null || signatures.length != 1 || signatures[0] == null || signatures[0].isEmpty()) {
-                throw new ValidationException("Invalid OAuth signature..");                
-            } else {
-                oauthParamMap.put(OAuthConstants.PARAM_OAUTH_SIGNATURE, signatures[0]);
+            if(signatureRequired) {
+                throw new ValidationException("OAuth signature is missing.");
             }
+        } else {
+            String signature = authParams.get(OAuthConstants.PARAM_OAUTH_SIGNATURE);
+            if(signatureRequired && (signature == null || signature.isEmpty())) {
+                throw new ValidationException("Invalid OAuth signature.");                
+            }
+            // ???
+            // Just keep the param even if the value is null/empty ???
+            // if(signature != null && !signature.isEmpty()) {
+                oauthParamMap.put(OAuthConstants.PARAM_OAUTH_SIGNATURE, signature);
+            // }
         }
         
         if(log.isLoggable(Level.FINER)) log.finer("oauthParamMap = " + oauthParamMap);
@@ -227,37 +249,26 @@ public final class OAuthSignatureUtil
 
     
     // Merge params without percent encoding...
-    // TBD:
-    // oauth_signature and realm should be filtered while generating the "signature base string"???
-    // unfortunately, once params are merged, we have no way to tell where the "realm" param came from originally...
-    // ....
-    public static Map<String,String[]> mergeRequestParameters(Map<String,String[]> authHeaders, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    // No "filtering" (for signature and realm).
+    // This method may be used generically (not in the context of gnerating a signature),
+    //   and hence params should not be filtered...
+    public static Map<String,String[]> mergeRequestParameters(Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    {
+        return mergeRequestParameters(null, formParams, queryParams);
+    }
+    public static Map<String,String[]> mergeRequestParameters(Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
         Map<String,List<String>> paramMap = new HashMap<>();
-        if(authHeaders != null) {
-            for(String key : authHeaders.keySet()) {
-//                if(OAuthConstants.PARAM_OAUTH_SIGNATURE.equals(key) || OAuthConstants.PARAM_REALM.equals(key)) {
-//                    // exclude these...
-//                    continue;
-//                }
-                String[] values = authHeaders.get(key);
-                List<String> valueList = paramMap.get(key);
-                if(valueList == null) {
-                    valueList = new ArrayList<>();
-                    paramMap.put(key, valueList);
-                }
-                // valueList.addAll(Arrays.asList(values));
-                for(String v : values) {
-                    valueList.add(v);
-                }
+        if(authHeader != null) {
+            for(String key : authHeader.keySet()) {
+                String value = authHeader.get(key);
+                List<String> valueList = new ArrayList<>();
+                valueList.add(value);
+                paramMap.put(key, valueList);
             }
         }
         if(formParams != null) {
             for(String key : formParams.keySet()) {
-//                if(OAuthConstants.PARAM_OAUTH_SIGNATURE.equals(key)) {
-//                    // exclude this..
-//                    continue;
-//                }
                 String[] values = formParams.get(key);
                 List<String> valueList = paramMap.get(key);
                 if(valueList == null) {
@@ -272,10 +283,6 @@ public final class OAuthSignatureUtil
         }
         if(queryParams != null) {
             for(String key : queryParams.keySet()) {
-//                if(OAuthConstants.PARAM_OAUTH_SIGNATURE.equals(key)) {
-//                    // exclude this..
-//                    continue;
-//                }
                 String[] values = queryParams.get(key);
                 List<String> valueList = paramMap.get(key);
                 if(valueList == null) {

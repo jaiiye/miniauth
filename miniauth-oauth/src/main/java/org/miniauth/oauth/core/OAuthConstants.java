@@ -19,7 +19,10 @@ public final class OAuthConstants
     public static final String PARAM_OAUTH_CALLBACK = "oauth_callback";
     public static final String PARAM_OAUTH_TOKEN_VERIFIER = "oauth_verifier";
     // ...
-    
+
+    public static final String OAUTH_VERSION_STRING = "1.0";
+    // ...
+
     private static final Set<String> sOAuthParams;
     static {
         sOAuthParams = new HashSet<>();

@@ -43,29 +43,69 @@ public final class OAuthParamMap implements Serializable
     {
         this(null);
     }
-    public OAuthParamMap(Map<String,Object> paramMap)
+    // The arg paramMap can be either Map<String,Object> or Map<String,String>.
+    // If it is Map<String,String>, it should be converted to Map<String,Object>.
+    public OAuthParamMap(Map<String, ? extends Object> paramMap)
     {
         this(paramMap, true);  // default true. ???
     }
     // if copyOAuthParamOnly is set to true, two things happen.
-    // (1) we "clone" the input map (rather than just copying its reference).
+    // (1) we "clone" the input map (rather than just copying its reference).  --> Now we always clone....
     // (2) we filter out all non-OAuth params.
-    public OAuthParamMap(Map<String,Object> paramMap, boolean copyOAuthParamOnly)
+    public OAuthParamMap(Map<String, ? extends Object> paramMap, boolean copyOAuthParamOnly)
     {
-        if(paramMap == null) {
-            this.paramMap = new HashMap<>();
-        } else {
+//        if(paramMap == null) {
+//            this.paramMap = new HashMap<>();
+//        } else {
+//            if(copyOAuthParamOnly) {
+//                this.paramMap = new HashMap<>();
+//                for(String p : OAuthConstants.getAllOAuthParams()) {
+//                    Object val = paramMap.get(p);
+//                    if(val != null) {
+//                        this.paramMap.put(p, val);
+//                    }
+//                }
+//            } else {
+//                // TBD: Validation???
+//                this.paramMap = (Map<String, Object>) paramMap;
+//            }
+//        }
+        this.paramMap = new HashMap<>();
+        if(paramMap != null) {
             if(copyOAuthParamOnly) {
-                this.paramMap = new HashMap<>();
                 for(String p : OAuthConstants.getAllOAuthParams()) {
                     Object val = paramMap.get(p);
                     if(val != null) {
-                        paramMap.put(p, val);
+                        if(p.equals(OAuthConstants.PARAM_OAUTH_TIMESTAMP) && (val instanceof String)) {
+                            try {
+                                Integer ts = Integer.valueOf((String) val);
+                                this.paramMap.put(p, ts);
+                            } catch(Exception e) {
+                                // Ignore.
+                                log.log(Level.INFO, "Invalid type for timestamp: " + val, e);
+                            }
+                        } else {
+                            this.paramMap.put(p, val);
+                        }
                     }
                 }
             } else {
-                // TBD: Validation???
-                this.paramMap = paramMap;
+                for(String k : paramMap.keySet()) {
+                    Object val = paramMap.get(k);
+                    if(val != null) {
+                        if(k.equals(OAuthConstants.PARAM_OAUTH_TIMESTAMP) && (val instanceof String)) {
+                            try {
+                                Integer ts = Integer.valueOf((String) val);
+                                this.paramMap.put(k, ts);
+                            } catch(Exception e) {
+                                // Ignore.
+                                log.log(Level.INFO, "Invalid type for timestamp: " + val, e);
+                            }
+                        } else {
+                            this.paramMap.put(k, val);
+                        }
+                    }
+                }
             }
         }
     }

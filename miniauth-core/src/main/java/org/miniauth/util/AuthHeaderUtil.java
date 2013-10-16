@@ -2,9 +2,7 @@ package org.miniauth.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -12,7 +10,7 @@ import org.miniauth.MiniAuthException;
 import org.miniauth.core.HttpHeader;
 import org.miniauth.exception.BadRequestException;
 import org.miniauth.exception.InternalErrorException;
-// import org.miniauth.oauth.core.OAuthConstants;
+import org.miniauth.exception.ValidationException;
 
 
 public final class AuthHeaderUtil
@@ -22,27 +20,22 @@ public final class AuthHeaderUtil
     private AuthHeaderUtil() {}
 
     
-    public static String getAuthScheme(Map<String,String[]> headers) throws BadRequestException
+    public static String getAuthScheme(Map<String,String> header) throws BadRequestException
     {
-        if(headers != null) {
-            String[] authHeaders = headers.get(HttpHeader.AUTHORIZATION);
-            if(authHeaders == null) {
+        if(header != null) {
+            String authHeader = header.get(HttpHeader.AUTHORIZATION);
+            if(authHeader == null) {
                 return null;
             } else {
-                int len = authHeaders.length;
-                if(len == 1) {
-                    String authHeader = authHeaders[0];
-                    return getAuthScheme(authHeader);
-                } else {
-                    // Can this happen???
-                    throw new BadRequestException("More than one authorization header found: len = " + len);
-                }
+                return getAuthScheme(authHeader);
             }
         } else {
             return null;
         }
     }
     
+    // NOte:
+    // This deos not work for OAuth2...
     public static String getAuthScheme(String authHeader) throws BadRequestException
     {
         if(authHeader == null || authHeader.isEmpty()) {
@@ -56,7 +49,7 @@ public final class AuthHeaderUtil
         return parts[0].trim();  // ???
     }
 
-    public static Map<String,String[]> getAuthParams(Map<String,String[]> headers) throws MiniAuthException
+    public static Map<String,String> getAuthParams(Map<String,String[]> headers) throws MiniAuthException
     {
         if(headers != null) {
             String[] authHeaders = headers.get(HttpHeader.AUTHORIZATION);
@@ -77,7 +70,7 @@ public final class AuthHeaderUtil
         }
     }
     
-    public static Map<String,String[]> getAuthParams(String authHeader) throws MiniAuthException
+    public static Map<String,String> getAuthParams(String authHeader) throws MiniAuthException
     {
         if(authHeader == null || authHeader.isEmpty()) {
             // ???
@@ -95,7 +88,7 @@ public final class AuthHeaderUtil
         String paramString = parts[1].trim();
         String[] pairs = paramString.split("&");
         
-        Map<String,String[]> paramMap = new HashMap<>();
+        Map<String,String> paramMap = new HashMap<>();
         try {
             for(String p : pairs) {
                 String[] pair = p.split("=", 2);
@@ -107,20 +100,10 @@ public final class AuthHeaderUtil
                     val = "";   // ???
                 }
                 if(paramMap.containsKey(key)) {
-                    // if(OAuthConstants.isOAuthParam(key)) {   // ??? 
-                    //     throw new BadRequestException("Duplicate OAuth params found in the authorization header: key = " + key);
-                    // } else {
-                        // TBD:
-                        // This is probably very inefficient if the number of params with the same key increases...
-                        String[] oldArr = paramMap.get(key);
-                        List<String> list = Arrays.asList(oldArr);
-                        list.add(val);
-                        String[] newArr = list.toArray(new String[]{});
-                        paramMap.put(key, newArr);
-                    // }
+                    throw new ValidationException("Duplicate OAuth params found in the authorization header: key = " + key);
                 } else {
                     // ????
-                    paramMap.put(key, new String[]{val});
+                    paramMap.put(key, val);
                 }
             }
         } catch (UnsupportedEncodingException e) {
