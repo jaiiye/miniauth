@@ -3,6 +3,7 @@ package org.miniauth.web.oauth;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,19 +14,26 @@ import org.miniauth.core.ParameterTransmissionType;
 import org.miniauth.exception.InvalidInputException;
 import org.miniauth.exception.InvalidStateException;
 import org.miniauth.oauth.builder.OAuthAuthStringBuilder;
+import org.miniauth.signature.SignatureGenerator;
 import org.miniauth.web.ClientAuthHandler;
 import org.miniauth.web.oauth.util.OAuthServletRequestUtil;
 
 
-public class OAuthClientAuthHandler extends OAuthAuthHandler implements ClientAuthHandler
+// TBD:
+// This does not really make sense....
+// We need a different way to build a "request object"...
+// ....
+/* public */ class OAuthClientAuthHandler extends OAuthAuthHandler implements ClientAuthHandler
 {
 
     // TBD: Is it safe to reuse this???
     private final AuthStringBuilder authStringBuilder;
+    private final SignatureGenerator signatureGenerator;
 
     public OAuthClientAuthHandler()
     {
         authStringBuilder = new OAuthAuthStringBuilder();
+        signatureGenerator = ((OAuthAuthStringBuilder) authStringBuilder).getOAuthSignatureGenerator();  // ???
     }
     
     // Note that "signing" is the last step.
@@ -91,7 +99,10 @@ public class OAuthClientAuthHandler extends OAuthAuthHandler implements ClientAu
         // Add oauth_X params...
         switch(transmissionType) {
         case ParameterTransmissionType.HEADER:
+            // note that autheHeader should be null at this point (or, maybe an empty map?)
             // ...
+            authHeader = new HashMap<>();
+            
             break;
             // ....
         }
@@ -105,6 +116,10 @@ public class OAuthClientAuthHandler extends OAuthAuthHandler implements ClientAu
         switch(transmissionType) {
         case ParameterTransmissionType.HEADER:
             // ...
+            // ???
+            // add a header to the request???
+            // How ??
+
             break;
             // ....
         }
