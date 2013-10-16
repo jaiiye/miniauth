@@ -8,6 +8,9 @@ import java.util.logging.Logger;
 
 // Note: Although this is in the auth.core package (and it can be used in a general context),
 //       its implementation is specifically tailored for OAuth (OAuth 1.0a).
+// This is really a wrapper of java.net.URI.
+// OAuth puts many small/messy requirements, and URI is no exception.
+// BaseURIInfo encapsulates this requirement.
 public final class BaseURIInfo
 {
     private static final Logger log = Logger.getLogger(BaseURIInfo.class.getName());
@@ -97,6 +100,7 @@ public final class BaseURIInfo
     }
     public URI buildURI(String query, String fragment) throws URISyntaxException 
     {
+        // NOTE:
         // Remove the default port from the url (per OAuth requirements during signing).
         int uriPort = this.port;
         if(UriScheme.getDefaultPort(this.uriScheme) == this.port) {

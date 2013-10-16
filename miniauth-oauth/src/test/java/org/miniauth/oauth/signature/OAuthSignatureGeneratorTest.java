@@ -2,6 +2,8 @@ package org.miniauth.oauth.signature;
 
 import static org.junit.Assert.assertEquals;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +41,13 @@ public class OAuthSignatureGeneratorTest
         String host = "example.com";
         int port = 80;
         String path = "/a/b";
-        BaseURIInfo uriInfo = new BaseURIInfo(uriScheme, userInfo, host, port, path);
+        //BaseURIInfo uriInfo = new BaseURIInfo(uriScheme, userInfo, host, port, path);
+        URI uriInfo = null;
+        try {
+            uriInfo = new URI(uriScheme, userInfo, host, port, path, null, null);
+        } catch (URISyntaxException e1) {
+            e1.printStackTrace();
+        }
 
         String consumerKey = "9djdj82h48djs9d2";
         String accessToken = "kkk9d7dh3k39sjv7";

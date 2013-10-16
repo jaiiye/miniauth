@@ -1,5 +1,7 @@
 package org.miniauth.oauth.signature;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,7 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.miniauth.MiniAuthException;
-import org.miniauth.core.BaseURIInfo;
 import org.miniauth.core.HttpMethod;
 import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.ConsumerCredential;
@@ -43,7 +44,13 @@ public class OAuthSignatureVerifierTest
         String host = "example.com";
         int port = 80;
         String path = "/a/b";
-        BaseURIInfo uriInfo = new BaseURIInfo(uriScheme, userInfo, host, port, path);
+        // BaseURIInfo uriInfo = new BaseURIInfo(uriScheme, userInfo, host, port, path);
+        URI uriInfo = null;
+        try {
+            uriInfo = new URI(uriScheme, userInfo, host, port, path, null, null);
+        } catch (URISyntaxException e1) {
+            e1.printStackTrace();
+        }
 
         String consumerKey = "9djdj82h48djs9d2";
         String accessToken = "kkk9d7dh3k39sjv7";
