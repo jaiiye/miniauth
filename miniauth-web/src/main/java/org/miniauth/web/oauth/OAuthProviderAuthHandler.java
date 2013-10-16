@@ -3,10 +3,9 @@ package org.miniauth.web.oauth;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.miniauth.MiniAuthException;
-import org.miniauth.credential.CredentialPair;
 import org.miniauth.web.ProviderAuthHandler;
 import org.miniauth.web.util.ServletRequestUtil;
 
@@ -22,11 +21,13 @@ public class OAuthProviderAuthHandler extends OAuthAuthHandler implements Provid
 
     
     @Override
-    public boolean verifyRequest(CredentialPair credentialPair, ServletRequest request) throws MiniAuthException
+    public boolean verifyRequest(Map<String, String> authCredential, HttpServletRequest request) throws MiniAuthException
     {
         // TBD:
         Map<String,String[]> params = ServletRequestUtil.parseServletRequest(request);
         
+        // TBD
+        // ...
         
         
         

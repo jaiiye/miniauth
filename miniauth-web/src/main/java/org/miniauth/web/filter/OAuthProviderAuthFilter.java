@@ -1,6 +1,7 @@
 package org.miniauth.web.filter;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.Filter;
@@ -9,6 +10,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.AuthScheme;
@@ -54,14 +56,18 @@ public class OAuthProviderAuthFilter extends ProviderAuthFilter implements Filte
         
         // TBD:
         // Where do you get the credential pair? (for consumer and user token/secrets)
-        CredentialPair credentialPair = null;
+        // CredentialPair credentialPair = null;
+        Map<String,String> authCredential = null;
         
         boolean verified = false;
         try {
-            verified = getProviderAuthHandler().verifyRequest(credentialPair, req);
+            verified = getProviderAuthHandler().verifyRequest(authCredential, (HttpServletRequest) req);
         } catch (MiniAuthException e) {
             // temporary
             throw new ServletException("Invalid auth.", e);
+        } catch (Exception e) {
+            // temporary
+            throw new ServletException("Unknown error.", e);
         }
         
         // TBD:
