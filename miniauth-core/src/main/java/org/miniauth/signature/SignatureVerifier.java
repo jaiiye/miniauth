@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.Map;
 
 import org.miniauth.MiniAuthException;
-import org.miniauth.credential.CredentialPair;
 
 
 // This is primarily for OAuth v1.0a
@@ -12,7 +11,7 @@ import org.miniauth.credential.CredentialPair;
 public interface SignatureVerifier
 {
     // See the comment in SignatureGenerator regarding the reason why we have two versions of (almost identical) verify().
-    boolean verify(CredentialPair credential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException;
-    boolean verify(CredentialPair credential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException;
+    boolean verify(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException;
+    boolean verify(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException;
 
 }

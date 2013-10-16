@@ -8,9 +8,11 @@ import java.util.logging.Logger;
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.BaseURIInfo;
 import org.miniauth.credential.AccessCredential;
+import org.miniauth.credential.AuthCredentialConstants;
 import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.oauth.common.OAuthParamMap;
 import org.miniauth.oauth.core.SignatureMethod;
+import org.miniauth.oauth.credential.OAuthAccessCredential;
 import org.miniauth.oauth.crypto.OAuthSignatureAlgorithm;
 import org.miniauth.oauth.crypto.OAuthSignatureAlgorithmFactory;
 import org.miniauth.signature.SignatureGenerator;
@@ -27,15 +29,15 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase implements Signa
 
     // oauthParams does not include oauth_signature.
     @Override
-    public String generate(AccessCredential credential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    public String generate(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
         // For now, we do not distinguish formParams and queryParams.
         // TBD: OAuth spec requires they should be treated separately...
         Map<String,String[]> requestParams = OAuthSignatureUtil.mergeRequestParameters(formParams, queryParams);
-        return generate(credential, httpMethod, baseUri, authHeader, requestParams);
+        return generate(authCredential, httpMethod, baseUri, authHeader, requestParams);
     }
     @Override
-    public String generate(AccessCredential credential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    public String generate(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
     {
         // String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeaders, formParams, queryParams);
         String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeader, requestParams);
@@ -43,17 +45,29 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase implements Signa
             throw new AuthSignatureException("Invalid signature method: " + signatureMethod);
         }
         // ...
+        AccessCredential accessCredential = null;
+        if(authCredential != null) {
+            String consumerSecret = null;
+            if(authCredential.containsKey(AuthCredentialConstants.CONSUMER_SECRET)) {
+                consumerSecret = authCredential.get(AuthCredentialConstants.CONSUMER_SECRET);
+            }
+            String tokenSecret = null;
+            if(authCredential.containsKey(AuthCredentialConstants.TOKEN_SECRET)) {
+                tokenSecret = authCredential.get(AuthCredentialConstants.TOKEN_SECRET);
+            }
+            accessCredential = new OAuthAccessCredential(consumerSecret, tokenSecret);
+        }
         
         OAuthSignatureAlgorithm oauthSignatureAlgorithm = OAuthSignatureAlgorithmFactory.getInstance().getOAuthSignatureAlgorithm(signatureMethod);
         
         String signature = null;
         if(SignatureMethod.PLAINTEXT.equals(signatureMethod)) {
-            signature = oauthSignatureAlgorithm.generate(null, credential);
+            signature = oauthSignatureAlgorithm.generate(null, accessCredential);
         } else {
             BaseURIInfo uriInfo = new BaseURIInfo(baseUri);
             // String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeaders, formParams, queryParams);
             String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeader, requestParams);
-            signature = oauthSignatureAlgorithm.generate(signatureBaseString, credential);
+            signature = oauthSignatureAlgorithm.generate(signatureBaseString, accessCredential);
         }
 
         if(log.isLoggable(Level.FINE)) log.fine("signature = " + signature);

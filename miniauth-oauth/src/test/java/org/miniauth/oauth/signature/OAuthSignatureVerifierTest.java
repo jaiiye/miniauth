@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.HttpMethod;
 import org.miniauth.credential.AccessCredential;
+import org.miniauth.credential.AuthCredentialConstants;
 import org.miniauth.credential.ConsumerCredential;
 import org.miniauth.credential.CredentialPair;
 import org.miniauth.credential.TokenCredential;
@@ -75,11 +76,16 @@ public class OAuthSignatureVerifierTest
         queryParams.put("a2", new String[]{"r b"});
         
         
-        
-        ConsumerCredential consumerCredential = new OAuthConsumerCredential(consumerKey, "_consumer_secret_");
-        TokenCredential tokenCredential = new OAuthTokenCredential(accessToken, "_token_secret_");
-        CredentialPair credential = new OAuthCredentialPair(consumerCredential, tokenCredential);
-        AccessCredential accessCredential = credential.getAccessCredential();
+//        ConsumerCredential consumerCredential = new OAuthConsumerCredential(consumerKey, "_consumer_secret_");
+//        TokenCredential tokenCredential = new OAuthTokenCredential(accessToken, "_token_secret_");
+//        CredentialPair credential = new OAuthCredentialPair(consumerCredential, tokenCredential);
+//        AccessCredential accessCredential = credential.getAccessCredential();
+
+        Map<String,String> accessCredential = new HashMap<>();
+        accessCredential.put(AuthCredentialConstants.CONSUMER_KEY, consumerKey);
+        accessCredential.put(AuthCredentialConstants.CONSUMER_SECRET, "_consumer_secret_");
+        accessCredential.put(AuthCredentialConstants.ACCESS_TOKEN, accessToken);
+        accessCredential.put(AuthCredentialConstants.TOKEN_SECRET, "_token_secret_");
 
         String signature = null;
         try {
@@ -93,7 +99,7 @@ public class OAuthSignatureVerifierTest
         authHeader.put("oauth_signature", signature);
 
         try {
-            boolean verfied = oAuthSignatureVerifier.verify(credential, httpMethod, uriInfo, authHeader, formParams, queryParams);
+            boolean verfied = oAuthSignatureVerifier.verify(accessCredential, httpMethod, uriInfo, authHeader, formParams, queryParams);
             System.out.println("verfied = " + verfied);
         } catch (MiniAuthException e) {
             e.printStackTrace();

@@ -14,6 +14,7 @@ import org.miniauth.MiniAuthException;
 import org.miniauth.core.BaseURIInfo;
 import org.miniauth.core.HttpMethod;
 import org.miniauth.credential.AccessCredential;
+import org.miniauth.credential.AuthCredentialConstants;
 import org.miniauth.oauth.credential.OAuthAccessCredential;
 
 public class OAuthSignatureGeneratorTest
@@ -71,7 +72,10 @@ public class OAuthSignatureGeneratorTest
         queryParams.put("c@", new String[]{});
         queryParams.put("a2", new String[]{"r b"});
         
-        AccessCredential credential = new OAuthAccessCredential("_consumer_secret_", "_token_secret_");
+        // AccessCredential credential = new OAuthAccessCredential("_consumer_secret_", "_token_secret_");
+        Map<String,String> credential = new HashMap<>();
+        credential.put(AuthCredentialConstants.CONSUMER_SECRET, "_consumer_secret_");
+        credential.put(AuthCredentialConstants.TOKEN_SECRET, "_token_secret_");
         try {
             String signature = oAuthSignatureGenerator.generate(credential, httpMethod, uriInfo, authHeader, formParams, queryParams);
             System.out.println("signature = " + signature);
