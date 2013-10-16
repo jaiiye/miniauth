@@ -36,6 +36,27 @@ public final class OAuthSignatureUtil
         return false;
     }
 
+    // TBD:
+    // Need to re-implement all these methods (for getting transmissionType, oauthParams, etc.)... 
+    public static Map<String,String> getOAuthParams(Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    {
+        Map<String,String> params = null;
+        if(authHeader != null && !authHeader.isEmpty()) {
+            params = authHeader;
+        } else if(requestParams != null && requestParams.containsKey(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD) ) {
+            params = new HashMap<>();
+            for(String q : requestParams.keySet()) {
+                if(OAuthConstants.isOAuthParam(q)) {
+                    String[] valArr = requestParams.get(q);
+                    if(valArr == null || valArr.length != 1) {
+                        throw new ValidationException("Multiple values found for the OAuth param: " + q);
+                    }
+                    params.put(q, valArr[0]);
+                }
+            }
+        }
+        return params;
+    }
     public static Map<String,String> getOAuthParams(Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
         Map<String,String> params = null;
@@ -89,8 +110,13 @@ public final class OAuthSignatureUtil
     
     public static String getOAuthSignatureMethod(Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
+        Map<String,String[]> requestParams = mergeRequestParameters(formParams, queryParams);
+        return getOAuthSignatureMethod(authHeader, requestParams);
+    }
+    public static String getOAuthSignatureMethod(Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    {
         // Note: we call getOAuthParams() not mergeRequestParameters()...
-        Map<String,String> oauthParams = getOAuthParams(authHeader, formParams, queryParams);
+        Map<String,String> oauthParams = getOAuthParams(authHeader, requestParams);
         return getOAuthSignatureMethod(oauthParams);
     }
     public static String getOAuthSignatureMethod(Map<String,String> oauthParams) throws MiniAuthException

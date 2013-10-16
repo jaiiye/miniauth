@@ -72,4 +72,40 @@ public class OAuthAuthStringBuilder implements AuthStringBuilder
         return authString;
     }
 
+    @Override
+    public String generateAuthorizationString(String transmissionType,
+            Map<String, String> authCredential, String httpMethod, URI baseURI,
+            Map<String, String> authHeader, Map<String, String[]> requestParams)
+            throws MiniAuthException
+    {
+        String consumerSecret = null;
+        String tokenSecret = null;
+        if(authCredential != null) {
+            if(authCredential.containsKey(AuthCredentialConstants.CONSUMER_SECRET)) {
+                consumerSecret = authCredential.get(AuthCredentialConstants.CONSUMER_SECRET);
+            }
+            if(authCredential.containsKey(AuthCredentialConstants.TOKEN_SECRET)) {
+                tokenSecret = authCredential.get(AuthCredentialConstants.TOKEN_SECRET);
+            }
+        }
+        AccessCredential credential = new OAuthAccessCredential(consumerSecret, tokenSecret);
+        BaseURIInfo uriInfo = new BaseURIInfo(baseURI);
+        OAuthParamMap oauthParamMap = getOAuthSignatureGenerator().generateOAuthParamMap(credential, httpMethod, uriInfo, authHeader, requestParams);
+
+        if(! ParameterTransmissionUtil.isTransmissionTypeValid(transmissionType)) {
+            transmissionType = ParameterTransmissionUtil.getDefaultTransmissionType();
+        }
+        String paramString = oauthParamMap.buildUrlEncodedParamString(transmissionType);
+        
+        String authString = null;
+        if(ParameterTransmissionType.HEADER.equals(transmissionType)) {
+            authString = AuthScheme.getAuthorizationHeaderAuthScheme(AuthScheme.OAUTH) + " " + paramString;
+        } else {
+            authString = paramString;
+        }
+
+        if(log.isLoggable(Level.FINER)) log.finer("authString = " + authString);
+        return authString;
+    }
+
 }

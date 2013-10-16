@@ -43,7 +43,16 @@ public class RsaSHA1OAuthSignatureAlgorithm extends AbstractOAuthSignatureAlgori
             AccessCredential credential, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams)
             throws MiniAuthException
     {
-        Map<String,String> oauthParams = OAuthSignatureUtil.getOAuthParams(authHeader, formParams, queryParams);
+        Map<String,String[]> requestParams = OAuthSignatureUtil.mergeRequestParameters(formParams, queryParams);
+        return generateOAuthParamMap(text, credential, authHeader, requestParams);
+    }
+
+    @Override
+    public OAuthParamMap generateOAuthParamMap(String text,
+            AccessCredential credential, Map<String, String> authHeader,
+            Map<String, String[]> requestParams) throws MiniAuthException
+    {
+        Map<String,String> oauthParams = OAuthSignatureUtil.getOAuthParams(authHeader, requestParams);
         OAuthParamMap oauthParamMap = new OAuthParamMap(oauthParams);
         
         String signature = generate(text, credential);
@@ -51,13 +60,13 @@ public class RsaSHA1OAuthSignatureAlgorithm extends AbstractOAuthSignatureAlgori
 
         return oauthParamMap;
     }
-
+ 
     @Override
     public boolean verify(String text, AccessCredential credential, String signature) throws AuthSignatureException, InvalidCredentialException
     {
         String key = buildKeyString(credential);
         return getSignatureAlgorithm().verify(text, key, signature);
     }
-    
+   
     
 }

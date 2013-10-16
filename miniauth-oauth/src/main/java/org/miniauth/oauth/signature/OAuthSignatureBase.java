@@ -30,6 +30,9 @@ public abstract class OAuthSignatureBase
     {
     }
     
+    // TBD:
+    // Need to clean up these methods.
+    // ....
    
     // Builds a "signature base string" from the oauthParams.
     // oauth_signature, if present, should be excluded.
@@ -37,6 +40,16 @@ public abstract class OAuthSignatureBase
     // formParams are used only if content-type is application/x-www-form-urlencoded, and the body is a single part.
     // It's the caller's responsibility to pass in the proper params.
     protected String buildSignatureBaseString(String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    {
+        String requestParamString = normalizeRequestParameters(authHeader, formParams, queryParams);
+        return buildSignatureBaseString(httpMethod, uriInfo, requestParamString);
+    }
+    protected String buildSignatureBaseString(String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    {
+        String requestParamString = normalizeRequestParameters(authHeader, requestParams);
+        return buildSignatureBaseString(httpMethod, uriInfo, requestParamString);
+    }
+    private String buildSignatureBaseString(String httpMethod, BaseURIInfo uriInfo, String requestParamString) throws MiniAuthException
     {
         StringBuilder sb = new StringBuilder();
         sb.append(httpMethod.toUpperCase(Locale.US)).append("&");  // httpMethod all caps
@@ -50,10 +63,13 @@ public abstract class OAuthSignatureBase
         }
         String encBaseUriString = PercentEncoder.encode(baseUriString);
         sb.append(encBaseUriString).append("&");
-        
-        // String requestParamString = normalizeRequestParameters(authHeaders, formParams, queryParams);
-        String requestParamString = normalizeRequestParameters(authHeader, formParams, queryParams);
-        sb.append(requestParamString);
+
+        if(requestParamString != null) {
+            sb.append(requestParamString);
+        } else {
+            // error ???
+            throw new BadRequestException("Failed to generate the request param string.");
+        }
         
         String signatureBaseString = sb.toString();
         if(log.isLoggable(Level.FINE)) log.fine("signatureBaseString = " + signatureBaseString);
@@ -61,29 +77,8 @@ public abstract class OAuthSignatureBase
         return signatureBaseString;
     }
 
-//    @Deprecated
-//    /* private */ String buildBaseUriString(String urlScheme, String host, int port, String path) throws BadRequestException
-//    {
-//        if((UriScheme.HTTP.equals(urlScheme) && port == 80) || (UriScheme.HTTPS.equals(urlScheme) && port == 443)) {
-//            port = -1;
-//        }
-//        URI baseUri = null;
-//        try {
-//            baseUri = new URI(urlScheme.toLowerCase(), null, host.toLowerCase(), port, path, null, null);
-//        } catch (URISyntaxException e) {
-//            throw new BadRequestException("Invalid url.", e);
-//        }
-//        String baseUriString = baseUri.toString();
-//        if(log.isLoggable(Level.FINER)) log.finer("baseUriString = " + baseUriString);
-//
-//        return baseUriString;
-//    }
-
-
-    protected String normalizeRequestParameters(Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    private String normalizePercentEncodedParamMap(Map<String,List<String>> paramMap) throws MiniAuthException
     {
-        // Note: Percent encoding is done before sorting...
-        Map<String,List<String>> paramMap = percentEncodeRequestParams(authHeader, formParams, queryParams);
         if(paramMap == null) {
             // ???
             return null;
@@ -120,7 +115,20 @@ public abstract class OAuthSignatureBase
 
         return paramString;
     }
+    protected String normalizeRequestParameters(Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    {
+        // Note: Percent encoding is done before sorting...
+        Map<String,List<String>> paramMap = percentEncodeRequestParams(authHeader, formParams, queryParams);
+        return normalizePercentEncodedParamMap(paramMap);
+    }
+    protected String normalizeRequestParameters(Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    {
+        // Note: Percent encoding is done before sorting...
+        Map<String,List<String>> paramMap = percentEncodeRequestParams(authHeader, requestParams);
+        return normalizePercentEncodedParamMap(paramMap);
+    }
      
+
     // Percent encode params,
     // and filter out signature (from header and params) and realm (in the auth header only).
     protected Map<String,List<String>> percentEncodeRequestParams(Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
@@ -200,6 +208,71 @@ public abstract class OAuthSignatureBase
                 String encodedKey = PercentEncoder.encode(q);
                 List<String> encodedList = paramMap.get(encodedKey);
                 String[] values = queryParams.get(q);
+                if(values != null) {
+                    if(encodedList == null) {
+                        encodedList = new ArrayList<>();
+                        paramMap.put(encodedKey, encodedList);
+                    }
+                    for(String v : values) {
+                        String encodedValue = PercentEncoder.encode(v);
+                        encodedList.add(encodedValue);
+                    }
+                } else {
+                    // ???
+                    if(encodedList == null) {
+                        paramMap.put(encodedKey, null);
+                    } else {
+                        // What to do?
+                        // Just ignore, or add an empty string element to the list?
+                        // ????
+                    }
+                }
+            }
+        }
+        return paramMap;
+    }
+    protected Map<String,List<String>> percentEncodeRequestParams(Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    {
+        boolean oauthParamFoundInHeader = false;
+        Map<String,List<String>> paramMap = null;
+        if(authHeader != null) {
+            paramMap = new HashMap<>();
+            for(String h : authHeader.keySet()) {
+                if(OAuthConstants.isOAuthParam(h)) {
+                    oauthParamFoundInHeader = true;
+                }
+                if(OAuthConstants.PARAM_OAUTH_SIGNATURE.equals(h) || OAuthConstants.PARAM_REALM.equals(h)) {
+                    continue;
+                }
+                String encodedKey = PercentEncoder.encode(h);
+                String value = authHeader.get(h);
+                List<String> encodedList = null;
+                if(value != null) {
+                    encodedList = new ArrayList<>();
+                    String encodedValue = PercentEncoder.encode(value);
+                    encodedList.add(encodedValue);
+                }
+                paramMap.put(encodedKey, encodedList);
+            }
+        }
+        if(requestParams != null) {
+            if(paramMap == null) {
+                paramMap = new HashMap<>();
+            }
+            for(String q : requestParams.keySet()) {
+                if(OAuthConstants.isOAuthParam(q)) {
+                    if(oauthParamFoundInHeader) {
+                        // OAuth param should be only in one part, auth header, form param, or query param.
+                        throw new ValidationException("OAuth param already present in header/form. But found in query again: param = " + q);
+                    }
+                }
+                if(OAuthConstants.PARAM_OAUTH_SIGNATURE.equals(q)) {
+                    // exclude these...
+                    continue;
+                }
+                String encodedKey = PercentEncoder.encode(q);
+                List<String> encodedList = paramMap.get(encodedKey);
+                String[] values = requestParams.get(q);
                 if(values != null) {
                     if(encodedList == null) {
                         encodedList = new ArrayList<>();

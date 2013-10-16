@@ -22,6 +22,7 @@ public interface OAuthSignatureAlgorithm
     // This param is used to input oauth parmas so that OAuthParamMap can be properly populated
     //    (without having to parse the text even if the text possibly includes oauth params).
     OAuthParamMap generateOAuthParamMap(String text, AccessCredential credential, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException;
+    OAuthParamMap generateOAuthParamMap(String text, AccessCredential credential, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException;
 
     // Returns true if the signature generated from the given text/credential matches the input signature.
     boolean verify(String text, AccessCredential credential, String signature) throws MiniAuthException;

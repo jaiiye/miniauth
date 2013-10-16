@@ -26,8 +26,13 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase
     // oauthParams does not include oauth_signature.
     public String generate(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
+        Map<String,String[]> requestParams = OAuthSignatureUtil.mergeRequestParameters(formParams, queryParams);
+        return generate(credential, httpMethod, uriInfo, authHeader, requestParams);
+    }
+    public String generate(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    {
         // String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeaders, formParams, queryParams);
-        String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeader, formParams, queryParams);
+        String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeader, requestParams);
         if(! SignatureMethod.isValid(signatureMethod)) {
             throw new AuthSignatureException("Invalid signature method: " + signatureMethod);
         }
@@ -40,7 +45,7 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase
             signature = oauthSignatureAlgorithm.generate(null, credential);
         } else {
             // String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeaders, formParams, queryParams);
-            String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeader, formParams, queryParams);
+            String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeader, requestParams);
             signature = oauthSignatureAlgorithm.generate(signatureBaseString, credential);
         }
 
@@ -53,17 +58,22 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase
     // TBD:
     public OAuthParamMap generateOAuthParamMap(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
+        Map<String,String[]> requestParams = OAuthSignatureUtil.mergeRequestParameters(formParams, queryParams);
+        return generateOAuthParamMap(credential, httpMethod, uriInfo, authHeader, requestParams);
+    }
+    public OAuthParamMap generateOAuthParamMap(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    {
         // String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeaders, formParams, queryParams);
-        String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeader, formParams, queryParams);
+        String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeader, requestParams);
         OAuthSignatureAlgorithm oauthSignatureAlgorithm = OAuthSignatureAlgorithmFactory.getInstance().getOAuthSignatureAlgorithm(signatureMethod);
       
         OAuthParamMap oAuthParamMap = new OAuthParamMap();
         if(SignatureMethod.PLAINTEXT.equals(signatureMethod)) {
-            oAuthParamMap = oauthSignatureAlgorithm.generateOAuthParamMap(null, credential, authHeader, formParams, queryParams);
+            oAuthParamMap = oauthSignatureAlgorithm.generateOAuthParamMap(null, credential, authHeader, requestParams);
         } else {
             // String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeaders, formParams, queryParams);
-            String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeader, formParams, queryParams);
-            oAuthParamMap = oauthSignatureAlgorithm.generateOAuthParamMap(signatureBaseString, credential, authHeader, formParams, queryParams);
+            String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeader, requestParams);
+            oAuthParamMap = oauthSignatureAlgorithm.generateOAuthParamMap(signatureBaseString, credential, authHeader, requestParams);
         }
         
         return oAuthParamMap;
