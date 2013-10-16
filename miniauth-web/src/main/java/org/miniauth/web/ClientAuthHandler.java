@@ -11,7 +11,11 @@ import org.miniauth.MiniAuthException;
 // Client-side auth handler.
 public interface ClientAuthHandler extends AuthHandler
 {
+    // In the context of OAuth, this should be really called signRequest().
+    // However, we (plan to) use this for other auth schemes,
+    //   hence we use a more generic (but somewhat unusual name), "endorse".
+
     // request is an "in-out" param.
     // boolean prepareRequest(AccessIdentity accessIdentity, ServletRequest request) throws MiniAuthException;
-    boolean prepareRequest(Map<String, String> authCredential, HttpServletRequest request) throws MiniAuthException, IOException;
+    boolean endorseRequest(Map<String, String> authCredential, HttpServletRequest request) throws MiniAuthException, IOException;
 }

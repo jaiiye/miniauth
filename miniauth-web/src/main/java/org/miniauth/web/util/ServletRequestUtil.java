@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,6 +48,14 @@ public final class ServletRequestUtil
         return formParams;
     }
     
+    // Returns the cloned (shallow) copy of request.getParameterMap().
+    // Note: formParams "+" queryParams == requestParams.
+    public static Map<String,String[]> getRequestParams(HttpServletRequest request) throws MiniAuthException
+    {
+        Map<String,String[]> requestParams = new HashMap<>(request.getParameterMap());
+        if(log.isLoggable(Level.FINER)) log.finer("requestParams = " + requestParams);
+        return requestParams;        
+    }
     
     public static String readFormBody(HttpServletRequest request) throws IOException 
     {
@@ -67,7 +76,7 @@ public final class ServletRequestUtil
     }
     
     
-    
+    // ....
     
     // TBD:
     public static Map<String,String[]> parseServletRequest(ServletRequest request)

@@ -24,7 +24,7 @@ public class OAuthAuthStringBuilder implements AuthStringBuilder
 
     // Lazy initialized.
     private OAuthSignatureGenerator oauthSignatureGenerator = null;
-    private OAuthSignatureGenerator getOAuthSignatureGenerator()
+    public OAuthSignatureGenerator getOAuthSignatureGenerator()
     {
         if(oauthSignatureGenerator == null) {
             oauthSignatureGenerator = new OAuthSignatureGenerator();

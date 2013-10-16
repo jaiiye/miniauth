@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.AuthScheme;
 import org.miniauth.exception.InvalidInputException;
+import org.miniauth.oauth.core.OAuthConstants;
+import org.miniauth.oauth.signature.OAuthSignatureUtil;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
 import org.miniauth.util.AuthHeaderUtil;
 import org.miniauth.web.util.ServletRequestUtil;
@@ -23,43 +26,44 @@ public final class OAuthServletRequestUtil
     private OAuthServletRequestUtil() {}
 
     
-    public static boolean isOAuthParamPresent(HttpServletRequest request) throws MiniAuthException, IOException
+    public static boolean isOAuthParamPresent(HttpServletRequest request) throws MiniAuthException //, IOException
     {
-        if(getOAuthParamTransmissionType(request) != null) {
-            return true;
-        } else {
+//        if(getOAuthParamTransmissionType(request) != null) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+        if(request == null) {
             return false;
         }
+        Map<String,String[]> params = request.getParameterMap();
+        if(params == null) {
+            return false;
+        }
+        return OAuthSignatureUtil.containsAnyOAuthParam(params);
+    }
+    public static boolean isOAuthSignaturePresent(HttpServletRequest request)
+    {
+        if(request == null) {
+            return false;
+        }
+        Map<String,String[]> params = request.getParameterMap();
+        if(params == null) {
+            return false;
+        }
+        return params.containsKey(OAuthConstants.PARAM_OAUTH_SIGNATURE);
     }
 
     public static String getOAuthParamTransmissionType(HttpServletRequest request) throws MiniAuthException, IOException
     {
-        String httpMethod = request.getMethod();
-        String host = request.getRemoteHost();
-        String requestUri = request.getRequestURI();
-        URI baseUri = null;
-        try {
-            baseUri = new URI(requestUri);
-        } catch (URISyntaxException e) {
-            // ??? This cannot happen.
-            throw new InvalidInputException("Invalid requestUri = " + requestUri, e);
-        }
-
         // ???
         Map<String,String> authHeader = OAuthServletRequestUtil.getAuthParams(request);
         Map<String,String[]> requestParams = request.getParameterMap();
         Map<String,String[]> queryParams = ServletRequestUtil.getQueryParams(request);
         Map<String,String[]> formParams = ServletRequestUtil.getFormParams(request);
-        
-        
-
-        // TBD:
-        // ...
-        
 
         String transmissionType = ParameterTransmissionUtil.getTransmissionType(authHeader, formParams, queryParams);
-        
-        
+        if(log.isLoggable(Level.FINER)) log.finer("transmissionType = " + transmissionType);
         return transmissionType;
     }
 

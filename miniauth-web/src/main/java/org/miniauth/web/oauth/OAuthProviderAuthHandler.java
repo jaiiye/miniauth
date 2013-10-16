@@ -21,36 +21,35 @@ public class OAuthProviderAuthHandler extends OAuthAuthHandler implements Provid
 {
     private static final Logger log = Logger.getLogger(OAuthProviderAuthHandler.class.getName());
 
+    // TBD: Is it safe to reuse this???
+    private final SignatureVerifier signatureVerifier;
+    
     public OAuthProviderAuthHandler()
     {
-        
+        signatureVerifier = new OAuthSignatureVerifier();
     }
 
     
     @Override
     public boolean verifyRequest(Map<String, String> authCredential, HttpServletRequest request) throws MiniAuthException, IOException
     {
-        
         String httpMethod = request.getMethod();
-        String host = request.getRemoteHost();
-        String requestUri = request.getRequestURI();
+        String requestUrl = request.getRequestURL().toString();
         URI baseUri = null;
         try {
-            baseUri = new URI(requestUri);
+            baseUri = new URI(requestUrl);
         } catch (URISyntaxException e) {
             // ??? This cannot happen.
-            throw new InvalidInputException("Invalid requestUri = " + requestUri, e);
+            throw new InvalidInputException("Invalid requestUrl = " + requestUrl, e);
         }
 
-        
         Map<String,String> authHeader = OAuthServletRequestUtil.getAuthParams(request);
         Map<String,String[]> requestParams = request.getParameterMap();
-
         
-        SignatureVerifier signatureVerifier = new OAuthSignatureVerifier();
+        // SignatureVerifier signatureVerifier = new OAuthSignatureVerifier();
         boolean verified = signatureVerifier.verify(authCredential, httpMethod, baseUri, authHeader, requestParams);
 
-        if(log.isLoggable(Level.FINE)) log.fine("verified = " + verified);;
+        if(log.isLoggable(Level.FINE)) log.fine("verified = " + verified);
         return verified;
     }
 
