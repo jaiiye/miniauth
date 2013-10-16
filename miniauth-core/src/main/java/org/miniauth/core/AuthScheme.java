@@ -30,6 +30,17 @@ public final class AuthScheme
             return authScheme;
         }
     }
+    // reverse
+    // TBD: Is there a better name for this function?
+    public static String getAuthSchemeFromAuthorizationHeaderAuthScheme(String authorizationHeaderAuthScheme)
+    {
+        switch(authorizationHeaderAuthScheme) {
+        case TOKEN_TYPE_BEARER:
+            return OAUTH2;
+        default:
+            return authorizationHeaderAuthScheme;
+        }
+    }
 
-
+    
 }

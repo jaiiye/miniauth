@@ -1,5 +1,6 @@
 package org.miniauth.web;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,5 +12,5 @@ import org.miniauth.MiniAuthException;
 public interface ProviderAuthHandler extends AuthHandler
 {
     // boolean verifyRequest(CredentialPair credentialPair, ServletRequest request) throws MiniAuthException;
-    boolean verifyRequest(Map<String, String> authCredential, HttpServletRequest request) throws MiniAuthException;
+    boolean verifyRequest(Map<String, String> authCredential, HttpServletRequest request) throws MiniAuthException, IOException;
 }

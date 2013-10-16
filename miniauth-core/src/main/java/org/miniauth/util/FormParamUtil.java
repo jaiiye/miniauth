@@ -33,7 +33,7 @@ public final class FormParamUtil
         return true;
     }
 
-    public static Map<String,String[]> getUrlEncodedFormParams(String contentType, String formBody) throws MiniAuthException
+    public static Map<String,String[]> parseUrlEncodedFormParams(String contentType, String formBody) throws MiniAuthException
     {
         if(contentType == null || !contentType.equals("application/x-www-form-urlencoded")) {
             return null;
