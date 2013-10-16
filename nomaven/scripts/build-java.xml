@@ -4,7 +4,7 @@
     <property name="classesDir" value="nomaven/build/classes"/>
     <property name="apidocDir" value="nomaven/build/apidoc"/>
     <property name="output" value="nomaven/build/jar"/>
-    <property name="version" value="0.1.0"/>
+    <property name="version" value="0.3.0"/>
 
 
 	<property environment="myenv" />
@@ -29,6 +29,13 @@
 			</fileset>
 		</delete>
     </target>
+	<target name="cleanOAuth2Classes">
+        <delete failonerror="false">
+		    <fileset dir ="${classesDir}/oauth2">
+	            <include name="**" />
+			</fileset>
+		</delete>
+    </target>
 	<target name="cleanWebClasses">
         <delete failonerror="false">
 		    <fileset dir ="${classesDir}/web">
@@ -36,7 +43,7 @@
 			</fileset>
 		</delete>
     </target>
-	<target name="cleanAllClasses" depends="cleanCoreClasses, cleanOAuthClasses, cleanWebClasses">
+	<target name="cleanAllClasses" depends="cleanCoreClasses, cleanOAuthClasses, cleanOAuth2Classes, cleanWebClasses">
         <delete failonerror="false">
 		    <fileset dir ="${classesDir}/all">
 	            <include name="**" />
@@ -47,6 +54,7 @@
     <target name="createOutputDir">
         <mkdir dir="${classesDir}/core"/>
         <mkdir dir="${classesDir}/oauth"/>
+        <mkdir dir="${classesDir}/oauth2"/>
         <mkdir dir="${classesDir}/web"/>
         <mkdir dir="${output}"/>
     </target>
@@ -68,6 +76,15 @@
                  includeantruntime="false"
         />
     </target>
+	<target name="buildOAuth2Classes" depends="cleanOAuth2Classes, createOutputDir">
+        <javac srcdir="miniauth-oauth2/src/main/java"
+                 classpath="${classesDir}/core"
+                 destdir="${classesDir}/oauth2"
+                 debug="on"
+                 source="1.7"
+                 includeantruntime="false"
+        />
+    </target>
 	<target name="buildWebClasses" depends="cleanWebClasses, createOutputDir">
         <javac srcdir="miniauth-web/src/main/java"
                  classpath="${classesDir}/core;${classesDir}/oauth"
@@ -78,7 +95,7 @@
         	<classpath refid="tomcat.runtime.lib"/>
         </javac>
     </target>
-	<target name="buildAllClasses" depends="cleanAllClasses, buildCoreClasses, buildOAuthClasses, buildWebClasses">
+	<target name="buildAllClasses" depends="cleanAllClasses, buildCoreClasses, buildOAuthClasses, buildOAuth2Classes, buildWebClasses">
     </target>
 
 
@@ -92,6 +109,12 @@
         <jar destfile="${output}/miniauth-oauth-${version}.jar"
              basedir="${classesDir}/oauth"
              includes="org/miniauth/oauth/**"
+        />
+    </target>
+    <target name="createOAuth2Jar" depends="buildOAuth2Classes">
+        <jar destfile="${output}/miniauth-oauth2-${version}.jar"
+             basedir="${classesDir}/oauth2"
+             includes="org/miniauth/oauth2/**"
         />
     </target>
     <target name="createWebJar" depends="buildWebClasses">
@@ -120,6 +143,9 @@
 		    <fileset dir ="${classesDir}/oauth">
 	            <include name="org/miniauth/oauth/**" />
 			</fileset>
+		    <fileset dir ="${classesDir}/oauth2">
+	            <include name="org/miniauth/oauth2/**" />
+			</fileset>
         	<fileset dir ="${classesDir}/web">
 	            <include name="org/miniauth/web/**" />
 			</fileset>
@@ -132,7 +158,7 @@
         />
     </target>
 
-	<target name="exportAllJars" depends="createCoreJar, createOAuthJar, createWebJar, createAllJar">
+	<target name="exportAllJars" depends="createCoreJar, createOAuthJar, createOAuth2Jar, createWebJar, createAllJar">
 
 	</target>
 
@@ -156,6 +182,9 @@
     	    </packageset>
     	    <packageset dir="miniauth-oauth/src/main/java" defaultexcludes="yes">
     	      <include name="org/miniauth/oauth/**"/>
+    	    </packageset>
+    	    <packageset dir="miniauth-oauth2/src/main/java" defaultexcludes="yes">
+    	      <include name="org/miniauth/oauth2/**"/>
     	    </packageset>
     	    <packageset dir="miniauth-web/src/main/java" defaultexcludes="yes">
     	      <include name="org/miniauth/web/**"/>
