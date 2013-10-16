@@ -131,6 +131,17 @@ public final class OAuthSignatureUtil
         return signatureMethod;
     }
 
+
+    // TBD:
+    // We need to keep formParams and queryParams separate for validation purposes...
+    // Currently, we merge them in the early stage of validation, which makes it impossible to validate against errors like
+    //  (1) oauth_X params cannot be put into more than one part.. e.g., if one oauth_x is in form param, and another oauth_y is in query param,
+    //         then that is an error according to the (extremely messy) OAuth1 spec.
+    //         However, once we merge these two param set we have no way to detect errors like this...
+    //  etc...
+    // ....
+
+    
     // It returns the oauthParam map (instead of boolean, as the method name seems to imply).
     // If validation fails, it throws exception (rather than returning false).
     // signatureRequired==false means we are validating request before the full request has been constructed.
@@ -145,6 +156,18 @@ public final class OAuthSignatureUtil
         Map<String,String> authParams = getOAuthParams(authHeader, formParams, queryParams);
         return validateOAuthParams(authParams, signatureRequired);
     }
+
+    public static OAuthParamMap validateOAuthParams(Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    {
+        return validateOAuthParams(authHeader, requestParams, true);
+    }
+    public static OAuthParamMap validateOAuthParams(Map<String,String> authHeader, Map<String,String[]> requestParams, boolean signatureRequired) throws MiniAuthException
+    {
+        // Note: we call getOAuthParams() not mergeRequestParameters()...
+        Map<String,String> authParams = getOAuthParams(authHeader, requestParams);
+        return validateOAuthParams(authParams, signatureRequired);
+    }
+
     public static OAuthParamMap validateOAuthParams(Map<String,String> authParams) throws MiniAuthException
     {
         return validateOAuthParams(authParams, true);

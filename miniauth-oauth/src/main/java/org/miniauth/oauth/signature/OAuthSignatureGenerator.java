@@ -12,10 +12,11 @@ import org.miniauth.oauth.common.OAuthParamMap;
 import org.miniauth.oauth.core.SignatureMethod;
 import org.miniauth.oauth.crypto.OAuthSignatureAlgorithm;
 import org.miniauth.oauth.crypto.OAuthSignatureAlgorithmFactory;
+import org.miniauth.signature.SignatureGenerator;
 
 
 // http://tools.ietf.org/html/rfc5849#section-3.4
-public class OAuthSignatureGenerator extends OAuthSignatureBase
+public class OAuthSignatureGenerator extends OAuthSignatureBase implements SignatureGenerator
 {
     private static final Logger log = Logger.getLogger(OAuthSignatureGenerator.class.getName());
 
@@ -24,11 +25,15 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase
     }
 
     // oauthParams does not include oauth_signature.
+    @Override
     public String generate(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
+        // For now, we do not distinguish formParams and queryParams.
+        // TBD: OAuth spec requires they should be treated separately...
         Map<String,String[]> requestParams = OAuthSignatureUtil.mergeRequestParameters(formParams, queryParams);
         return generate(credential, httpMethod, uriInfo, authHeader, requestParams);
     }
+    @Override
     public String generate(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
     {
         // String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeaders, formParams, queryParams);

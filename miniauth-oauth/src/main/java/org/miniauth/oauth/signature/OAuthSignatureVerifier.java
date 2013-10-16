@@ -16,10 +16,11 @@ import org.miniauth.oauth.crypto.OAuthSignatureAlgorithm;
 import org.miniauth.oauth.crypto.OAuthSignatureAlgorithmFactory;
 import org.miniauth.oauth.nonce.NonceStore;
 import org.miniauth.oauth.nonce.NonceStorePool;
+import org.miniauth.signature.SignatureVerifier;
 
 
 // http://tools.ietf.org/html/rfc5849#section-3.2
-public class OAuthSignatureVerifier extends OAuthSignatureBase
+public class OAuthSignatureVerifier extends OAuthSignatureBase implements SignatureVerifier
 {
     private static final Logger log = Logger.getLogger(OAuthSignatureVerifier.class.getName());
 
@@ -30,7 +31,16 @@ public class OAuthSignatureVerifier extends OAuthSignatureBase
     // oauthParams must include oauth_signature.
     // It returns true if signature is verfied against the given auth credential
     // Otherwise, it throws MiniAuthAuthException (rather than returning false). 
+    @Override
     public boolean verify(CredentialPair credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    {
+        // For now, we do not distinguish formParams and queryParams.
+        // TBD: OAuth spec requires they should be treated separately...
+        Map<String,String[]> requestParams = OAuthSignatureUtil.mergeRequestParameters(formParams, queryParams);
+        return verify(credential, httpMethod, uriInfo, authHeader, requestParams);
+    }
+    @Override
+    public boolean verify(CredentialPair credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
     {
         // Steps:
         // validate params
@@ -49,7 +59,7 @@ public class OAuthSignatureVerifier extends OAuthSignatureBase
         // ...
         
         
-        OAuthParamMap oauthParamMap = OAuthSignatureUtil.validateOAuthParams(authHeader, formParams, queryParams);
+        OAuthParamMap oauthParamMap = OAuthSignatureUtil.validateOAuthParams(authHeader, requestParams);
         String signatureMethod = oauthParamMap.getSignatureMethod();
         
         if(SignatureMethod.requiresNonceAndTimestamp(signatureMethod)) {
@@ -76,7 +86,7 @@ public class OAuthSignatureVerifier extends OAuthSignatureBase
             verified = oauthSignatureAlgorithm.verify(null, accessCredential, signature);
         } else {
             // String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeaders, formParams, queryParams);
-            String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeader, formParams, queryParams);
+            String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeader, requestParams);
             verified = oauthSignatureAlgorithm.verify(signatureBaseString, accessCredential, signature);
         }
 
