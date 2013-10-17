@@ -82,25 +82,40 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase implements Signa
     // Request header/params do not include oauth_signature.
     // Returned oauthParam map should include oauth_signature.
     @Override
-    public Map<String,Object> generateOAuthParamMap(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    public Map<String,Object> generateOAuthParamMap(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
         Map<String,String[]> requestParams = OAuthSignatureUtil.mergeRequestParameters(formParams, queryParams);
-        return generateOAuthParamMap(credential, httpMethod, uriInfo, authHeader, requestParams);
+        return generateOAuthParamMap(authCredential, httpMethod, baseUri, authHeader, requestParams);
     }
     @Override
-    public Map<String,Object> generateOAuthParamMap(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    public Map<String,Object> generateOAuthParamMap(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
     {
+        // ...
+        AccessCredential accessCredential = null;
+        if(authCredential != null) {
+            String consumerSecret = null;
+            if(authCredential.containsKey(AuthCredentialConstants.CONSUMER_SECRET)) {
+                consumerSecret = authCredential.get(AuthCredentialConstants.CONSUMER_SECRET);
+            }
+            String tokenSecret = null;
+            if(authCredential.containsKey(AuthCredentialConstants.TOKEN_SECRET)) {
+                tokenSecret = authCredential.get(AuthCredentialConstants.TOKEN_SECRET);
+            }
+            accessCredential = new OAuthAccessCredential(consumerSecret, tokenSecret);
+        }
+
         // String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeaders, formParams, queryParams);
         String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeader, requestParams);
         OAuthSignatureAlgorithm oauthSignatureAlgorithm = OAuthSignatureAlgorithmFactory.getInstance().getOAuthSignatureAlgorithm(signatureMethod);
       
         OAuthParamMap oAuthParamMap = new OAuthParamMap();
         if(SignatureMethod.PLAINTEXT.equals(signatureMethod)) {
-            oAuthParamMap = oauthSignatureAlgorithm.generateOAuthParamMap(null, credential, authHeader, requestParams);
+            oAuthParamMap = oauthSignatureAlgorithm.generateOAuthParamMap(null, accessCredential, authHeader, requestParams);
         } else {
+            BaseURIInfo uriInfo = new BaseURIInfo(baseUri);
             // String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeaders, formParams, queryParams);
             String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeader, requestParams);
-            oAuthParamMap = oauthSignatureAlgorithm.generateOAuthParamMap(signatureBaseString, credential, authHeader, requestParams);
+            oAuthParamMap = oauthSignatureAlgorithm.generateOAuthParamMap(signatureBaseString, accessCredential, authHeader, requestParams);
         }
         
         return oAuthParamMap.getReadOnlyParamMap();
