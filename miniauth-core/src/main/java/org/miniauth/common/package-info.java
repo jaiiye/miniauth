@@ -5,6 +5,7 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. 
 
 /**
- * Package for "request wrapper" related interfaces/classes.
+ * Package for common classes.
+ * (Package dependency order core <- util <- common)
  */
-package org.miniauth.request;
+package org.miniauth.common;

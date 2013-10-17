@@ -1,4 +1,4 @@
-package org.miniauth.request;
+package org.miniauth.common;
 
 import java.io.Serializable;
 import java.net.URI;
