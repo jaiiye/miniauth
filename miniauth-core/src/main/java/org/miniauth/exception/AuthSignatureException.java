@@ -3,7 +3,9 @@ package org.miniauth.exception;
 import org.miniauth.MiniAuthException;
 
 
-// Exception while generating OAuth signatures.
+/**
+ * Exception while generating OAuth signatures.
+ */
 public class AuthSignatureException extends MiniAuthException
 {
     private static final long serialVersionUID = 1L;

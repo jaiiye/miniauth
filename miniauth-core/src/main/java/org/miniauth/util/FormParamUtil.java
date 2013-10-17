@@ -15,6 +15,9 @@ import org.miniauth.exception.InternalErrorException;
 // import org.miniauth.oauth.core.OAuthConstants;
 
 
+/**
+ * Utility methods related to (url-encoded) form parameters.
+ */
 public final class FormParamUtil
 {
     private static final Logger log = Logger.getLogger(FormParamUtil.class.getName());

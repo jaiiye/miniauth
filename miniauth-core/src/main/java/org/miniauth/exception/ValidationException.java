@@ -3,7 +3,9 @@ package org.miniauth.exception;
 import org.miniauth.MiniAuthException;
 
 
-// Data format error, etc.
+/**
+ * Data format error, etc.
+ */
 public class ValidationException extends MiniAuthException
 {
     private static final long serialVersionUID = 1L;

@@ -3,6 +3,9 @@ package org.miniauth.util;
 import java.util.logging.Logger;
 
 
+/**
+ * Base64 encoder/decoder methods.
+ */
 public final class Base64Util
 {
     private static final Logger log = Logger.getLogger(Base64Util.class.getName());
@@ -103,6 +106,8 @@ public final class Base64Util
     
     
     // TBD:
+    // Need to compare these two versions.
+    // ....
     
     public static char[] encode(byte[] bytes, int iOff, int iLen) 
     {

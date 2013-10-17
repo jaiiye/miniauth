@@ -3,7 +3,9 @@ package org.miniauth.exception;
 import org.miniauth.MiniAuthException;
 
 
-// Any generic exception.
+/**
+ * Any generic exception.
+ */
 public class InternalErrorException extends MiniAuthException
 {
     private static final long serialVersionUID = 1L;

@@ -15,6 +15,9 @@ import org.miniauth.exception.InvalidInputException;
 import org.miniauth.exception.ValidationException;
 
 
+/**
+ * Various auth-related utility functions.
+ */
 public final class AuthHeaderUtil
 {
     private static final Logger log = Logger.getLogger(AuthHeaderUtil.class.getName());

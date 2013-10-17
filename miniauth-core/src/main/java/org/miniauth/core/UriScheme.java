@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-// 
+/**
+ * Defines the HTTP url scheme constants.
+ */
 public final class UriScheme
 {
     // Note the lowercase.
@@ -22,6 +24,11 @@ public final class UriScheme
 
     private UriScheme() {}
 
+    /**
+     * Returns the default port for the given scheme.
+     * @param scheme URL scheme, http or https.
+     * @return Default port of the given URL scheme.
+     */
     public static int getDefaultPort(String scheme)
     {
         if(DEFAULT_PORT.containsKey(scheme)) {

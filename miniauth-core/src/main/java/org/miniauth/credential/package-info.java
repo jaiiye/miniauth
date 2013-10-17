@@ -6,5 +6,8 @@
 
 /**
  * MiniAuth Core module Credential package.
+ * Note that we have a somewhat unusual API designs:
+ * We use Maps with these constants as keys in the public APIs,
+ * rather than using AuthCredential variety of bean classes. 
  */
 package org.miniauth.credential;

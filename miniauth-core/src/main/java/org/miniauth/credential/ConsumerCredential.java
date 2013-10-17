@@ -1,7 +1,9 @@
 package org.miniauth.credential;
 
 
-// Consumer credential.
+/**
+ * Consumer/client credential.
+ */
 public interface ConsumerCredential extends AuthCredential
 {
     String getConsumerKey();      // Client Identifier

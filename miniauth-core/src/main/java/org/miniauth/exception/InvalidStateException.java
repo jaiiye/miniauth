@@ -3,7 +3,10 @@ package org.miniauth.exception;
 import org.miniauth.MiniAuthException;
 
 
-// Similar to IlligalStateException.
+/**
+ * Similar to IlligalStateException
+ *    except that this inherits from MiniAuthException.
+ */
 public class InvalidStateException extends MiniAuthException
 {
     private static final long serialVersionUID = 1L;

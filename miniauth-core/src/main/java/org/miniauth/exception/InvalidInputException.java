@@ -3,7 +3,9 @@ package org.miniauth.exception;
 import org.miniauth.MiniAuthException;
 
 
-// Invalid request input exception.
+/**
+ * Invalid request input exception.
+ */
 public class InvalidInputException extends MiniAuthException
 {
     private static final long serialVersionUID = 1L;

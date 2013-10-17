@@ -1,6 +1,5 @@
 package org.miniauth.oauth.signature;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -54,13 +53,9 @@ public abstract class OAuthSignatureBase
         StringBuilder sb = new StringBuilder();
         sb.append(httpMethod.toUpperCase(Locale.US)).append("&");  // httpMethod all caps
         
-        String baseUriString = null;
-        try {
-            baseUriString = uriInfo.buildURIString();
-            if(log.isLoggable(Level.FINER)) log.finer("baseUriString = " + baseUriString);
-        } catch (URISyntaxException e) {
-            throw new BadRequestException("Invalid request URL.", e);
-        }
+        String baseUriString = uriInfo.buildURIString();
+        if(log.isLoggable(Level.FINER)) log.finer("baseUriString = " + baseUriString);
+
         String encBaseUriString = PercentEncoder.encode(baseUriString);
         sb.append(encBaseUriString).append("&");
 

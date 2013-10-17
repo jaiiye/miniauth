@@ -1,7 +1,11 @@
 package org.miniauth.credential;
 
 
-// This is used to allow using a Map in place of a specific credential type.
+/**
+ * This is used to allow using a Map in place of a specific credential type.
+ * Note that we use Maps with these constants as keys in the public APIs,
+ * rather than using AuthCredential variety of bean classes. 
+ */
 public final class AuthCredentialConstants
 {
     public static final String CONSUMER_KEY = "consumerKey";

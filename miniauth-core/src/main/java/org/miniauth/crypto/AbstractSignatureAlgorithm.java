@@ -3,6 +3,9 @@ package org.miniauth.crypto;
 import org.miniauth.exception.AuthSignatureException;
 
 
+/**
+ * Base class for SignatureAlgorithm.
+ */
 public abstract class AbstractSignatureAlgorithm implements SignatureAlgorithm
 {
 

@@ -5,12 +5,17 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.miniauth.MiniAuthException;
+import org.miniauth.exception.InvalidInputException;
 
-// Note: Although this is in the auth.core package (and it can be used in a general context),
-//       its implementation is specifically tailored for OAuth (OAuth 1.0a).
-// This is really a wrapper of java.net.URI.
-// OAuth puts many small/messy requirements, and URI is no exception.
-// BaseURIInfo encapsulates this requirement.
+
+/**
+ * Note: Although this is in the auth.core package (and it can be used in a general context),
+ *       its implementation is specifically tailored for OAuth (OAuth 1.0a).
+ * This is really a wrapper of java.net.URI.
+ * OAuth puts many small/messy requirements, and URI is no exception.
+ * BaseURIInfo encapsulates this requirement.
+ */
 public final class BaseURIInfo
 {
     private static final Logger log = Logger.getLogger(BaseURIInfo.class.getName());
@@ -87,18 +92,31 @@ public final class BaseURIInfo
     }
 
 
-    public static String buildBaseURIString(String uriScheme, String userInfo, String host, int port, String path) throws URISyntaxException 
+    // Builds a url string consistent with the OAuth requirements.
+    public static String buildBaseURIString(String uriScheme, String userInfo, String host, int port, String path) throws MiniAuthException 
     {
         BaseURIInfo uriInfo = new BaseURIInfo(uriScheme, userInfo, host, port, path);
         return uriInfo.buildURIString();
     }
 
 
-    public URI buildURI() throws URISyntaxException 
+    /**
+     * Builds the URI according to the OAuth the requirements. 
+     * @return The URI equivalent to this BaseUriInfo object.
+     * @throws MiniAuthException 
+     */
+    public URI buildURI() throws MiniAuthException 
     {
         return buildURI(null, null);
     }
-    public URI buildURI(String query, String fragment) throws URISyntaxException 
+    /**
+     * Builds the URI according to the OAuth the requirements. 
+     * @param query Query string.
+     * @param fragment URL fragment.
+     * @return The URI equivalent to this BaseUriInfo object.
+     * @throws MiniAuthException 
+     */
+    public URI buildURI(String query, String fragment) throws MiniAuthException 
     {
         // NOTE:
         // Remove the default port from the url (per OAuth requirements during signing).
@@ -106,15 +124,20 @@ public final class BaseURIInfo
         if(UriScheme.getDefaultPort(this.uriScheme) == this.port) {
             uriPort = -1;
         }
-        URI uri = new URI(this.uriScheme, this.userInfo, this.host, uriPort, this.path, query, fragment);
+        URI uri = null;
+        try {
+            uri = new URI(this.uriScheme, this.userInfo, this.host, uriPort, this.path, query, fragment);
+        } catch (URISyntaxException e) {
+            throw new InvalidInputException("Failed to construrct URI.", e);
+        }
         return uri;
     }
 
-    public String buildURIString() throws URISyntaxException 
+    public String buildURIString() throws MiniAuthException 
     {
         return buildURIString(null, null);
     }
-    public String buildURIString(String query, String fragment) throws URISyntaxException 
+    public String buildURIString(String query, String fragment) throws MiniAuthException 
     {
         URI uri = buildURI(query, fragment);
         return uri.toString();
@@ -126,8 +149,7 @@ public final class BaseURIInfo
         String str = "";
         try {
             str = buildURIString();
-        } catch (URISyntaxException e) {
-            // ????
+        } catch (MiniAuthException e) {
             log.log(Level.WARNING, "Failed to build URI string.", e);
         }
         return str;

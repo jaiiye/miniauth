@@ -24,6 +24,9 @@ import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.util.Base64Util;
 
 
+/**
+ * SHA1 with RSA signature algorithm.
+ */
 public class RsaSHA1SignatureAlgorithm extends AbstractSignatureAlgorithm implements SignatureAlgorithm
 {
     private static final Logger log = Logger.getLogger(RsaSHA1SignatureAlgorithm.class.getName());

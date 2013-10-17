@@ -8,8 +8,11 @@ import org.miniauth.core.BaseURIInfo;
 import org.miniauth.credential.AccessCredential;
 
 
-// This is primarily for OAuth v1.0a
-// Other auth schemes do not require signature.
+/**
+ * Signature generator interface.
+ * This is primarily for OAuth v1.0a
+ * Other auth schemes do not require signature.
+ */
 public interface SignatureGenerator
 {
     // Why two versions of generate() ???

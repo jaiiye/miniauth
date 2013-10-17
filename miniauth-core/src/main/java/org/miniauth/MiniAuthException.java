@@ -1,7 +1,9 @@
 package org.miniauth;
 
 
-// Base exception to be used throughout MiniAuth modules.
+/**
+ * Base exception to be used throughout MiniAuth modules.
+ */
 public class MiniAuthException extends Exception
 {
     private static final long serialVersionUID = 1L;
@@ -48,6 +50,10 @@ public class MiniAuthException extends Exception
 
     // Getters only.
 
+    /**
+     * Returns the "resource" associated with the error when it occurred.
+     * @return A "resource" relevant to this exception, if any.
+     */
     public String getResource()
     {
         return this.resource;

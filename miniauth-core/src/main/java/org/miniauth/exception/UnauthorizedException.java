@@ -3,7 +3,11 @@ package org.miniauth.exception;
 import org.miniauth.MiniAuthException;
 
 
-// Auth error.
+/**
+ * Auth error.
+ * Depending on the context,
+ * InvalidCredentialException might be more suitable than Unauthorized exception (which is generally to be used by the "provider"). 
+ */
 public class UnauthorizedException extends MiniAuthException
 {
     private static final long serialVersionUID = 1L;

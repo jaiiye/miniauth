@@ -3,7 +3,9 @@ package org.miniauth.exception;
 import org.miniauth.MiniAuthException;
 
 
-// Auth error.
+/**
+ * Auth error.
+ */
 public class InvalidCredentialException extends MiniAuthException
 {
     private static final long serialVersionUID = 1L;

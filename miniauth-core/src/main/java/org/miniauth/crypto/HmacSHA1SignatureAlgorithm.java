@@ -12,6 +12,9 @@ import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.util.Base64Util;
 
 
+/**
+ * HmacSHA1 algorithm.
+ */
 public class HmacSHA1SignatureAlgorithm extends AbstractSignatureAlgorithm implements SignatureAlgorithm
 {
 

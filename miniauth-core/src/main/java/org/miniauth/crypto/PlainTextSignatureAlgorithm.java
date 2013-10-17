@@ -3,6 +3,9 @@ package org.miniauth.crypto;
 import org.miniauth.exception.AuthSignatureException;
 
 
+/**
+ * "Plain text" signature algorithm per OAuth standard.
+ */
 public class PlainTextSignatureAlgorithm extends AbstractSignatureAlgorithm implements SignatureAlgorithm
 {
 

@@ -2,19 +2,19 @@ package org.miniauth.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.exception.InternalErrorException;
-// import org.miniauth.oauth.core.OAuthConstants;
 
 
+/**
+ * Utility methods related URL query params.
+ */
 public final class QueryParamUtil
 {
     private static final Logger log = Logger.getLogger(QueryParamUtil.class.getName());

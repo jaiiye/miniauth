@@ -3,7 +3,11 @@ package org.miniauth.exception;
 import org.miniauth.MiniAuthException;
 
 
-// Input error.
+/**
+ * Input error.
+ * TBD: Depending on the context, 
+ * using InvalidInputException rather than Bad "request" exception might be more appropriate.
+ */
 public class BadRequestException extends MiniAuthException
 {
     private static final long serialVersionUID = 1L;

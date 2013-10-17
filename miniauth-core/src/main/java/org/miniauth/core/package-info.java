@@ -8,5 +8,7 @@
  * Package for core classes used by MiniAuth.
  * It mostly includes (enum type) static constant classes
  * and some basic beans.
+ * Note that we use static String constants rather than enum types.
+ * It generally makes public APIs more flexible or "portable".
  */
 package org.miniauth.core;

@@ -8,19 +8,20 @@ import java.util.logging.Logger;
 import org.miniauth.exception.ValidationException;
 
 
-
-// We mainly use three types are maps in handling query/form parameters:
-//    Map<Stirng,String>
-//    Map<String,String[]> (or, Map<String,List<String>)
-//    Map<String,Object>
-// These are all related, but unfortunately, depending on the context, one form is more convenient than others.
-// Note: The original request parameters can always be represented as Map<String,String[]> 
-//       since a param can have multiple values.
-//       Once we assume the value is (or, should be) unique, we can use Map<String,String>.
-//       The value has an intrinsic type (e.g., int, or a serialized object, etc.), 
-//           and hence Map<String,String> can be ultimately "cast" to Map<String,Object>.
-// This class defines "conversion" routines among these different Map types.
-// TBD: We need to be more consistent in the use of these maps and reduce the need for these "conversions".
+/**
+ * We mainly use three types are maps in handling query/form parameters:
+ *    Map<Stirng,String>
+ *    Map<String,String[]> (or, Map<String,List<String>)
+ *    Map<String,Object>
+ * These are all related, but unfortunately, depending on the context, one form is more convenient than others.
+ * Note: The original request parameters can always be represented as Map<String,String[]> 
+ *       since a param can have multiple values.
+ *       Once we assume the value is (or, should be) unique, we can use Map<String,String>.
+ *       The value has an intrinsic type (e.g., int, or a serialized object, etc.), 
+ *           and hence Map<String,String> can be ultimately "cast" to Map<String,Object>.
+ * This class defines "conversion" routines among these different Map types.
+ * TBD: We need to be more consistent in the use of these maps and reduce the need for these "conversions".
+*/
 public final class ParamMapUtil
 {
     private static final Logger log = Logger.getLogger(ParamMapUtil.class.getName());

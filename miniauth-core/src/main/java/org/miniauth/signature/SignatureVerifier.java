@@ -6,8 +6,11 @@ import java.util.Map;
 import org.miniauth.MiniAuthException;
 
 
-// This is primarily for OAuth v1.0a
-// Other auth schemes do not require signature.
+/**
+ * Signature verifier interface.
+ * This is primarily for OAuth v1.0a
+ * Other auth schemes do not require signature.
+ */
 public interface SignatureVerifier
 {
     // See the comment in SignatureGenerator regarding the reason why we have two versions of (almost identical) verify().
