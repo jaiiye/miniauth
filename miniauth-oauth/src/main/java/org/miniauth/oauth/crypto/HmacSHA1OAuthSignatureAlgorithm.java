@@ -12,6 +12,9 @@ import org.miniauth.oauth.common.OAuthParamMap;
 import org.miniauth.oauth.signature.OAuthSignatureUtil;
 
 
+/**
+ * HMAC-SHA1 signature implementation of OAuthSignatureAlgorithm.
+ */
 public class HmacSHA1OAuthSignatureAlgorithm extends AbstractOAuthSignatureAlgorithm implements OAuthSignatureAlgorithm
 {
 

@@ -3,7 +3,11 @@ package org.miniauth.oauth.signature;
 import java.util.Comparator;
 
 
-// temporary
+/**
+ * OAuth requires sorting param keys and values according to a byte order.
+ *     (not in string order, in a certain locale).
+ * BytewiseComparator implements byte-wise comparison.
+ */
 public class BytewiseComparator implements Comparator<String>
 {
 

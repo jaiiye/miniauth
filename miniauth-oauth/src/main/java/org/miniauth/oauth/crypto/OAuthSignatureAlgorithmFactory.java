@@ -4,6 +4,10 @@ import java.util.logging.Logger;
 
 import org.miniauth.oauth.core.SignatureMethod;
 
+
+/**
+ * Factory for creating OAuthSignatureAlgorithm classes.
+ */
 public class OAuthSignatureAlgorithmFactory
 {
     private static final Logger log = Logger.getLogger(OAuthSignatureAlgorithmFactory.class.getName());
@@ -26,6 +30,11 @@ public class OAuthSignatureAlgorithmFactory
         return OAuthSignatureAlgorithmFactoryHolder.INSTANCE;
     }
 
+    /**
+     * Returns a signatureAlgorithm implementation of the given signature method.
+     * @param signatureMethod 
+     * @return A signature algorithm.
+     */
     public OAuthSignatureAlgorithm getOAuthSignatureAlgorithm(String signatureMethod)
     {
         if(! SignatureMethod.isValid(signatureMethod)) {

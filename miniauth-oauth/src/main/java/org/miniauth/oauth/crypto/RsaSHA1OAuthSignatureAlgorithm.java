@@ -13,6 +13,9 @@ import org.miniauth.oauth.signature.OAuthSignatureUtil;
 import org.miniauth.util.ParamMapUtil;
 
 
+/**
+ * RSA-SHA1 signature implementation of OAuthSignatureAlgorithm.
+ */
 public class RsaSHA1OAuthSignatureAlgorithm extends AbstractOAuthSignatureAlgorithm implements OAuthSignatureAlgorithm
 {
 

@@ -17,6 +17,9 @@ import org.miniauth.oauth.util.ParameterTransmissionUtil;
 import org.miniauth.util.ParamMapUtil;
 
 
+/**
+ * OAuth signature-related utility methods.
+ */
 public final class OAuthSignatureUtil
 {
     private static final Logger log = Logger.getLogger(OAuthSignatureUtil.class.getName());

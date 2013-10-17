@@ -12,6 +12,9 @@ import org.miniauth.oauth.common.OAuthParamMap;
 import org.miniauth.oauth.signature.OAuthSignatureUtil;
 
 
+/**
+ * "Plain text" signature implementation of OAuthSignatureAlgorithm.
+ */
 public class PlainTextOAuthSignatureAlgorithm extends AbstractOAuthSignatureAlgorithm implements OAuthSignatureAlgorithm
 {
 

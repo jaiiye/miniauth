@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-
-// Nonce should be really stored in a persistent storage.
-//   (This "simple" implementation will not generally work in a distributed system.)
-// NonceStore is per AuthIdentity (client+token).
-// TBD: If we use a persistent storage, 
-//    then a single nonce table for all AuthIdentity might be more convenient.
+/**
+ * Simple "nonce store" implementation.
+ * Note:
+ * Nonce should be really stored in a persistent storage.
+ *   (This "simple" implementation will not generally work in a distributed system.)
+ * NonceStore is per AuthIdentity (client+token).
+ * TBD: If we use a persistent storage, 
+ *    then a single nonce table for all AuthIdentity might be more convenient.
+ */
 public class SimpleNonceStore implements NonceStore, Serializable
 {
     private static final Logger log = Logger.getLogger(SimpleNonceStore.class.getName());

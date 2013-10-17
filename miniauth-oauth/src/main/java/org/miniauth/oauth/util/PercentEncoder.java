@@ -6,12 +6,13 @@ import java.util.logging.Logger;
 
 import org.miniauth.exception.InternalErrorException;
 
-
-// TBD:
-// http://tools.ietf.org/html/rfc5849#section-3.6
-// http://tools.ietf.org/html/rfc3986
-// This is not a generic percent encoder.
-//   it is specific to OAuth.
+/**
+ * Percent decoder.
+ * http://tools.ietf.org/html/rfc5849#section-3.6
+ * http://tools.ietf.org/html/rfc3986
+ * This is not a generic percent encoder.
+ *   it is specific to OAuth.
+ */
 public final class PercentEncoder
 {
     private static final Logger log = Logger.getLogger(PercentEncoder.class.getName());

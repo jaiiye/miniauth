@@ -5,6 +5,9 @@ import java.io.Serializable;
 import org.miniauth.credential.ConsumerCredential;
 
 
+/**
+ * OAuth specific implementation of ConsumerCredential.
+ */
 public final class OAuthConsumerCredential implements ConsumerCredential, Serializable
 {
     private static final long serialVersionUID = 1L;

@@ -9,6 +9,9 @@ import org.miniauth.credential.CredentialPair;
 import org.miniauth.credential.TokenCredential;
 
 
+/**
+ * OAuth specific implementation of CredentialPair.
+ */
 public class OAuthCredentialPair implements CredentialPair, Serializable
 {
     private static final long serialVersionUID = 1L;

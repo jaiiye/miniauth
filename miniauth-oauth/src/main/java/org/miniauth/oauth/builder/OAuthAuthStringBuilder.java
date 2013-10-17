@@ -18,6 +18,9 @@ import org.miniauth.oauth.signature.OAuthSignatureGenerator;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
 
 
+/**
+ * AuthStringBuilder implementation for OAuth auth scheme.
+ */
 public class OAuthAuthStringBuilder implements AuthStringBuilder
 {
     private static final Logger log = Logger.getLogger(OAuthAuthStringBuilder.class.getName());

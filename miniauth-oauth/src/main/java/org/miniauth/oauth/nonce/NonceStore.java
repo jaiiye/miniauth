@@ -1,6 +1,10 @@
 package org.miniauth.oauth.nonce;
 
 
+/**
+ * Nonce "store" interface.
+ * This is used to store old values so that we can check any collision/duplication.
+ */
 public interface NonceStore
 {
     // TBD:

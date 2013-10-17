@@ -5,6 +5,9 @@ import java.io.Serializable;
 import org.miniauth.credential.AccessCredential;
 
 
+/**
+ * OAuth specific implementation of AccessCredential.
+ */
 public final class OAuthAccessCredential implements AccessCredential, Serializable
 {
     private static final long serialVersionUID = 1L;

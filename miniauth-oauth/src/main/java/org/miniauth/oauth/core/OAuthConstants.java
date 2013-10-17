@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+/**
+ * OAuth related static constants.
+ */
 public final class OAuthConstants
 {
     // OAuth means OAuth version 1.0a.

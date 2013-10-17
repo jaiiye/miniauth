@@ -7,11 +7,16 @@ import java.util.logging.Logger;
 import org.miniauth.credential.AccessIdentity;
 
 
-// This is not really a "pool"
-// More like a factory + cache.
-//   (Each NonceStore for a given AccessIdentity is conceptually a singleton.)
-// TBD: This should really be implemented using a distributed cache like memcache.
-//  Otherwise, this will not work in a distributed server system.
+/**
+ * NonceStore pool.
+ * Note:
+ * This is not really a "pool"
+ * More like a factory + cache.
+ *   (Each NonceStore for a given AccessIdentity is conceptually a singleton.)
+ * TBD: This should really be implemented using a distributed cache like memcache.
+ *  Otherwise, this will not work in a distributed server system.
+ */
+
 public final class NonceStorePool
 {
     private static final Logger log = Logger.getLogger(NonceStorePool.class.getName());

@@ -12,6 +12,9 @@ import org.miniauth.oauth.signature.OAuthSignatureGenerator;
 import org.miniauth.oauth.util.PercentEncoder;
 
 
+/**
+ * Base class for OAuthSignatureAlgorithm
+ */
 public abstract class AbstractOAuthSignatureAlgorithm implements OAuthSignatureAlgorithm
 {
     private static final Logger log = Logger.getLogger(OAuthSignatureGenerator.class.getName());

@@ -5,6 +5,9 @@ import java.io.Serializable;
 import org.miniauth.credential.TokenCredential;
 
 
+/**
+ * OAuth specific implementation of TokenCredential.
+ */
 public final class OAuthTokenCredential implements TokenCredential, Serializable
 {
     private static final long serialVersionUID = 1L;

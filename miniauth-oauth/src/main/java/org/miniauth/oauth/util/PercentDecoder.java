@@ -7,9 +7,11 @@ import java.util.logging.Logger;
 import org.miniauth.exception.InternalErrorException;
 
 
-// TBD:
-// http://tools.ietf.org/html/rfc5849#section-3.6
-// http://tools.ietf.org/html/rfc3986
+/**
+ * Percent decoder.
+ * http://tools.ietf.org/html/rfc5849#section-3.6
+ * http://tools.ietf.org/html/rfc3986
+ */
 public final class PercentDecoder
 {
     private static final Logger log = Logger.getLogger(PercentDecoder.class.getName());

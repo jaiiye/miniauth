@@ -18,7 +18,10 @@ import org.miniauth.oauth.crypto.OAuthSignatureAlgorithmFactory;
 import org.miniauth.signature.SignatureGenerator;
 
 
-// http://tools.ietf.org/html/rfc5849#section-3.4
+/**
+ * Signature generator implementation for OAuth.
+ * Cf. http://tools.ietf.org/html/rfc5849#section-3.4 
+ */
 public class OAuthSignatureGenerator extends OAuthSignatureBase implements SignatureGenerator
 {
     private static final Logger log = Logger.getLogger(OAuthSignatureGenerator.class.getName());

@@ -13,6 +13,9 @@ import org.miniauth.oauth.core.OAuthConstants;
 import org.miniauth.util.AuthHeaderUtil;
 
 
+/**
+ * Utility functions related to determining "parameter transmission type" from request parameters. 
+ */
 public final class ParameterTransmissionUtil
 {
     private static final Logger log = Logger.getLogger(ParameterTransmissionUtil.class.getName());

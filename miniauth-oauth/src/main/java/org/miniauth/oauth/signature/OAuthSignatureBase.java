@@ -20,7 +20,10 @@ import org.miniauth.oauth.core.OAuthConstants;
 import org.miniauth.oauth.util.PercentEncoder;
 
 
-// http://tools.ietf.org/html/rfc5849#section-3.4
+/**
+ * Base class for Signature generator/verifier implementations for OAuth.
+ * Cf. http://tools.ietf.org/html/rfc5849#section-3.4 
+ */
 public abstract class OAuthSignatureBase
 {
     private static final Logger log = Logger.getLogger(OAuthSignatureBase.class.getName());

@@ -22,7 +22,10 @@ import org.miniauth.oauth.nonce.NonceStorePool;
 import org.miniauth.signature.SignatureVerifier;
 
 
-// http://tools.ietf.org/html/rfc5849#section-3.2
+/**
+ * Signature verifier implementation for OAuth.
+ * Cf. http://tools.ietf.org/html/rfc5849#section-3.2 
+ */
 public class OAuthSignatureVerifier extends OAuthSignatureBase implements SignatureVerifier
 {
     private static final Logger log = Logger.getLogger(OAuthSignatureVerifier.class.getName());
