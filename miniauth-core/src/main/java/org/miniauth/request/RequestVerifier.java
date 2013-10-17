@@ -14,7 +14,7 @@ public interface RequestVerifier
     /**
      * Returns true if the request is valid and verified.
      * @param credential Access credential needed to validate/verify the request.
-     * @param request Partial incoming request wrapper object 
+     * @param request Partial incoming request wrapper object. It should be considered read-only. 
      * @return true if the request was successfully verified.
      * @throws MiniAuthException
      */

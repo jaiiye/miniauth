@@ -14,7 +14,7 @@ public interface RequestEndorser
     /**
      * Returns true if the request has been successfully "endorsed".
      * @param credential Access credential needed to endorse/sign the request.
-     * @param request Partial outgoing request wrapper object 
+     * @param request Partial outgoing request wrapper object. "In-out" param.
      * @return true if the operation was successful.
      * @throws MiniAuthException
      */
