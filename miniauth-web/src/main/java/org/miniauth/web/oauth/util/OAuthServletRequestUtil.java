@@ -28,6 +28,8 @@ public final class OAuthServletRequestUtil
     
     public static boolean isOAuthParamPresent(HttpServletRequest request) throws MiniAuthException //, IOException
     {
+        // TBD: need to check the header first...
+        
 //        if(getOAuthParamTransmissionType(request) != null) {
 //            return true;
 //        } else {
@@ -47,6 +49,9 @@ public final class OAuthServletRequestUtil
         if(request == null) {
             return false;
         }
+
+        // TBD: need to check the header first...
+        
         Map<String,String[]> params = request.getParameterMap();
         if(params == null) {
             return false;

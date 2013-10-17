@@ -1,12 +1,12 @@
 package org.miniauth.web.oauth;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.builder.AuthStringBuilder;
@@ -16,14 +16,19 @@ import org.miniauth.exception.InvalidStateException;
 import org.miniauth.oauth.builder.OAuthAuthStringBuilder;
 import org.miniauth.signature.SignatureGenerator;
 import org.miniauth.web.ClientAuthHandler;
-import org.miniauth.web.oauth.util.OAuthServletRequestUtil;
+import org.miniauth.web.oauth.util.OAuthURLConnectionUtil;
+import org.miniauth.web.util.URLConnectionUtil;
 
 
 // TBD:
-// This does not really make sense....
-// We need a different way to build a "request object"...
+// URL?
+// URLConnection?
+// HttpClient?
 // ....
-/* public */ class OAuthClientAuthHandler extends OAuthAuthHandler implements ClientAuthHandler
+// Probably, the best way is to create wrappers on these objects????
+// ....
+// ....
+public class OAuthClientAuthHandler extends OAuthAuthHandler implements ClientAuthHandler
 {
 
     // TBD: Is it safe to reuse this???
@@ -38,36 +43,36 @@ import org.miniauth.web.oauth.util.OAuthServletRequestUtil;
     
     // Note that "signing" is the last step.
     // Once the request is signed, it cannot be modified.
-    public boolean isEndorsed(HttpServletRequest request)
+    public boolean isEndorsed(HttpURLConnection conn) throws MiniAuthException, IOException
     {
         // TBD: ...
-        // return OAuthServletRequestUtil.isOAuthParamPresent(request);
-        return OAuthServletRequestUtil.isOAuthSignaturePresent(request);
+        // return OAuthURLConnectionUtil.isOAuthParamPresent(conn);
+        return OAuthURLConnectionUtil.isOAuthSignaturePresent(conn);
     }
 
     @Override
-    public boolean endorseRequest(Map<String, String> authCredential, HttpServletRequest request) throws MiniAuthException, IOException
+    public boolean endorseRequest(Map<String, String> authCredential, HttpURLConnection conn) throws MiniAuthException, IOException
     {
-        return endorseRequest(authCredential, request, null);
+        return endorseRequest(authCredential, conn, null);
     }
-    public boolean endorseRequest(Map<String, String> authCredential, HttpServletRequest request, String transmissionType) throws MiniAuthException, IOException
+    public boolean endorseRequest(Map<String, String> authCredential, HttpURLConnection conn, String transmissionType) throws MiniAuthException, IOException
     {
         // Note:
-        // At this point, request should not contain any oauth_x parameters.
-        if(isEndorsed(request)) {
+        // At this point, conn should not contain any oauth_x parameters.
+        if(isEndorsed(conn)) {
             // return false;
             throw new InvalidStateException("Request already endorsed.");
         }
         // ...
         // 
         // TBD:
-        // We can use any existing oauth_ parameters already included in request
+        // We can use any existing oauth_ parameters already included in conn
         //   and fill in what's missing including signature.
         // For now, we do not support such scenario.
         // ...
-        // boolean oauthParamIncluded = OAuthServletRequestUtil.isOAuthParamPresent(request);
+        // boolean oauthParamIncluded = OAuthServletRequestUtil.isOAuthParamPresent(conn);
         // if(transmissionType == null) {
-        //     transmissionType = OAuthServletRequestUtil.getOAuthParamTransmissionType(request);
+        //     transmissionType = OAuthServletRequestUtil.getOAuthParamTransmissionType(conn);
         // }
         if(transmissionType == null) {
             // We always use the header type if it's not already set...
@@ -79,19 +84,23 @@ import org.miniauth.web.oauth.util.OAuthServletRequestUtil;
         
         // ...
         
-        String httpMethod = request.getMethod();
-        String requestUrl = request.getRequestURL().toString();
+        URL url = conn.getURL();
+        if(url == null) {
+            throw new InvalidStateException("Request URL is not set.");
+        }
+
+        String httpMethod = conn.getRequestMethod();
         URI baseURI = null;
         try {
-            baseURI = new URI(requestUrl);
+            baseURI = url.toURI();
         } catch (URISyntaxException e) {
             // ??? This cannot happen.
-            throw new InvalidInputException("Invalid requestUrl = " + requestUrl, e);
+            throw new InvalidInputException("Invalid requestUrl = " + url.toString(), e);
         }
 
         // ???
-        Map<String,String> authHeader = OAuthServletRequestUtil.getAuthParams(request);
-        Map<String,String[]> requestParams = request.getParameterMap();
+        Map<String,String> authHeader = OAuthURLConnectionUtil.getAuthParams(conn);
+        Map<String,String[]> requestParams = URLConnectionUtil.getRequestParams(conn);  // ???
         
         // ...
         
@@ -111,14 +120,13 @@ import org.miniauth.web.oauth.util.OAuthServletRequestUtil;
         String authString = authStringBuilder.generateAuthorizationString(transmissionType, authCredential, httpMethod, baseURI, authHeader, requestParams);
 
         
-        // add oauth_X params including the signature to request.
+        // add oauth_X params including the signature to conn.
         //
         switch(transmissionType) {
         case ParameterTransmissionType.HEADER:
             // ...
             // ???
-            // add a header to the request???
-            // How ??
+            // add a header to the conn
 
             break;
             // ....

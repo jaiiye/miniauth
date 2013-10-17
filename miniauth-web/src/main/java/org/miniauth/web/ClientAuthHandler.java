@@ -1,9 +1,8 @@
 package org.miniauth.web;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.miniauth.MiniAuthException;
 
@@ -17,5 +16,5 @@ public interface ClientAuthHandler extends AuthHandler
 
     // request is an "in-out" param.
     // boolean prepareRequest(AccessIdentity accessIdentity, ServletRequest request) throws MiniAuthException;
-    boolean endorseRequest(Map<String, String> authCredential, HttpServletRequest request) throws MiniAuthException, IOException;
+    boolean endorseRequest(Map<String, String> authCredential, HttpURLConnection conn) throws MiniAuthException, IOException;
 }
