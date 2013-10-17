@@ -5,7 +5,9 @@ package org.miniauth.web;
 // This should be moved to a separate module.
 // ...
 
-// Client-side auth handler using Apache HttpClient...
+/**
+ * Client-side auth handler using Apache HttpClient...
+ */
 public interface HttpClientAuthHandler extends ClientAuthHandler
 {
     // client is an "in-out" param.

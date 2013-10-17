@@ -3,7 +3,9 @@ package org.miniauth.web;
 import org.miniauth.MiniAuthException;
 
 
-// Any generic exception.
+/**
+ * Any generic exception from Web module.
+ */
 public class MiniAuthWebException extends MiniAuthException
 {
     private static final long serialVersionUID = 1L;

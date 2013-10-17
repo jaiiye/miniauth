@@ -8,9 +8,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.miniauth.MiniAuthException;
 
 
-// Server-side auth handler.
+/**
+ * Server-side auth handler.
+ */
 public interface ProviderAuthHandler extends AuthHandler
 {
-    // boolean verifyRequest(CredentialPair credentialPair, ServletRequest request) throws MiniAuthException;
+    /**
+     * Verifies the request for auth.
+     * @param authCredential Auth credential needed for making a request. 
+     * @param request the request object.
+     * @return true if the request has valid authorization token.
+     * @throws MiniAuthException
+     * @throws IOException
+     */
     boolean verifyRequest(Map<String, String> authCredential, HttpServletRequest request) throws MiniAuthException, IOException;
 }
