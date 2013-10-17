@@ -17,6 +17,9 @@ import org.miniauth.web.ProviderAuthHandler;
 import org.miniauth.web.oauth.util.OAuthServletRequestUtil;
 
 
+/**
+ * OAuthAuthHandler implementation for provider side.
+ */
 public class OAuthProviderAuthHandler extends OAuthAuthHandler implements ProviderAuthHandler
 {
     private static final Logger log = Logger.getLogger(OAuthProviderAuthHandler.class.getName());

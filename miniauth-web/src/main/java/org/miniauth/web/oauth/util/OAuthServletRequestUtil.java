@@ -1,8 +1,6 @@
 package org.miniauth.web.oauth.util;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.AuthScheme;
-import org.miniauth.exception.InvalidInputException;
 import org.miniauth.oauth.core.OAuthConstants;
 import org.miniauth.oauth.signature.OAuthSignatureUtil;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;

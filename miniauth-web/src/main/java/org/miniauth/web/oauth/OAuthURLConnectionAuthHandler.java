@@ -11,11 +11,16 @@ import java.util.Map;
 import org.miniauth.MiniAuthException;
 import org.miniauth.builder.AuthStringBuilder;
 import org.miniauth.core.ParameterTransmissionType;
+import org.miniauth.credential.AuthCredentialConstants;
+import org.miniauth.exception.InternalErrorException;
 import org.miniauth.exception.InvalidInputException;
 import org.miniauth.exception.InvalidStateException;
 import org.miniauth.oauth.builder.OAuthAuthStringBuilder;
+import org.miniauth.oauth.core.OAuthConstants;
+import org.miniauth.oauth.core.SignatureMethod;
 import org.miniauth.signature.SignatureGenerator;
 import org.miniauth.web.URLConnectionAuthHandler;
+import org.miniauth.web.oauth.util.OAuthParamUtil;
 import org.miniauth.web.oauth.util.OAuthURLConnectionUtil;
 import org.miniauth.web.util.URLConnectionUtil;
 
@@ -27,7 +32,9 @@ import org.miniauth.web.util.URLConnectionUtil;
 // ....
 // Probably, the best way is to create wrappers on these objects????
 // ....
-// ....
+// Note:
+// This class has not been fully implemented....
+// .....
 public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements URLConnectionAuthHandler
 {
 
@@ -110,9 +117,17 @@ public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements U
         case ParameterTransmissionType.HEADER:
             // note that autheHeader should be null at this point (or, maybe an empty map?)
             // ...
-            authHeader = new HashMap<>();
+            authHeader = OAuthParamUtil.buildNewOAuthHeaderMap(authCredential);
             
             break;
+        default:
+            
+            // TBD:
+            // This makes sense only if the current form/url params is null (e.g., body is not set), etc...
+            // ????
+            
+            // Not implemented...
+            throw new InternalErrorException("Not supported/implemented transmissionType: " + transmissionType);
             // ....
         }
         
@@ -127,14 +142,20 @@ public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements U
             // ...
             // ???
             // add a header to the conn
+            conn.addRequestProperty("Authorization", authString);
 
             break;
+        default:
+            // TBD:
+            // signatureGenerator.generateOAuthParamMap(credential, httpMethod, uriInfo, authHeader, formParams, queryParams);
+            
+            // Not implemented...
+            throw new InternalErrorException("Not supported/implemented transmissionType: " + transmissionType);
             // ....
         }
         
         
-        
-        return false;
+        return true;
     }
     
     
