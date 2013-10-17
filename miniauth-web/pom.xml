@@ -55,12 +55,14 @@
       <version>0.3.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
+<!-- 
 	<dependency>
 	  <groupId>org.apache.httpcomponents</groupId>
 	  <artifactId>httpclient</artifactId>
 	  <version>4.3.1</version>
       <scope>compile</scope>
 	</dependency>
+-->
     <dependency>
       <groupId>org.apache.tomcat</groupId>
       <artifactId>tomcat-api</artifactId>

@@ -28,14 +28,14 @@ import org.miniauth.web.util.URLConnectionUtil;
 // Probably, the best way is to create wrappers on these objects????
 // ....
 // ....
-public class OAuthClientAuthHandler extends OAuthAuthHandler implements URLConnectionAuthHandler
+public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements URLConnectionAuthHandler
 {
 
     // TBD: Is it safe to reuse this???
     private final AuthStringBuilder authStringBuilder;
     private final SignatureGenerator signatureGenerator;
 
-    public OAuthClientAuthHandler()
+    public OAuthURLConnectionAuthHandler()
     {
         authStringBuilder = new OAuthAuthStringBuilder();
         signatureGenerator = ((OAuthAuthStringBuilder) authStringBuilder).getOAuthSignatureGenerator();  // ???
