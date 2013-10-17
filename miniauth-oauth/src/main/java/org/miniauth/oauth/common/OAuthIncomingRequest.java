@@ -15,6 +15,8 @@ public class OAuthIncomingRequest extends IncomingRequest
 {
     private static final long serialVersionUID = 1L;
 
+    // State variables.
+    private boolean endorsed = false;
     
     public OAuthIncomingRequest()
     {
@@ -41,27 +43,11 @@ public class OAuthIncomingRequest extends IncomingRequest
     @Override
     public boolean isEndorsed()
     {
-
-        
-        
-        
-        return false;
+        return this.endorsed;
     }
-
-    /**
-     * Returns true if this request has been verified.
-     *    (e.g., if its oauth_signature param has been verified in the case of OAuth, etc.).
-     * @return the "verification" state of this request.
-     */
-    @Override
-    public boolean isVerified()
+    public void setEndorsed(boolean endorsed)
     {
-
-
-        
-        
-        
-        return false;
+        this.endorsed = endorsed;
     }
 
     

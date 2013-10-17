@@ -3,6 +3,8 @@ package org.miniauth.common;
 import java.net.URI;
 import java.util.Map;
 
+import org.miniauth.MiniAuthException;
+
 
 /**
  * Provider side request, which is sent by a client.
@@ -15,6 +17,8 @@ public abstract class IncomingRequest extends RequestBase
     
     // ready for verification??
     private boolean ready = false;
+    // Already verified??
+    private boolean verified = false;
 
     public IncomingRequest()
     {
@@ -31,6 +35,89 @@ public abstract class IncomingRequest extends RequestBase
         super(httpMethod, baseURI, authHeader, formParams, queryParams);
     }
 
+    
+    
+    @Override
+    public RequestBase setHttpMethod(String httpMethod)
+            throws MiniAuthException
+    {
+        super.setHttpMethod(httpMethod);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    public RequestBase setBaseURI(URI baseURI) throws MiniAuthException
+    {
+        super.setBaseURI(baseURI);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    public RequestBase setAuthHeader(Map<String, String> authHeader)
+            throws MiniAuthException
+    {
+        super.setAuthHeader(authHeader);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    public RequestBase addAuthHeaderParam(String key, String value)
+            throws MiniAuthException
+    {
+        super.addAuthHeaderParam(key, value);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    public RequestBase setFormParams(Map<String, String[]> formParams)
+            throws MiniAuthException
+    {
+        super.setFormParams(formParams);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    public RequestBase addFormParams(Map<String, String[]> formParams)
+            throws MiniAuthException
+    {
+        super.addFormParams(formParams);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    public RequestBase addFormParam(String key, String value)
+            throws MiniAuthException
+    {
+        super.addFormParam(key, value);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    public RequestBase setQueryParams(Map<String, String[]> queryParams)
+            throws MiniAuthException
+    {
+        super.setQueryParams(queryParams);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    public RequestBase addQueryParams(Map<String, String[]> queryParams)
+            throws MiniAuthException
+    {
+        super.addQueryParams(queryParams);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    public RequestBase addQueryParam(String key, String value)
+            throws MiniAuthException
+    {
+        super.addQueryParam(key, value);
+        setVerified(false);
+        return this;
+    }
+
+
     /**
      * Returns true if the request is in a state where it can be verified.
      * @return true if it is ready for verification.
@@ -40,7 +127,6 @@ public abstract class IncomingRequest extends RequestBase
     {
         return ready;
     }
-    
     /**
      * Sets the "ready" state. If it is true, then it can be endorsed. 
      * @param ready The ready state of this request.
@@ -48,6 +134,20 @@ public abstract class IncomingRequest extends RequestBase
     public void setReady(boolean ready)
     {
         this.ready = ready;
+    }
+
+    /**
+     * Returns true if this request has been verified.
+     *    (e.g., if its oauth_signature param has been verified in the case of OAuth, etc.).
+     * @return the "verification" state of this request.
+     */
+    public boolean isVerified()
+    {
+        return this.verified;
+    }
+    public void setVerified(boolean verified)
+    {
+        this.verified = verified;
     }
 
 
@@ -61,12 +161,6 @@ public abstract class IncomingRequest extends RequestBase
     public abstract boolean isEndorsed();
 
 
-    /**
-     * Returns true if this request has been verified.
-     *    (e.g., if its oauth_signature param has been verified in the case of OAuth, etc.).
-     * @return the "verification" state of this request.
-     */
-    public abstract boolean isVerified();
 
     
 }

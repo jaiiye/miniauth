@@ -15,7 +15,9 @@ public class OAuthOutgoingRequest extends OutgoingRequest
 {
     private static final long serialVersionUID = 1L;
 
-    
+    // State variables.
+    private boolean endorsed = false;
+
     public OAuthOutgoingRequest()
     {
         super();
@@ -42,10 +44,11 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     @Override
     public boolean isEndorsed()
     {
-        
-        
-        
-        return false;
+        return this.endorsed;
+    }
+    public void setEndorsed(boolean endorsed)
+    {
+        this.endorsed = endorsed;
     }
 
     
