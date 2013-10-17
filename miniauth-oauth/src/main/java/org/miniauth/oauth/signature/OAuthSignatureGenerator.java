@@ -27,7 +27,7 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase implements Signa
     {
     }
 
-    // oauthParams does not include oauth_signature.
+    // request header/params do not include oauth_signature.
     @Override
     public String generate(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
@@ -76,13 +76,16 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase implements Signa
     
     
     
-    // TBD:
-    public OAuthParamMap generateOAuthParamMap(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    // Request header/params do not include oauth_signature.
+    // Returned oauthParam map should include oauth_signature.
+    @Override
+    public Map<String,Object> generateOAuthParamMap(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
         Map<String,String[]> requestParams = OAuthSignatureUtil.mergeRequestParameters(formParams, queryParams);
         return generateOAuthParamMap(credential, httpMethod, uriInfo, authHeader, requestParams);
     }
-    public OAuthParamMap generateOAuthParamMap(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    @Override
+    public Map<String,Object> generateOAuthParamMap(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
     {
         // String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeaders, formParams, queryParams);
         String signatureMethod = OAuthSignatureUtil.getOAuthSignatureMethod(authHeader, requestParams);
@@ -97,7 +100,7 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase implements Signa
             oAuthParamMap = oauthSignatureAlgorithm.generateOAuthParamMap(signatureBaseString, credential, authHeader, requestParams);
         }
         
-        return oAuthParamMap;
+        return oAuthParamMap.getReadOnlyParamMap();
     }
     
     

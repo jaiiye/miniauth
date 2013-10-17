@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.Map;
 
 import org.miniauth.MiniAuthException;
+import org.miniauth.core.BaseURIInfo;
+import org.miniauth.credential.AccessCredential;
 
 
 // This is primarily for OAuth v1.0a
@@ -24,5 +26,8 @@ public interface SignatureGenerator
     // The client can use whichever version is more convenient, for now (since we don't do "full" validation).
     String generate(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException;
     String generate(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException;
+
+    Map<String,Object> generateOAuthParamMap(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException;
+    Map<String,Object> generateOAuthParamMap(AccessCredential credential, String httpMethod, BaseURIInfo uriInfo, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException;
 
 }

@@ -54,7 +54,8 @@ public class OAuthAuthStringBuilder implements AuthStringBuilder
         }
         AccessCredential credential = new OAuthAccessCredential(consumerSecret, tokenSecret);
         BaseURIInfo uriInfo = new BaseURIInfo(baseURI);
-        OAuthParamMap oauthParamMap = getOAuthSignatureGenerator().generateOAuthParamMap(credential, httpMethod, uriInfo, authHeader, formParams, queryParams);
+        Map<String,Object> oauthParameters = getOAuthSignatureGenerator().generateOAuthParamMap(credential, httpMethod, uriInfo, authHeader, formParams, queryParams);
+        OAuthParamMap oauthParamMap = new OAuthParamMap(oauthParameters);
 
         if(! ParameterTransmissionUtil.isTransmissionTypeValid(transmissionType)) {
             transmissionType = ParameterTransmissionUtil.getDefaultTransmissionType();
@@ -90,7 +91,8 @@ public class OAuthAuthStringBuilder implements AuthStringBuilder
         }
         AccessCredential credential = new OAuthAccessCredential(consumerSecret, tokenSecret);
         BaseURIInfo uriInfo = new BaseURIInfo(baseURI);
-        OAuthParamMap oauthParamMap = getOAuthSignatureGenerator().generateOAuthParamMap(credential, httpMethod, uriInfo, authHeader, requestParams);
+        Map<String,Object> oauthParameters = getOAuthSignatureGenerator().generateOAuthParamMap(credential, httpMethod, uriInfo, authHeader, requestParams);
+        OAuthParamMap oauthParamMap = new OAuthParamMap(oauthParameters);
 
         if(! ParameterTransmissionUtil.isTransmissionTypeValid(transmissionType)) {
             transmissionType = ParameterTransmissionUtil.getDefaultTransmissionType();

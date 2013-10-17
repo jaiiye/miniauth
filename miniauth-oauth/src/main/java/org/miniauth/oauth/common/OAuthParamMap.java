@@ -110,11 +110,19 @@ public final class OAuthParamMap implements Serializable
         }
     }
     
-//    // TBD: How to make the returned map immutable???
+    // TBD: How to make the returned map immutable???
 //    public Map<String,Object> getParamMap()
 //    {
 //        return paramMap;
 //    }
+    public Map<String,Object> getReadOnlyParamMap()
+    {
+        // Shallow copy...
+        // This is not exactly "read only" in general since the caller can change the object referenced by the value.
+        // But, in this case, the value "object" is only string or integer...
+        // So, in effect, it's readonly....
+        return new HashMap<>(this.paramMap);
+    }
 
 
     //////////////////////////////////////////////////////
