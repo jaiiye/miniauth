@@ -6,10 +6,17 @@
     <property name="output" value="nomaven/build/jar"/>
     <property name="version" value="0.3.0"/>
 
+    <!--  Install Apache httpclient under nomaven/lib (which is not git repo)  -->
+    <property name="httpClientDir" value="nomaven/lib/httpcomponents-client-4.3.1"/>
 
 	<property environment="myenv" />
 	<path id="tomcat.runtime.lib">
 	    <fileset dir="${myenv.CATALINA_HOME}/lib">
+	        <include name="*.jar"/>
+	    </fileset>
+	</path>
+	<path id="apache.httpclient.lib">
+	    <fileset dir="${httpClientDir}/lib">
 	        <include name="*.jar"/>
 	    </fileset>
 	</path>
@@ -93,6 +100,7 @@
                  source="1.7"
                  includeantruntime="false">
         	<classpath refid="tomcat.runtime.lib"/>
+        	<classpath refid="apache.httpclient.lib"/>
         </javac>
     </target>
 	<target name="buildAllClasses" depends="cleanAllClasses, buildCoreClasses, buildOAuthClasses, buildOAuth2Classes, buildWebClasses">
@@ -177,6 +185,7 @@
 	<target name="apidoc" depends="createAllJar, cleanApidocDir, createApidocDir" description="Generate javadoc for all modules">
 	    <javadoc destdir="${apidocDir}">
         	<classpath refid="tomcat.runtime.lib"/>
+        	<classpath refid="apache.httpclient.lib"/>
     	    <packageset dir="miniauth-core/src/main/java" defaultexcludes="yes">
     	      <include name="org/miniauth/**"/>
     	    </packageset>
