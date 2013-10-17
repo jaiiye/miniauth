@@ -5,7 +5,9 @@ import java.io.Serializable;
 import org.miniauth.credential.TokenCredential;
 
 
-// For uname/pword based credential.
+/**
+ * For uname/pword based credential.
+ */
 public final class BasicTokenCredential implements TokenCredential, Serializable
 {
     private static final long serialVersionUID = 1L;

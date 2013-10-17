@@ -12,6 +12,9 @@ import org.miniauth.core.AuthScheme;
 import org.miniauth.credential.AuthCredentialConstants;
 
 
+/**
+ * AuthStringBuilder implementation for HTTP Basic access auth scheme.
+ */
 public class BasicAuthStringBuilder implements AuthStringBuilder
 {
     private static final Logger log = Logger.getLogger(BasicAuthStringBuilder.class.getName());

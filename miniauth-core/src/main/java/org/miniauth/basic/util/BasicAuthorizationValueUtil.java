@@ -14,10 +14,16 @@ public final class BasicAuthorizationValueUtil
 
     private BasicAuthorizationValueUtil() {}
 
-    
-    // It builds a string of (base64 encoded) username:password per HTTP Basic auth rule.
-    // http://www.ietf.org/rfc/rfc2617.txt
-    // Note that this does not build a full header string (e.g., including "Basic" etc.).
+    /**
+     * It builds a string of (base64 encoded) username:password per HTTP Basic auth rule.
+     * Cf. http://www.ietf.org/rfc/rfc2617.txt
+     * Note that this does not build a full header string (e.g., including "Basic" etc.).
+     * 
+     * @param uname
+     * @param pword
+     * @return the auth string that can be used in a Basic auth header (after "Authorization: Basic ")
+     * @throws InternalErrorException
+     */
     public static String buildBasicAuthorizationValueString(String uname, String pword) throws InternalErrorException
     {
         if(uname == null) {
