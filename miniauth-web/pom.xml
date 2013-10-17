@@ -5,17 +5,13 @@
   <parent>
     <groupId>org.aerysoft.miniauth</groupId>
     <artifactId>miniauth</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>0.4.0-SNAPSHOT</version>
   </parent>
 
 <!-- 
   <groupId>org.aerysoft.miniauth</groupId>
 -->
   <artifactId>miniauth-web</artifactId>
-<!--
-  <version>0.3.0-SNAPSHOT</version>
-  <version>0.1.0-SNAPSHOT-${maven.build.timestamp}</version>
--->
 
   <name>MiniAuth Web</name>
   <description>MiniAuth OAuth signature library in Java. Web/Servlet-support module.</description>
@@ -40,19 +36,19 @@
     <dependency>
       <groupId>org.aerysoft.miniauth</groupId>
       <artifactId>miniauth-core</artifactId>
-      <version>0.3.1-SNAPSHOT</version>
+      <version>0.4.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.aerysoft.miniauth</groupId>
       <artifactId>miniauth-oauth</artifactId>
-      <version>0.3.1-SNAPSHOT</version>
+      <version>0.4.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.aerysoft.miniauth</groupId>
       <artifactId>miniauth-oauth2</artifactId>
-      <version>0.3.1-SNAPSHOT</version>
+      <version>0.4.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
 <!-- 
