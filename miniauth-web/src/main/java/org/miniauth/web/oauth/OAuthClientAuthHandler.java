@@ -15,7 +15,7 @@ import org.miniauth.exception.InvalidInputException;
 import org.miniauth.exception.InvalidStateException;
 import org.miniauth.oauth.builder.OAuthAuthStringBuilder;
 import org.miniauth.signature.SignatureGenerator;
-import org.miniauth.web.ClientAuthHandler;
+import org.miniauth.web.URLConnectionAuthHandler;
 import org.miniauth.web.oauth.util.OAuthURLConnectionUtil;
 import org.miniauth.web.util.URLConnectionUtil;
 
@@ -28,7 +28,7 @@ import org.miniauth.web.util.URLConnectionUtil;
 // Probably, the best way is to create wrappers on these objects????
 // ....
 // ....
-public class OAuthClientAuthHandler extends OAuthAuthHandler implements ClientAuthHandler
+public class OAuthClientAuthHandler extends OAuthAuthHandler implements URLConnectionAuthHandler
 {
 
     // TBD: Is it safe to reuse this???
