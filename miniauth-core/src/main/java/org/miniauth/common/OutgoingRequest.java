@@ -19,21 +19,26 @@ public abstract class OutgoingRequest extends RequestBase
     // ready for endorsing??
     private boolean ready = false;
 
-    public OutgoingRequest()
+    protected OutgoingRequest()
     {
         super();
     }
-    public OutgoingRequest(String httpMethod, URI baseURI)
+    protected OutgoingRequest(String httpMethod, URI baseURI)
     {
         super(httpMethod, baseURI);
     }
-    public OutgoingRequest(String httpMethod, URI baseURI,
+    protected OutgoingRequest(String httpMethod, URI baseURI,
             Map<String, String> authHeader, Map<String, String[]> formParams,
             Map<String, String[]> queryParams)
     {
         super(httpMethod, baseURI, authHeader, formParams, queryParams);
     }
+    protected OutgoingRequest(RequestBase request)
+    {
+        super(request);
+    }
 
+    
     /**
      * Returns true if the request is in a state where it can be endorsed.
      * @return true if it is ready for endorsement.
@@ -43,12 +48,11 @@ public abstract class OutgoingRequest extends RequestBase
     {
         return ready;
     }
-    
     /**
      * Sets the "ready" state. If it is true, then it can be endorsed. 
      * @param ready The ready state of this request.
      */
-    public void setReady(boolean ready)
+    protected void setReady(boolean ready)
     {
         this.ready = ready;
     }

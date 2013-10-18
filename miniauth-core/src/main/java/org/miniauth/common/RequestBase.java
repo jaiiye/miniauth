@@ -2,12 +2,16 @@ package org.miniauth.common;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
+import org.miniauth.basic.builder.BasicAuthStringBuilder;
 
 
 /**
@@ -15,6 +19,7 @@ import org.miniauth.MiniAuthException;
  */
 public abstract class RequestBase implements Serializable
 {
+    private static final Logger log = Logger.getLogger(RequestBase.class.getName());
     private static final long serialVersionUID = 1L;
     
     // To be used for List.toArray() function.
@@ -27,15 +32,15 @@ public abstract class RequestBase implements Serializable
     private Map<String,String[]> queryParams = null;
 
 
-    public RequestBase()
+    protected RequestBase()
     {
         this(null, null);
     }
-    public RequestBase(String httpMethod, URI baseURI)
+    protected RequestBase(String httpMethod, URI baseURI)
     {
         this(httpMethod, baseURI, null, null, null);
     }
-    public RequestBase(String httpMethod, URI baseURI,
+    protected RequestBase(String httpMethod, URI baseURI,
             Map<String, String> authHeader, Map<String, String[]> formParams,
             Map<String, String[]> queryParams)
     {
@@ -45,6 +50,64 @@ public abstract class RequestBase implements Serializable
         this.authHeader = authHeader;
         this.formParams = formParams;
         this.queryParams = queryParams;
+    }
+    // Copy constructor. (Uses deep copy.)
+    // We can create a new RequestBase object using the given object as a template.
+    // Note that we allow for a partial/incomplete copy instead of throwing an exception. 
+    protected RequestBase(RequestBase request)
+    {
+        if(request != null) {
+            this.httpMethod = request.getHttpMethod();
+            URI targetURI = request.getBaseURI();
+            if(targetURI != null) {
+                try {
+                    this.baseURI = new URI(request.getBaseURI().toString());
+                } catch (URISyntaxException e) {
+                    // Ignore. This should not normally happen, anyway.
+                    log.log(Level.WARNING, "Failed to copy baseURI.", e);
+                }
+            }
+            Map<String,String> requestAuthHeader = request.getAuthHeader();
+            if(requestAuthHeader != null) {
+                this.authHeader = new HashMap<>();
+                for(String k : requestAuthHeader.keySet()) {
+                    String v = requestAuthHeader.get(k);
+                    this.authHeader.put(k, v);
+                }
+            }
+            Map<String,String[]> requestFormParams = request.getFormParams();
+            if(requestFormParams != null) {
+                this.formParams = new HashMap<>();
+                for(String k : requestFormParams.keySet()) {
+                    String[] values = requestFormParams.get(k);
+                    String[] vs = null;
+                    if(values != null) {
+                        int vLen = values.length;
+                        vs = new String[vLen];
+                        if(vLen > 0) {
+                            System.arraycopy(values, 0, vs, 0, vLen);
+                        }
+                    }
+                    this.formParams.put(k, vs);
+                }
+            }
+            Map<String,String[]> requestQueryParams = request.getQueryParams();
+            if(requestQueryParams != null) {
+                this.queryParams = new HashMap<>();
+                for(String k : requestQueryParams.keySet()) {
+                    String[] values = requestQueryParams.get(k);
+                    String[] vs = null;
+                    if(values != null) {
+                        int vLen = values.length;
+                        vs = new String[vLen];
+                        if(vLen > 0) {
+                            System.arraycopy(values, 0, vs, 0, vLen);
+                        }
+                    }
+                    this.queryParams.put(k, vs);
+                }
+            }
+        }
     }
 
     

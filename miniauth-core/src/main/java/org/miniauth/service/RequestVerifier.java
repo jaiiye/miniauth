@@ -1,4 +1,4 @@
-package org.miniauth.request;
+package org.miniauth.service;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.common.IncomingRequest;

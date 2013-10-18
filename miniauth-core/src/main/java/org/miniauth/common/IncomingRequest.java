@@ -20,22 +20,25 @@ public abstract class IncomingRequest extends RequestBase
     // Already verified??
     private boolean verified = false;
 
-    public IncomingRequest()
+    protected IncomingRequest()
     {
         super();
     }
-    public IncomingRequest(String httpMethod, URI baseURI)
+    protected IncomingRequest(String httpMethod, URI baseURI)
     {
         super(httpMethod, baseURI);
     }
-    public IncomingRequest(String httpMethod, URI baseURI,
+    protected IncomingRequest(String httpMethod, URI baseURI,
             Map<String, String> authHeader, Map<String, String[]> formParams,
             Map<String, String[]> queryParams)
     {
         super(httpMethod, baseURI, authHeader, formParams, queryParams);
     }
+    protected IncomingRequest(RequestBase request)
+    {
+        super(request);
+    }
 
-    
     
     @Override
     public RequestBase setHttpMethod(String httpMethod)
@@ -131,7 +134,7 @@ public abstract class IncomingRequest extends RequestBase
      * Sets the "ready" state. If it is true, then it can be endorsed. 
      * @param ready The ready state of this request.
      */
-    public void setReady(boolean ready)
+    protected void setReady(boolean ready)
     {
         this.ready = ready;
     }

@@ -3,7 +3,11 @@ package org.miniauth.oauth.common;
 import java.net.URI;
 import java.util.Map;
 
+import org.miniauth.MiniAuthException;
 import org.miniauth.common.OutgoingRequest;
+import org.miniauth.common.RequestBase;
+import org.miniauth.credential.AccessIdentity;
+import org.miniauth.oauth.service.OAuthRequestUtil;
 
 
 /**
@@ -17,23 +21,51 @@ public class OAuthOutgoingRequest extends OutgoingRequest
 
     // State variables.
     private boolean endorsed = false;
+    
+    // OAuth parameter wrapper
+    private OAuthParamMap oauthParamMap = null;
+    // private AccessIdentity accessIdentity = null;    // Just use oauthParamMap.accessIdentity
 
-    public OAuthOutgoingRequest()
+
+    // Note that Ctor's are not public.
+    // Use the builder class to create OAuthOutgoingRequest objects.
+    protected OAuthOutgoingRequest()
     {
         super();
     }
-    public OAuthOutgoingRequest(String httpMethod, URI baseURI)
+    protected OAuthOutgoingRequest(String httpMethod, URI baseURI)
     {
         super(httpMethod, baseURI);
     }
-    public OAuthOutgoingRequest(String httpMethod, URI baseURI,
+    protected OAuthOutgoingRequest(String httpMethod, URI baseURI,
             Map<String, String> authHeader, Map<String, String[]> formParams,
             Map<String, String[]> queryParams)
     {
         super(httpMethod, baseURI, authHeader, formParams, queryParams);
     }
+    protected OAuthOutgoingRequest(RequestBase request)
+    {
+        super(request);
+    }
 
     
+    // TBD: Who calls this method?
+    // Build OAuthParamMap (excluding the signature)...
+    public void buildOAuthParamMap() throws MiniAuthException
+    {
+        buildOAuthParamMap(null);
+    }
+    public void buildOAuthParamMap(AccessIdentity accessIdentity) throws MiniAuthException
+    {
+        oauthParamMap = OAuthRequestUtil.buildOAuthParams(this, accessIdentity);
+        setReady(true);
+    }
+    public OAuthParamMap getOauthParamMap()
+    {
+        return oauthParamMap;
+    }
+
+
     /**
      * Returns true if this request has been "endorsed"
      *    (e.g., if it includes the oauth_signature param in the case of OAuth, etc.).

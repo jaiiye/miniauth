@@ -3,7 +3,10 @@ package org.miniauth.oauth.common;
 import java.net.URI;
 import java.util.Map;
 
+import org.miniauth.MiniAuthException;
 import org.miniauth.common.IncomingRequest;
+import org.miniauth.common.RequestBase;
+import org.miniauth.oauth.service.OAuthRequestUtil;
 
 
 /**
@@ -18,19 +21,43 @@ public class OAuthIncomingRequest extends IncomingRequest
     // State variables.
     private boolean endorsed = false;
     
-    public OAuthIncomingRequest()
+    // OAuth parameter wrapper
+    private OAuthParamMap oauthParamMap = null;
+    // private AccessIdentity accessIdentity = null;    // Just use oauthParamMap.accessIdentity
+
+
+    // Note that Ctor's are not public.
+    // Use the builder class to create OAuthIncomingRequest objects.
+    protected OAuthIncomingRequest()
     {
         super();
     }
-    public OAuthIncomingRequest(String httpMethod, URI baseURI)
+    protected OAuthIncomingRequest(String httpMethod, URI baseURI)
     {
         super(httpMethod, baseURI);
     }
-    public OAuthIncomingRequest(String httpMethod, URI baseURI,
+    protected OAuthIncomingRequest(String httpMethod, URI baseURI,
             Map<String, String> authHeader, Map<String, String[]> formParams,
             Map<String, String[]> queryParams)
     {
         super(httpMethod, baseURI, authHeader, formParams, queryParams);
+    }
+    protected OAuthIncomingRequest(RequestBase request)
+    {
+        super(request);
+    }
+
+    
+    // TBD: Who calls this method?
+    // Build OAuthParamMap (including the signature)...
+    public void buildOAuthParamMap() throws MiniAuthException
+    {
+        oauthParamMap = OAuthRequestUtil.buildOAuthParams(this);
+        setReady(true);
+    }
+    public OAuthParamMap getOauthParamMap()
+    {
+        return oauthParamMap;
     }
 
     
