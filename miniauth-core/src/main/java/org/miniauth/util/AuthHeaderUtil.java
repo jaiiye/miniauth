@@ -93,15 +93,25 @@ public final class AuthHeaderUtil
             throw new BadRequestException("No OAuth params found in the authorization header.");
         }
         
+        String headerAuthScheme = parts[0].trim();
         if(expectedAuthScheme != null) {
-            String authScheme = parts[0].trim();
-            if(! expectedAuthScheme.equals(AuthScheme.getAuthorizationHeaderAuthScheme(authScheme))) {
-                throw new InvalidInputException("expected: " + expectedAuthScheme + "; Auth scheme found: " + authScheme);
+            if(! expectedAuthScheme.equals(AuthScheme.getAuthorizationHeaderAuthScheme(headerAuthScheme))) {
+                throw new InvalidInputException("expected: " + expectedAuthScheme + "; Auth scheme found: " + headerAuthScheme);
             }
         }
         
+        
+//        String SEPARATER = "&";
+//        String authScheme = AuthScheme.getAuthSchemeFromAuthorizationHeaderAuthScheme(headerAuthScheme);
+//        if(AuthScheme.OAUTH.equals(authScheme)) {
+//            SEPARATER = ",";
+//        }
+        // ???
+        String SEPARATER = ",";
+        // ???
+
         String paramString = parts[1].trim();
-        String[] pairs = paramString.split("&");
+        String[] pairs = paramString.split(SEPARATER);
         
         Map<String,String> paramMap = new HashMap<>();
         try {
