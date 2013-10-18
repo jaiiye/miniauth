@@ -1,9 +1,12 @@
 package org.miniauth.oauth.credential;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
+import org.miniauth.credential.AuthCredentialConstants;
 import org.miniauth.credential.ConsumerCredential;
 import org.miniauth.credential.CredentialPair;
 import org.miniauth.credential.TokenCredential;
@@ -19,8 +22,8 @@ public class OAuthCredentialPair implements CredentialPair, Serializable
     private final ConsumerCredential consumerCredential;
     private final TokenCredential tokenCredential;
     // "cache" 
-    private AccessIdentity accessIdentity = null;
-    private AccessCredential accessCredential = null;
+    private volatile AccessIdentity accessIdentity = null;
+    private volatile AccessCredential accessCredential = null;
     // ...
 
     public OAuthCredentialPair(ConsumerCredential consumerCredential, TokenCredential tokenCredential)
@@ -29,11 +32,33 @@ public class OAuthCredentialPair implements CredentialPair, Serializable
         this.consumerCredential = consumerCredential;
         this.tokenCredential = tokenCredential;
     }
-
+    public OAuthCredentialPair(Map<String,String> authCredential)
+    {
+        this((authCredential!=null ? authCredential.get(AuthCredentialConstants.CONSUMER_KEY) : null),
+                (authCredential!= null ? authCredential.get(AuthCredentialConstants.CONSUMER_SECRET) : null),
+                (authCredential!=null ? authCredential.get(AuthCredentialConstants.ACCESS_TOKEN) : null),
+                (authCredential!= null ? authCredential.get(AuthCredentialConstants.TOKEN_SECRET) : null));
+    }
     public OAuthCredentialPair(String consumerKey, String consumerSecret, String accessToken, String tokenSecret)
     {
         this(new OAuthConsumerCredential(consumerKey, consumerSecret), new OAuthTokenCredential(accessToken, tokenSecret));
     }
+
+    // Returns a "read-only" map of the bean content.
+    public Map<String,String> toReadOnlyMap()
+    {
+        Map<String,String> map = new HashMap<>();
+        if(this.consumerCredential != null) {
+            map.put(AuthCredentialConstants.CONSUMER_KEY, this.consumerCredential.getConsumerKey());
+            map.put(AuthCredentialConstants.CONSUMER_SECRET, this.consumerCredential.getConsumerSecret());
+        }
+        if(this.tokenCredential != null) {
+            map.put(AuthCredentialConstants.ACCESS_TOKEN, this.tokenCredential.getAccessToken());
+            map.put(AuthCredentialConstants.TOKEN_SECRET, this.tokenCredential.getTokenSecret());
+        }
+        return map;
+    }
+
 
     @Override
     public String getConsumerKey()

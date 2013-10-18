@@ -1,7 +1,10 @@
 package org.miniauth.oauth.credential;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.miniauth.credential.AuthCredentialConstants;
 import org.miniauth.credential.TokenCredential;
 
 
@@ -15,11 +18,25 @@ public final class OAuthTokenCredential implements TokenCredential, Serializable
     private final String accessToken;
     private final String tokenSecret;
 
+    public OAuthTokenCredential(Map<String,String> authCredential)
+    {
+        this((authCredential!=null ? authCredential.get(AuthCredentialConstants.ACCESS_TOKEN) : null),
+                (authCredential!= null ? authCredential.get(AuthCredentialConstants.TOKEN_SECRET) : null));
+    }
     public OAuthTokenCredential(String accessToken, String tokenSecret)
     {
         super();
         this.accessToken = accessToken;
         this.tokenSecret = tokenSecret;
+    }
+
+    // Returns a "read-only" map of the bean content.
+    public Map<String,String> toReadOnlyMap()
+    {
+        Map<String,String> map = new HashMap<>();
+        map.put(AuthCredentialConstants.ACCESS_TOKEN, this.accessToken);
+        map.put(AuthCredentialConstants.TOKEN_SECRET, this.tokenSecret);
+        return map;
     }
 
     @Override

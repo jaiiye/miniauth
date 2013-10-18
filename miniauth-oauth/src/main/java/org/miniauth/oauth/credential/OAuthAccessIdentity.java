@@ -1,8 +1,11 @@
 package org.miniauth.oauth.credential;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.miniauth.credential.AccessIdentity;
+import org.miniauth.credential.AuthCredentialConstants;
 
 
 /**
@@ -15,11 +18,25 @@ public final class OAuthAccessIdentity implements AccessIdentity, Serializable
     private final String consumerKey;
     private final String accessToken;
     
+    public OAuthAccessIdentity(Map<String,String> authCredential)
+    {
+        this((authCredential!=null ? authCredential.get(AuthCredentialConstants.CONSUMER_KEY) : null),
+                (authCredential!= null ? authCredential.get(AuthCredentialConstants.ACCESS_TOKEN) : null));
+    }
     public OAuthAccessIdentity(String consumerKey, String accessToken)
     {
         super();
         this.consumerKey = consumerKey;
         this.accessToken = accessToken;
+    }
+
+    // Returns a "read-only" map of the bean content.
+    public Map<String,String> toReadOnlyMap()
+    {
+        Map<String,String> map = new HashMap<>();
+        map.put(AuthCredentialConstants.CONSUMER_KEY, this.consumerKey);
+        map.put(AuthCredentialConstants.ACCESS_TOKEN, this.accessToken);
+        return map;
     }
 
     @Override
