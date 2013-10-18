@@ -10,6 +10,9 @@ import org.miniauth.oauth.core.SignatureMethod;
 import org.miniauth.oauth.util.OAuthSignatureUtil;
 
 
+/**
+ * Methods to extract OAuth params from the incoming/output partial request objects. 
+ */
 public final class OAuthParamMapUtil
 {
     private static final Logger log = Logger.getLogger(OAuthParamMapUtil.class.getName());
@@ -59,6 +62,8 @@ public final class OAuthParamMapUtil
 //            throw new BadRequestException("OAuth signature is missing in the request.");
 //        }
         
+        // ??? Validate???
+        // TBD: We may end up doing the validation multiple times across the call chain. Need to check....
         OAuthParamMap oauthParamMap = OAuthSignatureUtil.validateOAuthParams(request.getAuthHeader(), request.getFormParams(), request.getQueryParams(), true);
 
         if(log.isLoggable(Level.FINER)) log.finer("oauthParamMap = " + oauthParamMap);

@@ -22,13 +22,14 @@ public final class OAuthIncomingRequestBuilder
         init();
     }
     
-    public void init()
+    public OAuthIncomingRequestBuilder init()
     {
-        init(null);
+        return init(null);
     }
-    public void init(OAuthIncomingRequest incomingRequest)
+    public OAuthIncomingRequestBuilder init(OAuthIncomingRequest incomingRequest)
     {
         this.incomingRequest = new OAuthIncomingRequest(incomingRequest);
+        return this;
     }
 
     public OAuthIncomingRequestBuilder setHttpMethod(String httpMethod)

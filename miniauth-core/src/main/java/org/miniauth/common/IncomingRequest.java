@@ -41,7 +41,7 @@ public abstract class IncomingRequest extends RequestBase
 
     
     @Override
-    public RequestBase setHttpMethod(String httpMethod)
+    protected RequestBase setHttpMethod(String httpMethod)
             throws MiniAuthException
     {
         super.setHttpMethod(httpMethod);
@@ -49,21 +49,21 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
-    public RequestBase setBaseURI(URI baseURI) throws MiniAuthException
+    protected RequestBase setBaseURI(URI baseURI) throws MiniAuthException
     {
         super.setBaseURI(baseURI);
         setVerified(false);
         return this;
     }
     @Override
-    public RequestBase setBaseURI(String baseUri) throws MiniAuthException
+    protected RequestBase setBaseURI(String baseUri) throws MiniAuthException
     {
         super.setBaseURI(baseUri);
         setVerified(false);
         return this;
     }
     @Override
-    public RequestBase setAuthHeader(String authHeaderStr)
+    protected RequestBase setAuthHeader(String authHeaderStr)
             throws MiniAuthException
     {
         super.setAuthHeader(authHeaderStr);
@@ -71,7 +71,7 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
-    public RequestBase setAuthHeader(Map<String, String> authHeader)
+    protected RequestBase setAuthHeader(Map<String, String> authHeader)
             throws MiniAuthException
     {
         super.setAuthHeader(authHeader);
@@ -79,7 +79,7 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
-    public RequestBase addAuthHeaderParam(String key, String value)
+    protected RequestBase addAuthHeaderParam(String key, String value)
             throws MiniAuthException
     {
         super.addAuthHeaderParam(key, value);
@@ -87,14 +87,14 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
-    public RequestBase setFormParams(String formBody) throws MiniAuthException
+    protected RequestBase setFormParams(String formBody) throws MiniAuthException
     {
         super.setFormParams(formBody);
         setVerified(false);
         return this;
     }
     @Override
-    public RequestBase setFormParams(Map<String, String[]> formParams)
+    protected RequestBase setFormParams(Map<String, String[]> formParams)
             throws MiniAuthException
     {
         super.setFormParams(formParams);
@@ -102,7 +102,7 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
-    public RequestBase addFormParams(Map<String, String[]> formParams)
+    protected RequestBase addFormParams(Map<String, String[]> formParams)
             throws MiniAuthException
     {
         super.addFormParams(formParams);
@@ -110,7 +110,7 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
-    public RequestBase addFormParam(String key, String value)
+    protected RequestBase addFormParam(String key, String value)
             throws MiniAuthException
     {
         super.addFormParam(key, value);
@@ -118,7 +118,7 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
-    public RequestBase setQueryParams(String queryString)
+    protected RequestBase setQueryParams(String queryString)
             throws MiniAuthException
     {
         super.setQueryParams(queryString);
@@ -126,7 +126,7 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
-    public RequestBase setQueryParams(Map<String, String[]> queryParams)
+    protected RequestBase setQueryParams(Map<String, String[]> queryParams)
             throws MiniAuthException
     {
         super.setQueryParams(queryParams);
@@ -134,7 +134,7 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
-    public RequestBase addQueryParams(Map<String, String[]> queryParams)
+    protected RequestBase addQueryParams(Map<String, String[]> queryParams)
             throws MiniAuthException
     {
         super.addQueryParams(queryParams);
@@ -142,7 +142,7 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
-    public RequestBase addQueryParam(String key, String value)
+    protected RequestBase addQueryParam(String key, String value)
             throws MiniAuthException
     {
         super.addQueryParam(key, value);

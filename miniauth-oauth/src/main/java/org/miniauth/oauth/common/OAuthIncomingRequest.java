@@ -49,15 +49,18 @@ public class OAuthIncomingRequest extends IncomingRequest
             Map<String, String[]> queryParams)
     {
         super(httpMethod, baseURI, authHeader, formParams, queryParams);
-        initAuthParamTransmissionType();
+        // initAuthParamTransmissionType();
     }
     protected OAuthIncomingRequest(RequestBase request)
     {
         super(request);
-        initAuthParamTransmissionType();
+        // initAuthParamTransmissionType();
     }
 
     // TBD:
+    // Calling this in ctor's does not work.
+    // We need to call this every time setters are called for authHeader, formParams, and queryParams...
+    // --> we'll need to call this in getAuthParamTransmissionType().
     protected void initAuthParamTransmissionType()
     {
         // TBD:
@@ -76,6 +79,9 @@ public class OAuthIncomingRequest extends IncomingRequest
     }
     protected String getAuthParamTransmissionType()
     {
+        if(!isReady()) {
+            initAuthParamTransmissionType();
+        }
         return authParamTransmissionType;
     }
 
@@ -85,6 +91,7 @@ public class OAuthIncomingRequest extends IncomingRequest
     public void buildOAuthParamMap() throws MiniAuthException
     {
         oauthParamMap = OAuthParamMapUtil.buildOAuthParams(this);
+        initAuthParamTransmissionType();
         setReady(true);
     }
     public OAuthParamMap getOauthParamMap()
@@ -95,7 +102,7 @@ public class OAuthIncomingRequest extends IncomingRequest
     
     
     @Override
-    public RequestBase setAuthHeader(String authHeaderStr)
+    protected RequestBase setAuthHeader(String authHeaderStr)
             throws MiniAuthException
     {
         super.setAuthHeader(authHeaderStr, AuthScheme.OAUTH);
@@ -104,7 +111,87 @@ public class OAuthIncomingRequest extends IncomingRequest
     }
 
 
+    // This is necessary to make these setters accessible from the builder class.
 
+    @Override
+    protected RequestBase setHttpMethod(String httpMethod)
+            throws MiniAuthException
+    {
+        return super.setHttpMethod(httpMethod);
+    }
+    @Override
+    protected RequestBase setBaseURI(URI baseURI) throws MiniAuthException
+    {
+        return super.setBaseURI(baseURI);
+    }
+    @Override
+    protected RequestBase setBaseURI(String baseUri) throws MiniAuthException
+    {
+        return super.setBaseURI(baseUri);
+    }
+    @Override
+    protected RequestBase setAuthHeader(Map<String, String> authHeader)
+            throws MiniAuthException
+    {
+        return super.setAuthHeader(authHeader);
+    }
+    @Override
+    protected RequestBase addAuthHeaderParam(String key, String value)
+            throws MiniAuthException
+    {
+        return super.addAuthHeaderParam(key, value);
+    }
+    @Override
+    protected RequestBase setFormParams(String formBody)
+            throws MiniAuthException
+    {
+        return super.setFormParams(formBody);
+    }
+    @Override
+    protected RequestBase setFormParams(Map<String, String[]> formParams)
+            throws MiniAuthException
+    {
+        return super.setFormParams(formParams);
+    }
+    @Override
+    protected RequestBase addFormParams(Map<String, String[]> formParams)
+            throws MiniAuthException
+    {
+        return super.addFormParams(formParams);
+    }
+    @Override
+    protected RequestBase addFormParam(String key, String value)
+            throws MiniAuthException
+    {
+        return super.addFormParam(key, value);
+    }
+    @Override
+    protected RequestBase setQueryParams(String queryString)
+            throws MiniAuthException
+    {
+        return super.setQueryParams(queryString);
+    }
+    @Override
+    protected RequestBase setQueryParams(Map<String, String[]> queryParams)
+            throws MiniAuthException
+    {
+        return super.setQueryParams(queryParams);
+    }
+    @Override
+    protected RequestBase addQueryParams(Map<String, String[]> queryParams)
+            throws MiniAuthException
+    {
+        return super.addQueryParams(queryParams);
+    }
+    @Override
+    protected RequestBase addQueryParam(String key, String value)
+            throws MiniAuthException
+    {
+        return super.addQueryParam(key, value);
+    }
+
+    
+    
     /**
      * Returns true if this request has been "endorsed"
      *    (e.g., if it includes the oauth_signature param in the case of OAuth, etc.).
@@ -125,5 +212,19 @@ public class OAuthIncomingRequest extends IncomingRequest
 //        this.endorsed = endorsed;
 //    }
 
+    // For debugging...
+    @Override
+    public String toString()
+    {
+        return "OAuthIncomingRequest [authParamTransmissionType="
+                + authParamTransmissionType + ", oauthParamMap="
+                + oauthParamMap + ", getHttpMethod()=" + getHttpMethod()
+                + ", getBaseURI()=" + getBaseURI() + ", getAuthHeader()="
+                + getAuthHeader() + ", getFormParams()=" + getFormParams()
+                + ", getQueryParams()=" + getQueryParams() + "]";
+    }
+
+    
+    
     
 }

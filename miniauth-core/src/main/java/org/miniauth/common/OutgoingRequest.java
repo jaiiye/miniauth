@@ -59,7 +59,7 @@ public abstract class OutgoingRequest extends RequestBase
 
 
     @Override
-    public RequestBase setHttpMethod(String httpMethod)
+    protected RequestBase setHttpMethod(String httpMethod)
             throws MiniAuthException
     {
         if(isEndorsed()) {
@@ -68,7 +68,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.setHttpMethod(httpMethod);
     }
     @Override
-    public RequestBase setBaseURI(URI baseURI) throws MiniAuthException
+    protected RequestBase setBaseURI(URI baseURI) throws MiniAuthException
     {
         if(isEndorsed()) {
             throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
@@ -76,7 +76,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.setBaseURI(baseURI);
     }
     @Override
-    public RequestBase setBaseURI(String baseUri) throws MiniAuthException
+    protected RequestBase setBaseURI(String baseUri) throws MiniAuthException
     {
         if(isEndorsed()) {
             throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
@@ -84,7 +84,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.setBaseURI(baseUri);
     }
     @Override
-    public RequestBase setAuthHeader(String authHeaderStr)
+    protected RequestBase setAuthHeader(String authHeaderStr)
             throws MiniAuthException
     {
         if(isEndorsed()) {
@@ -93,7 +93,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.setAuthHeader(authHeaderStr);
     }
     @Override
-    public RequestBase setAuthHeader(Map<String, String> authHeader)
+    protected RequestBase setAuthHeader(Map<String, String> authHeader)
             throws MiniAuthException
     {
         if(isEndorsed()) {
@@ -102,7 +102,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.setAuthHeader(authHeader);
     }
     @Override
-    public RequestBase addAuthHeaderParam(String key, String value)
+    protected RequestBase addAuthHeaderParam(String key, String value)
             throws MiniAuthException
     {
         if(isEndorsed()) {
@@ -111,7 +111,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.addAuthHeaderParam(key, value);
     }
     @Override
-    public RequestBase setFormParams(String formBody) throws MiniAuthException
+    protected RequestBase setFormParams(String formBody) throws MiniAuthException
     {
         if(isEndorsed()) {
             throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
@@ -119,7 +119,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.setFormParams(formBody);
     }
     @Override
-    public RequestBase setFormParams(Map<String, String[]> formParams)
+    protected RequestBase setFormParams(Map<String, String[]> formParams)
             throws MiniAuthException
     {
         if(isEndorsed()) {
@@ -128,7 +128,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.setFormParams(formParams);
     }
     @Override
-    public RequestBase addFormParams(Map<String, String[]> formParams)
+    protected RequestBase addFormParams(Map<String, String[]> formParams)
             throws MiniAuthException
     {
         if(isEndorsed()) {
@@ -137,7 +137,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.addFormParams(formParams);
     }
     @Override
-    public RequestBase addFormParam(String key, String value)
+    protected RequestBase addFormParam(String key, String value)
             throws MiniAuthException
     {
         if(isEndorsed()) {
@@ -146,7 +146,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.addFormParam(key, value);
     }
     @Override
-    public RequestBase setQueryParams(String queryString)
+    protected RequestBase setQueryParams(String queryString)
             throws MiniAuthException
     {
         if(isEndorsed()) {
@@ -155,7 +155,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.setQueryParams(queryString);
     }
     @Override
-    public RequestBase setQueryParams(Map<String, String[]> queryParams)
+    protected RequestBase setQueryParams(Map<String, String[]> queryParams)
             throws MiniAuthException
     {
         if(isEndorsed()) {
@@ -164,7 +164,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.setQueryParams(queryParams);
     }
     @Override
-    public RequestBase addQueryParams(Map<String, String[]> queryParams)
+    protected RequestBase addQueryParams(Map<String, String[]> queryParams)
             throws MiniAuthException
     {
         if(isEndorsed()) {
@@ -173,7 +173,7 @@ public abstract class OutgoingRequest extends RequestBase
         return super.addQueryParams(queryParams);
     }
     @Override
-    public RequestBase addQueryParam(String key, String value)
+    protected RequestBase addQueryParam(String key, String value)
             throws MiniAuthException
     {
         if(isEndorsed()) {

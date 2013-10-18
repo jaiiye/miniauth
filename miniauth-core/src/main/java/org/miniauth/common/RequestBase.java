@@ -118,7 +118,7 @@ public abstract class RequestBase implements Serializable
     {
         return httpMethod;
     }
-    public RequestBase setHttpMethod(String httpMethod) throws MiniAuthException
+    protected RequestBase setHttpMethod(String httpMethod) throws MiniAuthException
     {
         this.httpMethod = httpMethod;
         return this;
@@ -128,12 +128,12 @@ public abstract class RequestBase implements Serializable
     {
         return baseURI;
     }
-    public RequestBase setBaseURI(URI baseURI) throws MiniAuthException
+    protected RequestBase setBaseURI(URI baseURI) throws MiniAuthException
     {
         this.baseURI = baseURI;
         return this;
     }
-    public RequestBase setBaseURI(String baseUri) throws MiniAuthException
+    protected RequestBase setBaseURI(String baseUri) throws MiniAuthException
     {
         try {
             this.baseURI = new URI(baseUri);
@@ -147,7 +147,7 @@ public abstract class RequestBase implements Serializable
     {
         return authHeader;
     }
-    public RequestBase setAuthHeader(String authHeaderStr) throws MiniAuthException
+    protected RequestBase setAuthHeader(String authHeaderStr) throws MiniAuthException
     {
         this.authHeader = AuthHeaderUtil.getAuthParams(authHeaderStr);
         return this;
@@ -157,12 +157,12 @@ public abstract class RequestBase implements Serializable
         this.authHeader = AuthHeaderUtil.getAuthParams(authHeaderStr, expectedAuthScheme);
         return this;
     }
-    public RequestBase setAuthHeader(Map<String, String> authHeader) throws MiniAuthException
+    protected RequestBase setAuthHeader(Map<String, String> authHeader) throws MiniAuthException
     {
         this.authHeader = authHeader;
         return this;
     }
-    public RequestBase addAuthHeaderParam(String key, String value) throws MiniAuthException
+    protected RequestBase addAuthHeaderParam(String key, String value) throws MiniAuthException
     {
         if(this.authHeader == null) {
             this.authHeader = new HashMap<>();
@@ -175,17 +175,17 @@ public abstract class RequestBase implements Serializable
     {
         return formParams;
     }
-    public RequestBase setFormParams(String formBody) throws MiniAuthException
+    protected RequestBase setFormParams(String formBody) throws MiniAuthException
     {
         this.formParams = FormParamUtil.parseUrlEncodedFormBody(formBody);
         return this;
     }
-    public RequestBase setFormParams(Map<String, String[]> formParams) throws MiniAuthException
+    protected RequestBase setFormParams(Map<String, String[]> formParams) throws MiniAuthException
     {
         this.formParams = formParams;
         return this;
     }
-    public RequestBase addFormParams(Map<String, String[]> formParams) throws MiniAuthException
+    protected RequestBase addFormParams(Map<String, String[]> formParams) throws MiniAuthException
     {
         if(this.formParams == null) {
             this.formParams = new HashMap<>(formParams);
@@ -194,7 +194,7 @@ public abstract class RequestBase implements Serializable
         }
         return this;
     }
-    public RequestBase addFormParam(String key, String value) throws MiniAuthException
+    protected RequestBase addFormParam(String key, String value) throws MiniAuthException
     {
         if(this.formParams == null) {
             this.formParams = new HashMap<>();
@@ -215,17 +215,17 @@ public abstract class RequestBase implements Serializable
     {
         return queryParams;
     }
-    public RequestBase setQueryParams(String queryString) throws MiniAuthException
+    protected RequestBase setQueryParams(String queryString) throws MiniAuthException
     {
         this.queryParams = QueryParamUtil.parseQueryParams(queryString);
         return this;
     }
-    public RequestBase setQueryParams(Map<String, String[]> queryParams) throws MiniAuthException
+    protected RequestBase setQueryParams(Map<String, String[]> queryParams) throws MiniAuthException
     {
         this.queryParams = queryParams;
         return this;
     }
-    public RequestBase addQueryParams(Map<String, String[]> queryParams) throws MiniAuthException
+    protected RequestBase addQueryParams(Map<String, String[]> queryParams) throws MiniAuthException
     {
         if(this.queryParams == null) {
             this.queryParams = new HashMap<>(queryParams);
@@ -234,7 +234,7 @@ public abstract class RequestBase implements Serializable
         }
         return this;
     }
-    public RequestBase addQueryParam(String key, String value) throws MiniAuthException
+    protected RequestBase addQueryParam(String key, String value) throws MiniAuthException
     {
         if(this.queryParams == null) {
             this.queryParams = new HashMap<>();
