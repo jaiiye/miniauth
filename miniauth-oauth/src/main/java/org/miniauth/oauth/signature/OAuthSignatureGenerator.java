@@ -15,6 +15,7 @@ import org.miniauth.oauth.core.SignatureMethod;
 import org.miniauth.oauth.credential.OAuthAccessCredential;
 import org.miniauth.oauth.crypto.OAuthSignatureAlgorithm;
 import org.miniauth.oauth.crypto.OAuthSignatureAlgorithmFactory;
+import org.miniauth.oauth.util.OAuthSignatureUtil;
 import org.miniauth.signature.SignatureGenerator;
 
 

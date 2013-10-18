@@ -192,7 +192,6 @@ public abstract class OutgoingRequest extends RequestBase
      * Also, once it's endorsed, it cannot be endorsed again or it cannot be changed.
      * @return the "endorsement" state of this request.
      */
-    @Override
     public abstract boolean isEndorsed();
 
     

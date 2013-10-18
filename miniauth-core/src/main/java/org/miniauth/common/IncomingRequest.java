@@ -190,10 +190,9 @@ public abstract class IncomingRequest extends RequestBase
      *    (e.g., if it includes the oauth_signature param in the case of OAuth, etc.).
      *    Endorsed==true does not mean it's verified.
      * @return the "endorsement" state of this request.
+     * @throws MiniAuthException TODO
      */
-    @Override
-    public abstract boolean isEndorsed();
-
+    public abstract boolean isEndorsed() throws MiniAuthException;
 
 
     

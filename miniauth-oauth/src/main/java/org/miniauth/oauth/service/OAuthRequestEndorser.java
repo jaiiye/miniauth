@@ -1,6 +1,7 @@
 package org.miniauth.oauth.service;
 
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
@@ -66,17 +67,15 @@ public class OAuthRequestEndorser implements RequestEndorser
         }
 
         OAuthOutgoingRequest oauthRequest = (OAuthOutgoingRequest) request;
-
         Map<String,String> authCredential = null;
         if(credential != null) {
             authCredential = credential.toReadOnlyMap();
         }
         
         OAuthParamMap newOAuthParamMap = signatureGenerator.generateOAuthParamMap(authCredential, oauthRequest.getHttpMethod(), oauthRequest.getBaseURI(), oauthRequest.getAuthHeader(), oauthRequest.getFormParams(), oauthRequest.getQueryParams());
-
         oauthRequest.endorse(newOAuthParamMap);
 
-        
+        if(log.isLoggable(Level.FINE)) log.fine("oauthRequest = " + oauthRequest);
         return true;
     }
 

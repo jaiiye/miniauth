@@ -9,7 +9,7 @@ import org.miniauth.crypto.SignatureAlgorithm;
 import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.exception.InvalidCredentialException;
 import org.miniauth.oauth.common.OAuthParamMap;
-import org.miniauth.oauth.signature.OAuthSignatureUtil;
+import org.miniauth.oauth.util.OAuthSignatureUtil;
 import org.miniauth.util.ParamMapUtil;
 
 

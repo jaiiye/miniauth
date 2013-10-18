@@ -1,5 +1,7 @@
 package org.miniauth.oauth.service;
 
+import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
@@ -9,7 +11,9 @@ import org.miniauth.exception.InvalidInputException;
 import org.miniauth.exception.InvalidStateException;
 import org.miniauth.exception.UnauthorizedException;
 import org.miniauth.oauth.common.OAuthIncomingRequest;
+import org.miniauth.oauth.signature.OAuthSignatureVerifier;
 import org.miniauth.service.RequestVerifier;
+import org.miniauth.signature.SignatureVerifier;
 
 
 /**
@@ -20,9 +24,14 @@ public class OAuthRequestVerifier implements RequestVerifier
 {
     private static final Logger log = Logger.getLogger(OAuthRequestVerifier.class.getName());
 
+    // TBD: 
+    private SignatureVerifier signatureVerifier = null;
+    // private OAuthSignatureVerifier signatureVerifier = null;
+
     // Singleton.
     private OAuthRequestVerifier()
     {
+        signatureVerifier = new OAuthSignatureVerifier();
     }
     // Initialization-on-demand holder.
     private static final class OAuthRequestVerifierHolder
@@ -59,13 +68,14 @@ public class OAuthRequestVerifier implements RequestVerifier
         }
 
         OAuthIncomingRequest oauthRequest = (OAuthIncomingRequest) request;
+        Map<String,String> authCredential = null;
+        if(credential != null) {
+            authCredential = credential.toReadOnlyMap();
+        }
 
-        
-        
-        
-        
-        
-        return false;
+        boolean verified = signatureVerifier.verify(authCredential, oauthRequest.getHttpMethod(), oauthRequest.getBaseURI(), oauthRequest.getAuthHeader(), oauthRequest.getFormParams(), oauthRequest.getQueryParams());
+        if(log.isLoggable(Level.FINE)) log.fine("verified = " + verified);
+        return verified;
     }
 
 }

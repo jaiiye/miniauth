@@ -13,7 +13,7 @@ import org.miniauth.core.AuthScheme;
 import org.miniauth.credential.AuthCredentialConstants;
 import org.miniauth.oauth.core.OAuthConstants;
 import org.miniauth.oauth.core.SignatureMethod;
-import org.miniauth.oauth.signature.OAuthSignatureUtil;
+import org.miniauth.oauth.util.OAuthSignatureUtil;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
 import org.miniauth.util.AuthHeaderUtil;
 import org.miniauth.web.util.ServletRequestUtil;

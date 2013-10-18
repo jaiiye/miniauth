@@ -1,23 +1,20 @@
-package org.miniauth.oauth.service;
+package org.miniauth.oauth.common;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.credential.AccessIdentity;
-import org.miniauth.oauth.common.OAuthIncomingRequest;
-import org.miniauth.oauth.common.OAuthOutgoingRequest;
-import org.miniauth.oauth.common.OAuthParamMap;
 import org.miniauth.oauth.core.OAuthConstants;
 import org.miniauth.oauth.core.SignatureMethod;
-import org.miniauth.oauth.signature.OAuthSignatureUtil;
+import org.miniauth.oauth.util.OAuthSignatureUtil;
 
 
-public final class OAuthRequestUtil
+public final class OAuthParamMapUtil
 {
-    private static final Logger log = Logger.getLogger(OAuthRequestUtil.class.getName());
+    private static final Logger log = Logger.getLogger(OAuthParamMapUtil.class.getName());
 
-    private OAuthRequestUtil() {};
+    private OAuthParamMapUtil() {};
 
     public static OAuthParamMap buildOAuthParams(OAuthOutgoingRequest request) throws MiniAuthException
     {

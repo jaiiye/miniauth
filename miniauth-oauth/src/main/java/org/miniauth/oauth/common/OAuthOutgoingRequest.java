@@ -9,10 +9,11 @@ import org.miniauth.MiniAuthException;
 import org.miniauth.common.OutgoingRequest;
 import org.miniauth.common.RequestBase;
 import org.miniauth.core.AuthScheme;
+import org.miniauth.core.ParameterTransmissionType;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.AuthSignatureException;
+import org.miniauth.exception.InternalErrorException;
 import org.miniauth.exception.InvalidStateException;
-import org.miniauth.oauth.service.OAuthRequestUtil;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
 
 
@@ -98,7 +99,7 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     }
     public void buildOAuthParamMap(AccessIdentity accessIdentity) throws MiniAuthException
     {
-        oauthParamMap = OAuthRequestUtil.buildOAuthParams(this, accessIdentity);
+        oauthParamMap = OAuthParamMapUtil.buildOAuthParams(this, accessIdentity);
         setReady(true);
     }
     public OAuthParamMap getOauthParamMap()
@@ -123,12 +124,24 @@ public class OAuthOutgoingRequest extends OutgoingRequest
             this.oauthParamMap.updateParams(oauthParamMap);
         }
         
-        // TBD:
         // Now, we need to update the internal vars based on the new oauthParamMap
-        // ....
-        
-        
-        
+        switch(authParamTransmissionType) {
+        case ParameterTransmissionType.HEADER:
+            Map<String,String> newAuthHeader = OAuthRequestUtil.updateOAuthHeaderWithOAuthParamMap(getAuthHeader(), oauthParamMap);
+            setAuthHeader(newAuthHeader);
+            break;
+        case ParameterTransmissionType.FORM:
+            Map<String,String[]> newFormParams = OAuthRequestUtil.updateParamsWithOAuthParamMap(getFormParams(), oauthParamMap);
+            setFormParams(newFormParams);
+            break;
+        case ParameterTransmissionType.QUERY:
+            Map<String,String[]> newQueryParams = OAuthRequestUtil.updateParamsWithOAuthParamMap(getQueryParams(), oauthParamMap);
+            setQueryParams(newQueryParams);
+            break;
+        default:
+            // ??? This should not happen...
+            throw new InternalErrorException("Invalid authParamTransmissionType: " + authParamTransmissionType);
+        }
         
         setEndorsed(true);
     }

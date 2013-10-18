@@ -1,4 +1,4 @@
-package org.miniauth.oauth.signature;
+package org.miniauth.oauth.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,6 @@ import org.miniauth.exception.ValidationException;
 import org.miniauth.oauth.common.OAuthParamMap;
 import org.miniauth.oauth.core.OAuthConstants;
 import org.miniauth.oauth.core.SignatureMethod;
-import org.miniauth.oauth.util.ParameterTransmissionUtil;
 import org.miniauth.util.ParamMapUtil;
 
 

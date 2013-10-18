@@ -19,6 +19,7 @@ import org.miniauth.oauth.crypto.OAuthSignatureAlgorithm;
 import org.miniauth.oauth.crypto.OAuthSignatureAlgorithmFactory;
 import org.miniauth.oauth.nonce.NonceStore;
 import org.miniauth.oauth.nonce.NonceStorePool;
+import org.miniauth.oauth.util.OAuthSignatureUtil;
 import org.miniauth.signature.SignatureVerifier;
 
 

@@ -259,12 +259,12 @@ public abstract class RequestBase implements Serializable
      */
     public abstract boolean isReady();
 
-    /**
-     * Returns true if this request has been "endorsed".
-     * Its meaning changes depending on whether this object is an instanceOf IncomingRequest or OutgoingRequest.
-     * @return the "endorsement" state of this request.
-     */
-    public abstract boolean isEndorsed();
+//    /**
+//     * Returns true if this request has been "endorsed".
+//     * Its meaning changes depending on whether this object is an instanceOf IncomingRequest or OutgoingRequest.
+//     * @return the "endorsement" state of this request.
+//     */
+//    public abstract boolean isEndorsed();
 
 
     // For debugging...

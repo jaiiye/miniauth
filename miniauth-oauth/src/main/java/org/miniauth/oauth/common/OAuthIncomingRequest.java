@@ -9,7 +9,6 @@ import org.miniauth.MiniAuthException;
 import org.miniauth.common.IncomingRequest;
 import org.miniauth.common.RequestBase;
 import org.miniauth.core.AuthScheme;
-import org.miniauth.oauth.service.OAuthRequestUtil;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
 
 
@@ -27,8 +26,8 @@ public class OAuthIncomingRequest extends IncomingRequest
     private volatile String authParamTransmissionType = null;
     // ...
 
-    // State variables.
-    private boolean endorsed = false;
+//    // State variables.
+//    private boolean endorsed = false;
     
     // OAuth parameter wrapper
     private OAuthParamMap oauthParamMap = null;
@@ -85,7 +84,7 @@ public class OAuthIncomingRequest extends IncomingRequest
     // Build OAuthParamMap (including the signature)...
     public void buildOAuthParamMap() throws MiniAuthException
     {
-        oauthParamMap = OAuthRequestUtil.buildOAuthParams(this);
+        oauthParamMap = OAuthParamMapUtil.buildOAuthParams(this);
         setReady(true);
     }
     public OAuthParamMap getOauthParamMap()
@@ -113,14 +112,18 @@ public class OAuthIncomingRequest extends IncomingRequest
      * @return the "endorsement" state of this request.
      */
     @Override
-    public boolean isEndorsed()
+    public boolean isEndorsed() throws MiniAuthException
     {
-        return this.endorsed;
+        if(! isReady()) {
+            return false;    // ????
+        }
+        return oauthParamMap.isSignatureSet();
+//        return this.endorsed;
     }
-    public void setEndorsed(boolean endorsed)
-    {
-        this.endorsed = endorsed;
-    }
+//    protected void setEndorsed(boolean endorsed)
+//    {
+//        this.endorsed = endorsed;
+//    }
 
     
 }

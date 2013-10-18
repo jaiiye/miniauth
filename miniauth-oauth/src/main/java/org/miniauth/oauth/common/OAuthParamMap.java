@@ -196,7 +196,17 @@ public final class OAuthParamMap implements Serializable
         return new HashMap<>(this.paramMap);
     }
 
+    
+    public boolean isEmpty()
+    {
+        // TBD:
+        // If paramMap has an entry with null/empty value, isEmpty() should really return true.... ????
+        // ...
+        // For now.....
+        return (this.paramMap == null || this.paramMap.isEmpty());
+    }
 
+    
     //////////////////////////////////////////////////////
     // "Bean" interface
     
