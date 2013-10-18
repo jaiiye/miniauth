@@ -7,6 +7,7 @@ import org.miniauth.MiniAuthException;
 import org.miniauth.common.OutgoingRequest;
 import org.miniauth.common.RequestBase;
 import org.miniauth.credential.AccessIdentity;
+import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.oauth.service.OAuthRequestUtil;
 
 
@@ -22,8 +23,10 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     // State variables.
     private boolean endorsed = false;
     
-    // OAuth parameter wrapper
-    private OAuthParamMap oauthParamMap = null;
+    // OAuth parameter wrapper. "Cache".
+    // This can be generated based on the internal attributes.
+    // And, it can be overridden by a setter (endorse()), which can make it "out of sync" with the itnernal attributes.
+    private volatile OAuthParamMap oauthParamMap = null;
     // private AccessIdentity accessIdentity = null;    // Just use oauthParamMap.accessIdentity
 
 
@@ -64,6 +67,33 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     {
         return oauthParamMap;
     }
+    
+    // The arg oauthParamMap should contain the generated signature
+    //     as well as other required oauth_x params.
+    public void endorse(OAuthParamMap oauthParamMap) throws MiniAuthException
+    {
+        // TBD: What about other OAuth required params ???
+        if(oauthParamMap == null || ! oauthParamMap.isSignatureSet()) {
+            // Can this happen???
+            // If we have failed to generate a signature, 
+            //    we should have thrown exception earlier in the call chain.
+            throw new AuthSignatureException("Signature is not set. The request cannot be endorsed.");
+        }
+        if(this.oauthParamMap == null) {
+            this.oauthParamMap = new OAuthParamMap(oauthParamMap);
+        } else {
+            this.oauthParamMap.updateParams(oauthParamMap);
+        }
+        
+        // TBD:
+        // Now, we need to update the internal vars based on the new oauthParamMap
+        // ....
+        
+        
+        
+        
+        setEndorsed(true);
+    }
 
 
     /**
@@ -78,7 +108,7 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     {
         return this.endorsed;
     }
-    public void setEndorsed(boolean endorsed)
+    protected void setEndorsed(boolean endorsed)
     {
         this.endorsed = endorsed;
     }

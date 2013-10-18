@@ -82,13 +82,23 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase implements Signa
     // Request header/params do not include oauth_signature.
     // Returned oauthParam map should include oauth_signature.
     @Override
-    public Map<String,Object> generateOAuthParamMap(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    public Map<String,Object> generateOAuthParams(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
+    {
+        OAuthParamMap oAuthParamMap = generateOAuthParamMap(authCredential, httpMethod, baseUri, authHeader, formParams, queryParams);
+        return oAuthParamMap.toReadOnlyMap();
+    }
+    public OAuthParamMap generateOAuthParamMap(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
         Map<String,String[]> requestParams = OAuthSignatureUtil.mergeRequestParameters(formParams, queryParams);
         return generateOAuthParamMap(authCredential, httpMethod, baseUri, authHeader, requestParams);
     }
     @Override
-    public Map<String,Object> generateOAuthParamMap(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    public Map<String,Object> generateOAuthParams(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
+    {
+        OAuthParamMap oAuthParamMap = generateOAuthParamMap(authCredential, httpMethod, baseUri, authHeader, requestParams);
+        return oAuthParamMap.toReadOnlyMap();
+    }
+    public OAuthParamMap generateOAuthParamMap(Map<String, String> authCredential, String httpMethod, URI baseUri, Map<String,String> authHeader, Map<String,String[]> requestParams) throws MiniAuthException
     {
         // ...
         AccessCredential accessCredential = null;
@@ -118,7 +128,7 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase implements Signa
             oAuthParamMap = oauthSignatureAlgorithm.generateOAuthParamMap(signatureBaseString, accessCredential, authHeader, requestParams);
         }
         
-        return oAuthParamMap.getReadOnlyParamMap();
+        return oAuthParamMap;
     }
     
     

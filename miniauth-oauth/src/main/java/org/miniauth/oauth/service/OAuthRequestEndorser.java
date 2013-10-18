@@ -1,5 +1,6 @@
 package org.miniauth.oauth.service;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
@@ -8,7 +9,10 @@ import org.miniauth.credential.AccessCredential;
 import org.miniauth.exception.InvalidInputException;
 import org.miniauth.exception.InvalidStateException;
 import org.miniauth.oauth.common.OAuthOutgoingRequest;
+import org.miniauth.oauth.common.OAuthParamMap;
+import org.miniauth.oauth.signature.OAuthSignatureGenerator;
 import org.miniauth.service.RequestEndorser;
+import org.miniauth.signature.SignatureGenerator;
 
 
 /**
@@ -19,9 +23,14 @@ public class OAuthRequestEndorser implements RequestEndorser
 {
     private static final Logger log = Logger.getLogger(OAuthRequestEndorser.class.getName());
 
+    // TBD: 
+    // private SignatureGenerator signatureGenerator = null;
+    private OAuthSignatureGenerator signatureGenerator = null;
+    
     // Singleton.
     private OAuthRequestEndorser()
     {
+        signatureGenerator = new OAuthSignatureGenerator();
     }
     // Initialization-on-demand holder.
     private static final class OAuthRequestEndorserHolder
@@ -36,7 +45,8 @@ public class OAuthRequestEndorser implements RequestEndorser
 
     
     /**
-     * Returns true if the request has been successfully "endorsed".
+     * Returns true if the oauthRequest has been successfully "endorsed".
+     * (Note: it never returns false. If error occurs, it throws exceptions.)
      * @param credential Access credential needed to endorse/sign the request.
      * @param request Partial outgoing request wrapper object. "In-out" param.
      * @return true if the operation was successful.
@@ -57,12 +67,17 @@ public class OAuthRequestEndorser implements RequestEndorser
 
         OAuthOutgoingRequest oauthRequest = (OAuthOutgoingRequest) request;
 
+        Map<String,String> authCredential = null;
+        if(credential != null) {
+            authCredential = credential.toReadOnlyMap();
+        }
         
-        
+        OAuthParamMap newOAuthParamMap = signatureGenerator.generateOAuthParamMap(authCredential, oauthRequest.getHttpMethod(), oauthRequest.getBaseURI(), oauthRequest.getAuthHeader(), oauthRequest.getFormParams(), oauthRequest.getQueryParams());
 
+        oauthRequest.endorse(newOAuthParamMap);
 
         
-        return false;
+        return true;
     }
 
 }

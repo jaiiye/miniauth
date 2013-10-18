@@ -41,8 +41,18 @@ public final class OAuthParamMap implements Serializable
 
     public OAuthParamMap()
     {
-        this(null);
+        this((OAuthParamMap) null);
     }
+    // Copy constructor.
+    public OAuthParamMap(OAuthParamMap oauthParamMap)
+    {
+        this(oauthParamMap != null ? oauthParamMap.toReadOnlyMap() : (Map<String,String>) null);
+    }
+    public OAuthParamMap(OAuthParamMap oauthParamMap, boolean copyOAuthParamOnly)
+    {
+        this((oauthParamMap != null ? oauthParamMap.toReadOnlyMap() : (Map<String,String>) null), copyOAuthParamOnly);
+    }
+
     // The arg paramMap can be either Map<String,Object> or Map<String,String>.
     // If it is Map<String,String>, it should be converted to Map<String,Object>.
     public OAuthParamMap(Map<String, ? extends Object> paramMap)
@@ -50,7 +60,7 @@ public final class OAuthParamMap implements Serializable
         this(paramMap, true);  // default true. ???
     }
     // if copyOAuthParamOnly is set to true, two things happen.
-    // (1) we "clone" the input map (rather than just copying its reference).  --> Now we always clone....
+    // (1) we "clone" the input map (rather than just copying its reference).  --> Now we always clone/shallow copy....
     // (2) we filter out all non-OAuth params.
     public OAuthParamMap(Map<String, ? extends Object> paramMap, boolean copyOAuthParamOnly)
     {
@@ -71,6 +81,67 @@ public final class OAuthParamMap implements Serializable
 //            }
 //        }
         this.paramMap = new HashMap<>();
+        updateParams(paramMap, copyOAuthParamOnly);
+//        if(paramMap != null) {
+//            if(copyOAuthParamOnly) {
+//                for(String p : OAuthConstants.getAllOAuthParams()) {
+//                    Object val = paramMap.get(p);
+//                    if(val != null) {
+//                        if(p.equals(OAuthConstants.PARAM_OAUTH_TIMESTAMP) && (val instanceof String)) {
+//                            try {
+//                                Integer ts = Integer.valueOf((String) val);
+//                                this.paramMap.put(p, ts);
+//                            } catch(Exception e) {
+//                                // Ignore.
+//                                log.log(Level.INFO, "Invalid type for timestamp: " + val, e);
+//                            }
+//                        } else {
+//                            this.paramMap.put(p, val);
+//                        }
+//                    }
+//                }
+//            } else {
+//                for(String k : paramMap.keySet()) {
+//                    Object val = paramMap.get(k);
+//                    if(val != null) {
+//                        if(k.equals(OAuthConstants.PARAM_OAUTH_TIMESTAMP) && (val instanceof String)) {
+//                            try {
+//                                Integer ts = Integer.valueOf((String) val);
+//                                this.paramMap.put(k, ts);
+//                            } catch(Exception e) {
+//                                // Ignore.
+//                                log.log(Level.INFO, "Invalid type for timestamp: " + val, e);
+//                            }
+//                        } else {
+//                            this.paramMap.put(k, val);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+    }
+    
+    // Overwrites internal attributes with the given oauthParamMap.
+    public void updateParams(OAuthParamMap oauthParamMap)
+    {
+        if(oauthParamMap != null) {
+            updateParams(oauthParamMap.toReadOnlyMap());
+        }
+    }
+    public void updateParams(OAuthParamMap oauthParamMap, boolean copyOAuthParamOnly)
+    {
+        if(oauthParamMap != null) {
+            updateParams(oauthParamMap.toReadOnlyMap(), copyOAuthParamOnly);
+        }
+    }
+    
+    // Overwrites internal attributes with the given paramMap.
+    public void updateParams(Map<String, ? extends Object> paramMap)
+    {
+        updateParams(paramMap, true);  // default true. ???
+    }
+    public void updateParams(Map<String, ? extends Object> paramMap, boolean copyOAuthParamOnly)
+    {
         if(paramMap != null) {
             if(copyOAuthParamOnly) {
                 for(String p : OAuthConstants.getAllOAuthParams()) {
@@ -110,12 +181,13 @@ public final class OAuthParamMap implements Serializable
         }
     }
     
+    
     // TBD: How to make the returned map immutable???
 //    public Map<String,Object> getParamMap()
 //    {
 //        return paramMap;
 //    }
-    public Map<String,Object> getReadOnlyParamMap()
+    public Map<String,Object> toReadOnlyMap()
     {
         // Shallow copy...
         // This is not exactly "read only" in general since the caller can change the object referenced by the value.

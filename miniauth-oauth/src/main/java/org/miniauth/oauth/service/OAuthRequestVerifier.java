@@ -39,6 +39,7 @@ public class OAuthRequestVerifier implements RequestVerifier
     
     /**
      * Returns true if the request is valid and verified.
+     * (Note: it does not return false. If error occurs, it throws exceptions.)
      * @param credential Access credential needed to validate/verify the request.
      * @param request Partial incoming request wrapper object. It should be considered read-only. 
      * @return true if the request was successfully verified.
@@ -59,6 +60,7 @@ public class OAuthRequestVerifier implements RequestVerifier
 
         OAuthIncomingRequest oauthRequest = (OAuthIncomingRequest) request;
 
+        
         
         
         
