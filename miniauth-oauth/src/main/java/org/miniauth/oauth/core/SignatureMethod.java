@@ -2,6 +2,7 @@ package org.miniauth.oauth.core;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.miniauth.core.CryptoAlgorithm;
 
@@ -12,6 +13,8 @@ import org.miniauth.core.CryptoAlgorithm;
  */
 public final class SignatureMethod
 {
+    private static final Logger log = Logger.getLogger(SignatureMethod.class.getName());
+
     // TBD: Move this to the core module???
     // These are OAuth specific....
     public static final String HMAC_SHA1 = "HMAC-SHA1";

@@ -71,7 +71,7 @@ public class OAuthRequestEndorser implements RequestEndorser
         if(credential != null) {
             authCredential = credential.toReadOnlyMap();
         }
-        
+
         OAuthParamMap newOAuthParamMap = signatureGenerator.generateOAuthParamMap(authCredential, oauthRequest.getHttpMethod(), oauthRequest.getBaseURI(), oauthRequest.getAuthHeader(), oauthRequest.getFormParams(), oauthRequest.getQueryParams());
         oauthRequest.endorse(newOAuthParamMap);
 

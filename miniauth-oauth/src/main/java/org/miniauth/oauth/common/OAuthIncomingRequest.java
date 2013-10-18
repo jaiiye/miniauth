@@ -77,7 +77,8 @@ public class OAuthIncomingRequest extends IncomingRequest
             // TBD: throw exception ???
         }
     }
-    protected String getAuthParamTransmissionType()
+    // TBD: We need a better way....
+    public String getAuthParamTransmissionType()
     {
         if(!isReady()) {
             initAuthParamTransmissionType();

@@ -7,6 +7,7 @@ import org.miniauth.MiniAuthException;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.oauth.core.OAuthConstants;
 import org.miniauth.oauth.core.SignatureMethod;
+import org.miniauth.oauth.nonce.NonceGenerator;
 import org.miniauth.oauth.util.OAuthSignatureUtil;
 
 
@@ -32,6 +33,9 @@ public final class OAuthParamMapUtil
         } else {
             oauthParamMap = new OAuthParamMap(OAuthSignatureUtil.getOAuthParams(request.getAuthHeader(), request.getFormParams(), request.getQueryParams()));
         }
+
+        // TBD:
+        // Is this the right place to do this ????
         if(accessIdentity != null) {
             oauthParamMap.setAccessIdentity(accessIdentity);
         }
@@ -43,7 +47,19 @@ public final class OAuthParamMapUtil
         if(signatureMethod == null || signatureMethod.isEmpty()) {
             oauthParamMap.setSignatureMethod(SignatureMethod.HMAC_SHA1);  // ???
         }
-        // timestamp and nonce ???
+        if(SignatureMethod.requiresNonceAndTimestamp(signatureMethod)) {
+            int timestamp = oauthParamMap.getTimestamp();
+            if(timestamp <= 0) {
+                timestamp = (int) (System.currentTimeMillis() / 1000L);
+                oauthParamMap.setTimestamp(timestamp);
+            }
+            String nonce = oauthParamMap.getNonce();
+            if(nonce == null || nonce.isEmpty()) {
+                nonce = NonceGenerator.generateRandomNonce();
+                oauthParamMap.setNonce(nonce);
+            }
+        }
+        // what else???
 
         if(log.isLoggable(Level.FINER)) log.finer("oauthParamMap = " + oauthParamMap);
         return oauthParamMap;

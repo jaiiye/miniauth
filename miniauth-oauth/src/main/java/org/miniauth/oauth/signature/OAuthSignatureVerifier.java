@@ -120,6 +120,8 @@ public class OAuthSignatureVerifier extends OAuthSignatureBase implements Signat
             BaseURIInfo uriInfo = new BaseURIInfo(baseUri);
             // String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeaders, formParams, queryParams);
             String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeader, requestParams);
+//            log.warning(">>>>>>>>>>> signature = " + signature);
+//            log.warning(">>>>>>>>>>> signatureBaseString = " + signatureBaseString);
             verified = oauthSignatureAlgorithm.verify(signatureBaseString, accessCredential, signature);
         }
 

@@ -14,6 +14,9 @@ import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.exception.InternalErrorException;
 import org.miniauth.exception.InvalidStateException;
+import org.miniauth.oauth.core.OAuthConstants;
+import org.miniauth.oauth.core.SignatureMethod;
+import org.miniauth.oauth.nonce.NonceGenerator;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
 
 
@@ -88,7 +91,8 @@ public class OAuthOutgoingRequest extends OutgoingRequest
         }
         this.authParamTransmissionType = authParamTransmissionType;
     }
-    protected String getAuthParamTransmissionType()
+    // TBD: We need a better way....
+    public String getAuthParamTransmissionType()
     {
         if(!isEndorsed()) {
             initAuthParamTransmissionType();
@@ -107,6 +111,30 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     {
         oauthParamMap = OAuthParamMapUtil.buildOAuthParams(this, accessIdentity);
         initAuthParamTransmissionType();
+
+        // TBD:
+        // buildOAuthParams() might have changed some of (oauth_x) param values.
+        // We need to update the internal vars based on the new oauthParamMap
+        // because signature is generated based on authHeader/formParams/queryParams, but on oauthParamMap;
+        // TBD: --> to utilize oauthParamMap in generating signature???
+        switch(authParamTransmissionType) {
+        case ParameterTransmissionType.HEADER:
+            Map<String,String> newAuthHeader = OAuthRequestUtil.updateOAuthHeaderWithOAuthParamMap(getAuthHeader(), oauthParamMap);
+            setAuthHeader(newAuthHeader);
+            break;
+        case ParameterTransmissionType.FORM:
+            Map<String,String[]> newFormParams = OAuthRequestUtil.updateParamsWithOAuthParamMap(getFormParams(), oauthParamMap);
+            setFormParams(newFormParams);
+            break;
+        case ParameterTransmissionType.QUERY:
+            Map<String,String[]> newQueryParams = OAuthRequestUtil.updateParamsWithOAuthParamMap(getQueryParams(), oauthParamMap);
+            setQueryParams(newQueryParams);
+            break;
+        default:
+            // ??? This should not happen...
+            throw new InternalErrorException("Invalid authParamTransmissionType: " + authParamTransmissionType);
+        }
+
         setReady(true);
     }
     public OAuthParamMap getOauthParamMap()

@@ -72,6 +72,8 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase implements Signa
             // String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeaders, formParams, queryParams);
             String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeader, requestParams);
             signature = oauthSignatureAlgorithm.generate(signatureBaseString, accessCredential);
+//            log.warning("<<<<<<<<<<< signature = " + signature);
+//            log.warning("<<<<<<<<<<< signatureBaseString = " + signatureBaseString);
         }
 
         if(log.isLoggable(Level.FINE)) log.fine("signature = " + signature);
@@ -127,6 +129,8 @@ public class OAuthSignatureGenerator extends OAuthSignatureBase implements Signa
             // String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeaders, formParams, queryParams);
             String signatureBaseString = buildSignatureBaseString(httpMethod, uriInfo, authHeader, requestParams);
             oAuthParamMap = oauthSignatureAlgorithm.generateOAuthParamMap(signatureBaseString, accessCredential, authHeader, requestParams);
+//            log.warning("<<<<<<<<<<< oAuthParamMap = " + oAuthParamMap);
+//            log.warning("<<<<<<<<<<< signatureBaseString = " + signatureBaseString);
         }
         
         return oAuthParamMap;
