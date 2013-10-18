@@ -76,6 +76,23 @@ public abstract class OutgoingRequest extends RequestBase
         return super.setBaseURI(baseURI);
     }
     @Override
+    public RequestBase setBaseURI(String baseUri) throws MiniAuthException
+    {
+        if(isEndorsed()) {
+            throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
+        }
+        return super.setBaseURI(baseUri);
+    }
+    @Override
+    public RequestBase setAuthHeader(String authHeaderStr)
+            throws MiniAuthException
+    {
+        if(isEndorsed()) {
+            throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
+        }
+        return super.setAuthHeader(authHeaderStr);
+    }
+    @Override
     public RequestBase setAuthHeader(Map<String, String> authHeader)
             throws MiniAuthException
     {
@@ -92,6 +109,14 @@ public abstract class OutgoingRequest extends RequestBase
             throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
         }
         return super.addAuthHeaderParam(key, value);
+    }
+    @Override
+    public RequestBase setFormParams(String formBody) throws MiniAuthException
+    {
+        if(isEndorsed()) {
+            throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
+        }
+        return super.setFormParams(formBody);
     }
     @Override
     public RequestBase setFormParams(Map<String, String[]> formParams)
@@ -121,6 +146,15 @@ public abstract class OutgoingRequest extends RequestBase
         return super.addFormParam(key, value);
     }
     @Override
+    public RequestBase setQueryParams(String queryString)
+            throws MiniAuthException
+    {
+        if(isEndorsed()) {
+            throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
+        }
+        return super.setQueryParams(queryString);
+    }
+    @Override
     public RequestBase setQueryParams(Map<String, String[]> queryParams)
             throws MiniAuthException
     {
@@ -148,6 +182,9 @@ public abstract class OutgoingRequest extends RequestBase
         return super.addQueryParam(key, value);
     }
 
+    
+    
+    
     /**
      * Returns true if this request has been "endorsed"
      *    (e.g., if it includes the oauth_signature param in the case of OAuth, etc.).

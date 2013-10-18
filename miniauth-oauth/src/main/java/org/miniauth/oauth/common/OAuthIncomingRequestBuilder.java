@@ -42,6 +42,17 @@ public final class OAuthIncomingRequestBuilder
         incomingRequest.setBaseURI(baseURI);
         return this;
     }
+    public OAuthIncomingRequestBuilder setBaseURI(String baseUri) throws MiniAuthException
+    {
+        incomingRequest.setBaseURI(baseUri);
+        return this;
+    }
+    public OAuthIncomingRequestBuilder setAuthHeader(String authHeaderStr)
+            throws MiniAuthException
+    {
+        incomingRequest.setAuthHeader(authHeaderStr);
+        return this;
+    }
     public OAuthIncomingRequestBuilder setAuthHeader(Map<String, String> authHeader)
             throws MiniAuthException
     {
@@ -52,6 +63,12 @@ public final class OAuthIncomingRequestBuilder
             throws MiniAuthException
     {
         incomingRequest.addAuthHeaderParam(key, value);
+        return this;
+    }
+    public OAuthIncomingRequestBuilder setFormParams(String formBody)
+            throws MiniAuthException
+    {
+        incomingRequest.setFormParams(formBody);
         return this;
     }
     public OAuthIncomingRequestBuilder setFormParams(Map<String, String[]> formParams)
@@ -70,6 +87,12 @@ public final class OAuthIncomingRequestBuilder
             throws MiniAuthException
     {
         incomingRequest.addFormParam(key, value);
+        return this;
+    }
+    public OAuthIncomingRequestBuilder setQueryParams(String queryString)
+            throws MiniAuthException
+    {
+        incomingRequest.setQueryParams(queryString);
         return this;
     }
     public OAuthIncomingRequestBuilder setQueryParams(Map<String, String[]> queryParams)

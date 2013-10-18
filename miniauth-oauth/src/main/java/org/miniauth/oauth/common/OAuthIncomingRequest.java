@@ -2,11 +2,15 @@ package org.miniauth.oauth.common;
 
 import java.net.URI;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.common.IncomingRequest;
 import org.miniauth.common.RequestBase;
+import org.miniauth.core.AuthScheme;
 import org.miniauth.oauth.service.OAuthRequestUtil;
+import org.miniauth.oauth.util.ParameterTransmissionUtil;
 
 
 /**
@@ -16,7 +20,12 @@ import org.miniauth.oauth.service.OAuthRequestUtil;
  */
 public class OAuthIncomingRequest extends IncomingRequest
 {
+    private static final Logger log = Logger.getLogger(OAuthIncomingRequest.class.getName());
     private static final long serialVersionUID = 1L;
+    
+    // TBD:
+    private volatile String authParamTransmissionType = null;
+    // ...
 
     // State variables.
     private boolean endorsed = false;
@@ -30,21 +39,45 @@ public class OAuthIncomingRequest extends IncomingRequest
     // Use the builder class to create OAuthIncomingRequest objects.
     protected OAuthIncomingRequest()
     {
-        super();
+        this(null, null);
     }
     protected OAuthIncomingRequest(String httpMethod, URI baseURI)
     {
-        super(httpMethod, baseURI);
+        this(httpMethod, baseURI, null, null, null);
     }
     protected OAuthIncomingRequest(String httpMethod, URI baseURI,
             Map<String, String> authHeader, Map<String, String[]> formParams,
             Map<String, String[]> queryParams)
     {
         super(httpMethod, baseURI, authHeader, formParams, queryParams);
+        initAuthParamTransmissionType();
     }
     protected OAuthIncomingRequest(RequestBase request)
     {
         super(request);
+        initAuthParamTransmissionType();
+    }
+
+    // TBD:
+    protected void initAuthParamTransmissionType()
+    {
+        // TBD:
+        try {
+            authParamTransmissionType = ParameterTransmissionUtil.getTransmissionType(getAuthHeader(), getFormParams(), getQueryParams());
+        } catch (MiniAuthException e) {
+            // ???
+            log.log(Level.INFO, "Failed to detect authParamTransmissionType.", e);
+        }
+        if(authParamTransmissionType == null) {
+            // What to do ???
+            // This is an error...
+            // authParamTransmissionType = ParameterTransmissionUtil.getDefaultTransmissionType();
+            // TBD: throw exception ???
+        }
+    }
+    protected String getAuthParamTransmissionType()
+    {
+        return authParamTransmissionType;
     }
 
     
@@ -61,6 +94,18 @@ public class OAuthIncomingRequest extends IncomingRequest
     }
 
     
+    
+    @Override
+    public RequestBase setAuthHeader(String authHeaderStr)
+            throws MiniAuthException
+    {
+        super.setAuthHeader(authHeaderStr, AuthScheme.OAUTH);
+//        setVerified(false);   // Done in super.
+        return this;
+    }
+
+
+
     /**
      * Returns true if this request has been "endorsed"
      *    (e.g., if it includes the oauth_signature param in the case of OAuth, etc.).

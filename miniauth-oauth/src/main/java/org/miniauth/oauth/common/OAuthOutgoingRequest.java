@@ -2,13 +2,18 @@ package org.miniauth.oauth.common;
 
 import java.net.URI;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.common.OutgoingRequest;
 import org.miniauth.common.RequestBase;
+import org.miniauth.core.AuthScheme;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.AuthSignatureException;
+import org.miniauth.exception.InvalidStateException;
 import org.miniauth.oauth.service.OAuthRequestUtil;
+import org.miniauth.oauth.util.ParameterTransmissionUtil;
 
 
 /**
@@ -18,7 +23,12 @@ import org.miniauth.oauth.service.OAuthRequestUtil;
  */
 public class OAuthOutgoingRequest extends OutgoingRequest
 {
+    private static final Logger log = Logger.getLogger(OAuthOutgoingRequest.class.getName());
     private static final long serialVersionUID = 1L;
+    
+    // TBD:
+    private volatile String authParamTransmissionType = null;
+    // ...
 
     // State variables.
     private boolean endorsed = false;
@@ -34,21 +44,49 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     // Use the builder class to create OAuthOutgoingRequest objects.
     protected OAuthOutgoingRequest()
     {
-        super();
+        this(null, null);
     }
     protected OAuthOutgoingRequest(String httpMethod, URI baseURI)
     {
-        super(httpMethod, baseURI);
+        this(httpMethod, baseURI, null, null, null);
     }
     protected OAuthOutgoingRequest(String httpMethod, URI baseURI,
             Map<String, String> authHeader, Map<String, String[]> formParams,
             Map<String, String[]> queryParams)
     {
         super(httpMethod, baseURI, authHeader, formParams, queryParams);
+        initAuthParamTransmissionType();
     }
     protected OAuthOutgoingRequest(RequestBase request)
     {
         super(request);
+        initAuthParamTransmissionType();
+    }
+
+    // TBD:
+    protected void initAuthParamTransmissionType()
+    {
+        // TBD:
+        try {
+            authParamTransmissionType = ParameterTransmissionUtil.getTransmissionType(getAuthHeader(), getFormParams(), getQueryParams());
+        } catch (MiniAuthException e) {
+            // ???
+            log.log(Level.INFO, "Failed to detect authParamTransmissionType.", e);
+        }
+        if(authParamTransmissionType == null) {
+            authParamTransmissionType = ParameterTransmissionUtil.getDefaultTransmissionType();
+        }
+    }
+    protected void setAuthParamTransmissionType(String authParamTransmissionType) throws MiniAuthException
+    {
+        if(isEndorsed()) {
+            throw new InvalidStateException("The request is already endorsed. authParamTransmissionType cannot be changed.");
+        }
+        this.authParamTransmissionType = authParamTransmissionType;
+    }
+    protected String getAuthParamTransmissionType()
+    {
+        return authParamTransmissionType;
     }
 
     
@@ -96,6 +134,18 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     }
 
 
+    @Override
+    public RequestBase setAuthHeader(String authHeaderStr)
+            throws MiniAuthException
+    {
+//        // Checked in super.
+//        if(isEndorsed()) {
+//            throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
+//        }
+        return super.setAuthHeader(authHeaderStr, AuthScheme.OAUTH);
+    }
+
+    
     /**
      * Returns true if this request has been "endorsed"
      *    (e.g., if it includes the oauth_signature param in the case of OAuth, etc.).

@@ -56,6 +56,21 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
+    public RequestBase setBaseURI(String baseUri) throws MiniAuthException
+    {
+        super.setBaseURI(baseUri);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    public RequestBase setAuthHeader(String authHeaderStr)
+            throws MiniAuthException
+    {
+        super.setAuthHeader(authHeaderStr);
+        setVerified(false);
+        return this;
+    }
+    @Override
     public RequestBase setAuthHeader(Map<String, String> authHeader)
             throws MiniAuthException
     {
@@ -68,6 +83,13 @@ public abstract class IncomingRequest extends RequestBase
             throws MiniAuthException
     {
         super.addAuthHeaderParam(key, value);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    public RequestBase setFormParams(String formBody) throws MiniAuthException
+    {
+        super.setFormParams(formBody);
         setVerified(false);
         return this;
     }
@@ -96,6 +118,14 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
+    public RequestBase setQueryParams(String queryString)
+            throws MiniAuthException
+    {
+        super.setQueryParams(queryString);
+        setVerified(false);
+        return this;
+    }
+    @Override
     public RequestBase setQueryParams(Map<String, String[]> queryParams)
             throws MiniAuthException
     {
@@ -120,6 +150,7 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
 
+    
 
     /**
      * Returns true if the request is in a state where it can be verified.

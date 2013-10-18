@@ -11,7 +11,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
-import org.miniauth.basic.builder.BasicAuthStringBuilder;
+import org.miniauth.exception.InvalidInputException;
+import org.miniauth.util.AuthHeaderUtil;
+import org.miniauth.util.FormParamUtil;
+import org.miniauth.util.QueryParamUtil;
 
 
 /**
@@ -130,10 +133,29 @@ public abstract class RequestBase implements Serializable
         this.baseURI = baseURI;
         return this;
     }
+    public RequestBase setBaseURI(String baseUri) throws MiniAuthException
+    {
+        try {
+            this.baseURI = new URI(baseUri);
+        } catch (URISyntaxException e) {
+            throw new InvalidInputException("Invalid baseUri = " + baseUri, e);
+        }
+        return this;
+    }
 
     public Map<String, String> getAuthHeader()
     {
         return authHeader;
+    }
+    public RequestBase setAuthHeader(String authHeaderStr) throws MiniAuthException
+    {
+        this.authHeader = AuthHeaderUtil.getAuthParams(authHeaderStr);
+        return this;
+    }
+    protected RequestBase setAuthHeader(String authHeaderStr, String expectedAuthScheme) throws MiniAuthException
+    {
+        this.authHeader = AuthHeaderUtil.getAuthParams(authHeaderStr, expectedAuthScheme);
+        return this;
     }
     public RequestBase setAuthHeader(Map<String, String> authHeader) throws MiniAuthException
     {
@@ -152,6 +174,11 @@ public abstract class RequestBase implements Serializable
     public Map<String, String[]> getFormParams()
     {
         return formParams;
+    }
+    public RequestBase setFormParams(String formBody) throws MiniAuthException
+    {
+        this.formParams = FormParamUtil.parseUrlEncodedFormBody(formBody);
+        return this;
     }
     public RequestBase setFormParams(Map<String, String[]> formParams) throws MiniAuthException
     {
@@ -187,6 +214,11 @@ public abstract class RequestBase implements Serializable
     public Map<String, String[]> getQueryParams()
     {
         return queryParams;
+    }
+    public RequestBase setQueryParams(String queryString) throws MiniAuthException
+    {
+        this.queryParams = QueryParamUtil.parseQueryParams(queryString);
+        return this;
     }
     public RequestBase setQueryParams(Map<String, String[]> queryParams) throws MiniAuthException
     {
