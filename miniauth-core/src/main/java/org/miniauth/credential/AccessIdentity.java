@@ -1,6 +1,7 @@
 package org.miniauth.credential;
 
 
+
 /**
  * Client and User "identity".
  */

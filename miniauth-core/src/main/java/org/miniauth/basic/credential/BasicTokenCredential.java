@@ -1,7 +1,10 @@
 package org.miniauth.basic.credential;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.miniauth.credential.AuthCredentialConstants;
 import org.miniauth.credential.TokenCredential;
 
 
@@ -15,11 +18,26 @@ public final class BasicTokenCredential implements TokenCredential, Serializable
     private final String uname;
     private final String pword;
 
+    public BasicTokenCredential(Map<String,String> authCredential)
+    {
+        this((authCredential!=null ? authCredential.get(AuthCredentialConstants.USERNAME) : null),
+                (authCredential!= null ? authCredential.get(AuthCredentialConstants.PASSWORD) : null));
+    }
     public BasicTokenCredential(String uname, String pword)
     {
         super();
         this.uname = uname;
         this.pword = pword;
+    }
+
+    // Returns a "read-only" map of the bean content.
+    @Override
+    public Map<String,String> toReadOnlyMap()
+    {
+        Map<String,String> map = new HashMap<>();
+        map.put(AuthCredentialConstants.USERNAME, this.uname);
+        map.put(AuthCredentialConstants.PASSWORD, this.pword);
+        return map;
     }
 
     @Override
@@ -31,6 +49,10 @@ public final class BasicTokenCredential implements TokenCredential, Serializable
 //    {
 //        this.uname = uname;
 //    }
+    public String getUsername()
+    {
+        return getAccessToken();
+    }
 
     @Override
     public String getTokenSecret()
@@ -41,6 +63,10 @@ public final class BasicTokenCredential implements TokenCredential, Serializable
 //    {
 //        this.pword = pword;
 //    }
+    public String getPassword()
+    {
+        return getTokenSecret();
+    }
 
 
     @Override

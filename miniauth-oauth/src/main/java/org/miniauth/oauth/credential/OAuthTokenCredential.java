@@ -31,6 +31,7 @@ public final class OAuthTokenCredential implements TokenCredential, Serializable
     }
 
     // Returns a "read-only" map of the bean content.
+    @Override
     public Map<String,String> toReadOnlyMap()
     {
         Map<String,String> map = new HashMap<>();
