@@ -94,8 +94,9 @@ public final class AuthHeaderUtil
         }
         
         String headerAuthScheme = parts[0].trim();
+        String authScheme = AuthScheme.getAuthSchemeFromAuthorizationHeaderAuthScheme(headerAuthScheme);
         if(expectedAuthScheme != null) {
-            if(! expectedAuthScheme.equals(AuthScheme.getAuthorizationHeaderAuthScheme(headerAuthScheme))) {
+            if(! expectedAuthScheme.equals(authScheme)) {
                 throw new InvalidInputException("expected: " + expectedAuthScheme + "; Auth scheme found: " + headerAuthScheme);
             }
         }
@@ -120,7 +121,14 @@ public final class AuthHeaderUtil
                 String key = URLDecoder.decode(pair[0], "UTF-8");
                 String val = null;
                 if(pair.length > 1) {
-                    val = URLDecoder.decode(pair[1], "UTF-8");
+                    String quoted = pair[1];
+                    if(quoted.length() > 1) {
+                        String bare = quoted.substring(1, quoted.length()-1);
+                        val = URLDecoder.decode(bare, "UTF-8");
+                    } else {
+                        // ???
+                        val = "";
+                    }
                 } else {
                     val = "";   // ???
                 }
