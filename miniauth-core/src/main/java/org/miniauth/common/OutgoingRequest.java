@@ -96,6 +96,35 @@ public abstract class OutgoingRequest extends RequestBase
         return super.setBaseURI(baseUri);
     }
     @Override
+    protected RequestBase setBaseURI(BaseURIInfo uriInfo)
+            throws MiniAuthException
+    {
+        if(isEndorsed()) {
+            throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
+        }
+        return super.setBaseURI(uriInfo);
+    }
+    @Override
+    protected RequestBase setAuthHeader(String authHeader)
+            throws MiniAuthException
+    {
+        if(isEndorsed()) {
+            throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
+        }
+        return super.setAuthHeader(authHeader);
+    }
+    @Override
+    protected RequestBase setAuthHeaderAuthorizationString(
+            String authHeaderAuthString, String expectedAuthScheme)
+            throws MiniAuthException
+    {
+        if(isEndorsed()) {
+            throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
+        }
+        return super.setAuthHeaderAuthorizationString(authHeaderAuthString,
+                expectedAuthScheme);
+    }
+    @Override
     protected RequestBase setAuthHeaderAuthorizationString(String authHeaderAuthString)
             throws MiniAuthException
     {
@@ -193,6 +222,7 @@ public abstract class OutgoingRequest extends RequestBase
         }
         return super.addQueryParam(key, value);
     }
+
 
     
 

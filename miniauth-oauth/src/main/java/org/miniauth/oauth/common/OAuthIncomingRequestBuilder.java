@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.Map;
 
 import org.miniauth.MiniAuthException;
+import org.miniauth.common.BaseURIInfo;
+import org.miniauth.common.RequestBase;
 
 
 /**
@@ -48,7 +50,27 @@ public final class OAuthIncomingRequestBuilder
         incomingRequest.setBaseURI(baseUri);
         return this;
     }
-    public OAuthIncomingRequestBuilder setAuthHeader(String authHeaderStr)
+    public OAuthIncomingRequestBuilder setBaseURI(BaseURIInfo uriInfo)
+            throws MiniAuthException
+    {
+        incomingRequest.setBaseURI(uriInfo);
+        return this;
+    }
+    public OAuthIncomingRequestBuilder setAuthHeader(String authHeader)
+            throws MiniAuthException
+    {
+        incomingRequest.setAuthHeader(authHeader);
+        return this;
+    }
+    public OAuthIncomingRequestBuilder setAuthHeaderAuthorizationString(
+            String authHeaderAuthString, String expectedAuthScheme)
+            throws MiniAuthException
+    {
+        incomingRequest.setAuthHeaderAuthorizationString(authHeaderAuthString,
+                expectedAuthScheme);
+        return this;
+    }
+    public OAuthIncomingRequestBuilder setAuthHeaderAuthorizationString(String authHeaderStr)
             throws MiniAuthException
     {
         incomingRequest.setAuthHeaderAuthorizationString(authHeaderStr);

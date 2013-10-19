@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
+import org.miniauth.common.BaseURIInfo;
 import org.miniauth.common.IncomingRequest;
 import org.miniauth.common.RequestBase;
 import org.miniauth.core.AuthScheme;
@@ -173,6 +174,26 @@ public class OAuthIncomingRequest extends IncomingRequest
     protected RequestBase setBaseURI(String baseUri) throws MiniAuthException
     {
         return super.setBaseURI(baseUri);
+    }
+    @Override
+    protected RequestBase setBaseURI(BaseURIInfo uriInfo)
+            throws MiniAuthException
+    {
+        return super.setBaseURI(uriInfo);
+    }
+    @Override
+    protected RequestBase setAuthHeader(String authHeader)
+            throws MiniAuthException
+    {
+        return super.setAuthHeader(authHeader);
+    }
+    @Override
+    protected RequestBase setAuthHeaderAuthorizationString(
+            String authHeaderAuthString, String expectedAuthScheme)
+            throws MiniAuthException
+    {
+        return super.setAuthHeaderAuthorizationString(authHeaderAuthString,
+                expectedAuthScheme);
     }
     @Override
     protected RequestBase setAuthHeaderAuthorizationString(String authHeaderAuthString)

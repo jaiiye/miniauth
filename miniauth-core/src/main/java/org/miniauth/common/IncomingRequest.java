@@ -67,9 +67,35 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
+    protected RequestBase setBaseURI(BaseURIInfo uriInfo)
+            throws MiniAuthException
+    {
+        super.setBaseURI(uriInfo);
+        setVerified(false);
+        return this;
+    }
+    @Override
     protected RequestBase setBaseURI(String baseUri) throws MiniAuthException
     {
         super.setBaseURI(baseUri);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    protected RequestBase setAuthHeader(String authHeader)
+            throws MiniAuthException
+    {
+        super.setAuthHeader(authHeader);
+        setVerified(false);
+        return this;
+    }
+    @Override
+    protected RequestBase setAuthHeaderAuthorizationString(
+            String authHeaderAuthString, String expectedAuthScheme)
+            throws MiniAuthException
+    {
+        super.setAuthHeaderAuthorizationString(authHeaderAuthString,
+                expectedAuthScheme);
         setVerified(false);
         return this;
     }
@@ -161,7 +187,6 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
 
-    
 
 
     /**
