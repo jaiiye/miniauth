@@ -45,6 +45,10 @@ public final class OAuthParamMapUtil
         }
         String signatureMethod = oauthParamMap.getSignatureMethod();
         if(signatureMethod == null || signatureMethod.isEmpty()) {
+            // TBD:
+            // What should be the default value?
+            // plain text or hmac-sha1 ???
+            // Get this from config or other preset value ???
             oauthParamMap.setSignatureMethod(SignatureMethod.HMAC_SHA1);  // ???
         }
         if(SignatureMethod.requiresNonceAndTimestamp(signatureMethod)) {
@@ -60,6 +64,10 @@ public final class OAuthParamMapUtil
             }
         }
         // what else???
+        
+        // TBD:
+        // if consumerKey/token is missing at this point
+        // throw exception ????
 
         if(log.isLoggable(Level.FINER)) log.finer("oauthParamMap = " + oauthParamMap);
         return oauthParamMap;

@@ -10,6 +10,7 @@ import org.miniauth.common.BaseURIInfo;
 import org.miniauth.common.IncomingRequest;
 import org.miniauth.common.RequestBase;
 import org.miniauth.core.AuthScheme;
+import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.BadRequestException;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
 
@@ -59,6 +60,31 @@ public class OAuthIncomingRequest extends IncomingRequest
         // initAuthParamTransmissionType();
     }
 
+
+    // TBD:
+    
+    public AccessIdentity getAccessIdentity() throws MiniAuthException
+    {
+        // TBD:
+        buildOAuthParamMap();
+        return oauthParamMap.getAccessIdentity();
+    }
+    public String getConumserKey() throws MiniAuthException
+    {
+        // TBD:
+        buildOAuthParamMap();
+        return oauthParamMap.getConsumerKey();
+    }
+    public String getAccessToken() throws MiniAuthException
+    {
+        // TBD:
+        buildOAuthParamMap();
+        return oauthParamMap.getToken();
+    }
+
+    
+
+    
     // TBD:
     // Calling this in ctor's does not work.
     // We need to call this every time setters are called for authHeader, formParams, and queryParams...

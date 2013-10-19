@@ -6,13 +6,14 @@ import java.util.Map;
 import org.miniauth.MiniAuthException;
 import org.miniauth.common.BaseURIInfo;
 import org.miniauth.credential.AccessIdentity;
+import org.miniauth.oauth.credential.OAuthAccessIdentity;
 
 
 /**
  * Builds an OAuthOutgoingRequest object.
  * (a) Construct OAuthOutgoingRequestBuilder or call init() on existing Builder.
- * (b) Set attributes.
- * (c) Call build() to create OAuthOutgoingRequest.
+ * (b) Set attributes. Note that later setter call overwrites any previously set values.
+ * (c) Then, call build() to create OAuthOutgoingRequest.
  */
 public final class OAuthOutgoingRequestBuilder
 {
@@ -33,6 +34,27 @@ public final class OAuthOutgoingRequestBuilder
         this.outgoingRequest = new OAuthOutgoingRequest(outgoingRequest);
         return this;
     }
+
+
+    protected OAuthOutgoingRequestBuilder setAccessIdentity(AccessIdentity accessIdentity) throws MiniAuthException
+    {
+        // TBD:
+        outgoingRequest.buildOAuthParamMap(accessIdentity);
+        return this;
+    }
+    protected OAuthOutgoingRequestBuilder setConsumerKey(String consumerKey) throws MiniAuthException
+    {
+        // TBD:
+        outgoingRequest.buildOAuthParamMap(new OAuthAccessIdentity(consumerKey, null));
+        return this;
+    }
+    protected OAuthOutgoingRequestBuilder setAccessToken(String accessToken) throws MiniAuthException
+    {
+        // TBD:
+        outgoingRequest.buildOAuthParamMap(new OAuthAccessIdentity(null, accessToken));
+        return this;
+    }
+
 
     public OAuthOutgoingRequestBuilder setHttpMethod(String httpMethod)
             throws MiniAuthException

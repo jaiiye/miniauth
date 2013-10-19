@@ -338,8 +338,13 @@ public final class OAuthParamMap implements Serializable
         if(accessIdentity != null) {
             String consumerKey = accessIdentity.getConsumerKey();
             String token = accessIdentity.getAccessToken();
-            setConsumerKey(consumerKey);
-            setToken(token);            
+            // ????
+            if(consumerKey != null) {   // empty string is ok.
+                setConsumerKey(consumerKey);
+            }
+            if(token != null) {
+                setToken(token);
+            }
         } else {
             // ???
         }

@@ -3,7 +3,6 @@ package org.miniauth.oauth.common;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
@@ -23,9 +22,8 @@ import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.exception.InternalErrorException;
 import org.miniauth.exception.InvalidInputException;
 import org.miniauth.exception.InvalidStateException;
-import org.miniauth.oauth.util.OAuthAuthorizationValueUtil;
+import org.miniauth.oauth.credential.OAuthAccessIdentity;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
-import org.miniauth.util.FormParamUtil;
 
 
 /**
@@ -75,6 +73,49 @@ public class OAuthOutgoingRequest extends OutgoingRequest
         // initAuthParamTransmissionType();
     }
 
+
+    // TBD:
+    
+    public AccessIdentity getAccessIdentity() throws MiniAuthException
+    {
+        // TBD:
+        buildOAuthParamMap();
+        return oauthParamMap.getAccessIdentity();
+    }
+    protected OAuthOutgoingRequest setAccessIdentity(AccessIdentity accessIdentity) throws MiniAuthException
+    {
+        // TBD:
+        buildOAuthParamMap(accessIdentity);
+        return this;
+    }
+    public String getConumserKey() throws MiniAuthException
+    {
+        // TBD:
+        buildOAuthParamMap();
+        return oauthParamMap.getConsumerKey();
+    }
+    protected OAuthOutgoingRequest setConsumerKey(String consumerKey) throws MiniAuthException
+    {
+        // TBD:
+        buildOAuthParamMap(new OAuthAccessIdentity(consumerKey, null));
+        return this;
+    }
+    public String getAccessToken() throws MiniAuthException
+    {
+        // TBD:
+        buildOAuthParamMap();
+        return oauthParamMap.getToken();
+    }
+    protected OAuthOutgoingRequest setAccessToken(String accessToken) throws MiniAuthException
+    {
+        // TBD:
+        buildOAuthParamMap(new OAuthAccessIdentity(null, accessToken));
+        return this;
+    }
+    
+    
+    
+    
     // TBD:
     // Calling this in ctor's does not work.
     // We need to call this every time setters are called for authHeader, formParams, and queryParams...
@@ -127,7 +168,7 @@ public class OAuthOutgoingRequest extends OutgoingRequest
         // TBD: --> to utilize oauthParamMap in generating signature???
         refreshHeadersAndParams();
 
-        setReady(true);
+        // setReady(true);
     }
     public OAuthParamMap getOauthParamMap()
     {
@@ -173,8 +214,8 @@ public class OAuthOutgoingRequest extends OutgoingRequest
         // Note:
         // Regardless of the current state (ready==true|false, endorsed=true|false)
         // prepare() can be always called.
-        setEndorsed(false);
-        setReady(false);
+//        setEndorsed(false);
+//        setReady(false);
 
         buildOAuthParamMap(accessIdentity);
 
