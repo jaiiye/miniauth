@@ -12,7 +12,7 @@ public interface CredentialMapper
     // [1] 
     // name: consumer, user token, etc.
     // credentialKey -> credentialSecret.
-    String getCredentialSecret(String crednetialName, String credentialKey);
+    String getCredentialSecret(String credentialName, String credentialKey);
     // [2]
 //    String getConsumerSecret(String consumerKey);
 //    String getTokenSecret(String accessToken);
