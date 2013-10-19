@@ -4,12 +4,23 @@ import java.net.URI;
 import java.util.Map;
 
 import org.miniauth.MiniAuthException;
+import org.miniauth.credential.AccessIdentity;
+import org.miniauth.exception.BadRequestException;
 
 
 /**
  * Provider side request, which is sent by a client.
  * Note that IncomingRequest does not represent a full request.
  * It's just a partial wrapper for attributes that are needed for auth handling.
+ * 
+ * [ The "life cycle" of IncomingRequest ]
+ * IncomingRequest goes through a similar life cycle as OutgoingRequest.
+ * However, its requirement is not as strict as that of OutgoingRequest.
+ * It starts with an "init" or constructed state.
+ * Once necessary attributes have been added, the object can be declared as being "ready".
+ * If the request is in a ready state, then it can be made "verified".
+ * Even after setVerified() is called, however, its internal attributes can be modified,
+ *     in which case, the verified flag is set back to false. 
  */
 public abstract class IncomingRequest extends RequestBase
 {
@@ -152,6 +163,33 @@ public abstract class IncomingRequest extends RequestBase
 
     
 
+
+    /**
+     * Put this request object in a "ready" state.
+     * The request object can be verified only if it's in a ready state.
+     * @return this object.
+     * @throws MiniAuthException if preparation fails, or the object cannot be put into the "ready" state.
+     */
+    public abstract IncomingRequest prepare() throws MiniAuthException;
+
+    /**
+     * Put this request object in a "verified" state. (It does not actually "verify" anything.)
+     * This is the second of the two "state changing" operations.
+     * This can be called only if the current state == ready.
+     * @return this object.
+     * @throws MiniAuthException if the IncomingRequest cannot be put into the "verified" state.
+     */
+    public IncomingRequest verify() throws MiniAuthException
+    {
+        if(! isReady()) {
+            throw new BadRequestException("Cannot change the state to verfied because the IncomingRequest is not ready.");
+        }
+        setVerified(true);
+        return this;
+    }
+
+
+    
     /**
      * Returns true if the request is in a state where it can be verified.
      * @return true if it is ready for verification.

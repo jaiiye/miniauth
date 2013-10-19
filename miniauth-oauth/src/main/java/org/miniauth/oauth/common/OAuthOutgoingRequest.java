@@ -103,11 +103,11 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     
     // TBD: Who calls this method?
     // Build OAuthParamMap (excluding the signature)...
-    public void buildOAuthParamMap() throws MiniAuthException
+    protected void buildOAuthParamMap() throws MiniAuthException
     {
         buildOAuthParamMap(null);
     }
-    public void buildOAuthParamMap(AccessIdentity accessIdentity) throws MiniAuthException
+    protected void buildOAuthParamMap(AccessIdentity accessIdentity) throws MiniAuthException
     {
         oauthParamMap = OAuthParamMapUtil.buildOAuthParams(this, accessIdentity);
         initAuthParamTransmissionType();
@@ -117,23 +117,7 @@ public class OAuthOutgoingRequest extends OutgoingRequest
         // We need to update the internal vars based on the new oauthParamMap
         // because signature is generated based on authHeader/formParams/queryParams, but on oauthParamMap;
         // TBD: --> to utilize oauthParamMap in generating signature???
-        switch(authParamTransmissionType) {
-        case ParameterTransmissionType.HEADER:
-            Map<String,String> newAuthHeader = OAuthRequestUtil.updateOAuthHeaderWithOAuthParamMap(getAuthHeader(), oauthParamMap);
-            setAuthHeader(newAuthHeader);
-            break;
-        case ParameterTransmissionType.FORM:
-            Map<String,String[]> newFormParams = OAuthRequestUtil.updateParamsWithOAuthParamMap(getFormParams(), oauthParamMap);
-            setFormParams(newFormParams);
-            break;
-        case ParameterTransmissionType.QUERY:
-            Map<String,String[]> newQueryParams = OAuthRequestUtil.updateParamsWithOAuthParamMap(getQueryParams(), oauthParamMap);
-            setQueryParams(newQueryParams);
-            break;
-        default:
-            // ??? This should not happen...
-            throw new InternalErrorException("Invalid authParamTransmissionType: " + authParamTransmissionType);
-        }
+        refreshHeadersAndParams();
 
         setReady(true);
     }
@@ -141,25 +125,14 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     {
         return oauthParamMap;
     }
-    
-    // The arg oauthParamMap should contain the generated signature
-    //     as well as other required oauth_x params.
-    public void endorse(OAuthParamMap oauthParamMap) throws MiniAuthException
+
+
+    // Note that authHeader/formParams/queryParams are "primary" variables. oauthParamMap is a "derived" variable.
+    // This method performs an action in the reverse direction.
+    // It "refreshes" authHeader/formParams/queryParams based on the current oauthParamMap.
+    // It's sort of the reverse of buildOAuthParamMap().
+    private void refreshHeadersAndParams() throws MiniAuthException
     {
-        // TBD: What about other OAuth required params ???
-        if(oauthParamMap == null || ! oauthParamMap.isSignatureSet()) {
-            // Can this happen???
-            // If we have failed to generate a signature, 
-            //    we should have thrown exception earlier in the call chain.
-            throw new AuthSignatureException("Signature is not set. The request cannot be endorsed.");
-        }
-        if(this.oauthParamMap == null) {
-            this.oauthParamMap = new OAuthParamMap(oauthParamMap);
-        } else {
-            this.oauthParamMap.updateParams(oauthParamMap);
-        }
-        
-        // Now, we need to update the internal vars based on the new oauthParamMap
         switch(authParamTransmissionType) {
         case ParameterTransmissionType.HEADER:
             Map<String,String> newAuthHeader = OAuthRequestUtil.updateOAuthHeaderWithOAuthParamMap(getAuthHeader(), oauthParamMap);
@@ -177,100 +150,99 @@ public class OAuthOutgoingRequest extends OutgoingRequest
             // ??? This should not happen...
             throw new InternalErrorException("Invalid authParamTransmissionType: " + authParamTransmissionType);
         }
-        
-        setEndorsed(true);
-    }
-
-
-    @Override
-    public RequestBase setAuthHeader(String authHeaderStr)
-            throws MiniAuthException
-    {
-//        // Checked in super.
-//        if(isEndorsed()) {
-//            throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
-//        }
-        return super.setAuthHeader(authHeaderStr, AuthScheme.OAUTH);
     }
 
     
-    // This is necessary to make these setters accessible from the builder class.
+    /**
+     * Put this request object in a "ready" state.
+     * This is the first of the two "state changing" operations.
+     * @param accessIdentity A pair of consumer key/token to use in "preparing" this request.
+     * @return this object.
+     */
+    @Override
+    public OutgoingRequest prepare(AccessIdentity accessIdentity) throws MiniAuthException
+    {
+        // Note:
+        // Regardless of the current state (ready==true|false, endorsed=true|false)
+        // prepare() can be always called.
+        setEndorsed(false);
+        setReady(false);
 
-    @Override
-    protected RequestBase setHttpMethod(String httpMethod)
-            throws MiniAuthException
-    {
-        return super.setHttpMethod(httpMethod);
+        buildOAuthParamMap(accessIdentity);
+
+        setReady(true);
+        return this;
     }
-    @Override
-    protected RequestBase setBaseURI(URI baseURI) throws MiniAuthException
+    
+    
+    // The arg oauthParamMap should contain the generated signature
+    //     as well as other required oauth_x params.
+    public void endorse(OAuthParamMap oauthParamMap) throws MiniAuthException
     {
-        return super.setBaseURI(baseURI);
+        if(isEndorsed()) {
+            throw new InvalidStateException("The request is already endorsed. Cannot endorse it again.");
+        }
+        if(! isReady()) {
+            throw new InvalidStateException("The request is not prepared. Cannot perform endorse().");
+        }
+
+        // TBD: What about other OAuth required params ???
+        if(oauthParamMap == null || ! oauthParamMap.isSignatureSet()) {
+            // Can this happen???
+            // If we have failed to generate a signature, 
+            //    we should have thrown exception earlier in the call chain.
+            throw new AuthSignatureException("Signature is not set. The request cannot be endorsed.");
+        }
+
+        if(this.oauthParamMap == null) {
+            this.oauthParamMap = new OAuthParamMap(oauthParamMap);
+        } else {
+            this.oauthParamMap.updateParams(oauthParamMap);
+        }
+        
+        // Now, we need to update the internal vars based on the new oauthParamMap
+        refreshHeadersAndParams();
+
+        setEndorsed(true);
     }
+
+    /**
+     * "Sign" this request object, 
+     * and put this request in a "endorsed" state.
+     * This is the second of the two "state changing" operations.
+     * This can be called only if the current state == ready.
+     * @param signature Signature to use for signing this request.
+     * @return this object.
+     */
     @Override
-    protected RequestBase setBaseURI(String baseUri) throws MiniAuthException
+    public OutgoingRequest endorse(String signature) throws MiniAuthException
     {
-        return super.setBaseURI(baseUri);
-    }
-    @Override
-    protected RequestBase setAuthHeader(Map<String, String> authHeader)
-            throws MiniAuthException
-    {
-        return super.setAuthHeader(authHeader);
-    }
-    @Override
-    protected RequestBase addAuthHeaderParam(String key, String value)
-            throws MiniAuthException
-    {
-        return super.addAuthHeaderParam(key, value);
-    }
-    @Override
-    protected RequestBase setFormParams(String formBody)
-            throws MiniAuthException
-    {
-        return super.setFormParams(formBody);
-    }
-    @Override
-    protected RequestBase setFormParams(Map<String, String[]> formParams)
-            throws MiniAuthException
-    {
-        return super.setFormParams(formParams);
-    }
-    @Override
-    protected RequestBase addFormParams(Map<String, String[]> formParams)
-            throws MiniAuthException
-    {
-        return super.addFormParams(formParams);
-    }
-    @Override
-    protected RequestBase addFormParam(String key, String value)
-            throws MiniAuthException
-    {
-        return super.addFormParam(key, value);
-    }
-    @Override
-    protected RequestBase setQueryParams(String queryString)
-            throws MiniAuthException
-    {
-        return super.setQueryParams(queryString);
-    }
-    @Override
-    protected RequestBase setQueryParams(Map<String, String[]> queryParams)
-            throws MiniAuthException
-    {
-        return super.setQueryParams(queryParams);
-    }
-    @Override
-    protected RequestBase addQueryParams(Map<String, String[]> queryParams)
-            throws MiniAuthException
-    {
-        return super.addQueryParams(queryParams);
-    }
-    @Override
-    protected RequestBase addQueryParam(String key, String value)
-            throws MiniAuthException
-    {
-        return super.addQueryParam(key, value);
+//        if(isEndorsed()) {
+//            throw new InvalidStateException("The request is already endorsed. Cannot endorse it again.");
+//        }
+//        if(! isReady()) {
+//            throw new InvalidStateException("The request is not prepared. Cannot perform endorse().");
+//        }
+//
+//        if(signature == null || signature.isEmpty()) {
+//            throw new AuthSignatureException("Signature is not set. The request cannot be endorsed.");
+//        }
+//
+//        if(this.oauthParamMap == null) {
+//            this.oauthParamMap = new OAuthParamMap();
+//        }
+//        this.oauthParamMap.setSignature(signature);
+//        
+//        // Now, we need to update the internal vars based on the new oauthParamMap
+//        refreshHeadersAndParams();
+//
+//        setEndorsed(true);
+//        return this;
+
+        OAuthParamMap oauthParamMap = new OAuthParamMap();
+        oauthParamMap.setSignature(signature);
+        endorse(oauthParamMap);
+        return this;
     }
 
     
@@ -290,6 +262,121 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     protected void setEndorsed(boolean endorsed)
     {
         this.endorsed = endorsed;
+    }
+
+
+    
+    // This is necessary to make these setters accessible from the builder class.
+    // Also, set ready to false whenver setters are used.
+
+    @Override
+    protected RequestBase setHttpMethod(String httpMethod)
+            throws MiniAuthException
+    {
+        super.setHttpMethod(httpMethod);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase setBaseURI(URI baseURI) throws MiniAuthException
+    {
+        super.setBaseURI(baseURI);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase setBaseURI(String baseUri) throws MiniAuthException
+    {
+        super.setBaseURI(baseUri);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase setAuthHeader(String authHeaderStr)
+            throws MiniAuthException
+    {
+        super.setAuthHeader(authHeaderStr, AuthScheme.OAUTH);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase setAuthHeader(Map<String, String> authHeader)
+            throws MiniAuthException
+    {
+        super.setAuthHeader(authHeader);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase addAuthHeaderParam(String key, String value)
+            throws MiniAuthException
+    {
+        super.addAuthHeaderParam(key, value);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase setFormParams(String formBody) throws MiniAuthException
+    {
+        super.setFormParams(formBody);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase setFormParams(Map<String, String[]> formParams)
+            throws MiniAuthException
+    {
+        super.setFormParams(formParams);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase addFormParams(Map<String, String[]> formParams)
+            throws MiniAuthException
+    {
+        super.addFormParams(formParams);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase addFormParam(String key, String value)
+            throws MiniAuthException
+    {
+        super.addFormParam(key, value);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase setQueryParams(String queryString)
+            throws MiniAuthException
+    {
+        super.setQueryParams(queryString);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase setQueryParams(Map<String, String[]> queryParams)
+            throws MiniAuthException
+    {
+        super.setQueryParams(queryParams);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase addQueryParams(Map<String, String[]> queryParams)
+            throws MiniAuthException
+    {
+        super.addQueryParams(queryParams);
+        setReady(false);
+        return this;
+    }
+    @Override
+    protected RequestBase addQueryParam(String key, String value)
+            throws MiniAuthException
+    {
+        super.addQueryParam(key, value);
+        setReady(false);
+        return this;
     }
 
 

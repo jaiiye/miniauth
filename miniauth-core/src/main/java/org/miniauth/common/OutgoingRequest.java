@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Map;
 
 import org.miniauth.MiniAuthException;
+import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.InvalidStateException;
 
 
@@ -11,6 +12,17 @@ import org.miniauth.exception.InvalidStateException;
  * Client side request, which is being built by the client.
  * Note that OutgoingRequest does not represent a full request.
  * It's just a partial wrapper for attributes that are needed for auth handling.
+ * 
+ * [ The "life cycle" of OutgoingRequest ]
+ * The request starts with an "init" state.
+ * Once all necessary attributes are added, the request can be put into a "ready" state.
+ * This can be accomplished by calling prepare() (depending on the implementation of a subclass).
+ * Generally, prepare() can be called more than once, if necessary 
+ *     (that is, because the object attributes have changed since the last prepare() call). 
+ * Once the OutgoingRequest is in a ready state, one can call endorse(),
+ *     which adds a signature, etc. to the request object (in the case of OAuth).
+ * If it is endorsed, then the OutgoingRequest object can no longer be changed.
+ * One can only get/retrieve relevant parameters from the object.
  */
 public abstract class OutgoingRequest extends RequestBase
 {
@@ -183,7 +195,26 @@ public abstract class OutgoingRequest extends RequestBase
     }
 
     
-    
+
+    /**
+     * Put this request object in a "ready" state.
+     * This is the first of the two "state changing" operations.
+     * @param accessIdentity Auth identity to use in "preparing" this request.
+     * @return this object.
+     * @throws MiniAuthException if preparation fails, or the object cannot be into the "ready" state.
+     */
+    public abstract OutgoingRequest prepare(AccessIdentity accessIdentity) throws MiniAuthException;
+
+    /**
+     * Put this request object in a "endorsed" state.
+     * This is the second of the two "state changing" operations.
+     * This can be called only if the current state == ready.
+     * @param signature Signature to use for endorsing. Could be null, if the auth scheme does not require signature.
+     * @return this object.
+     * @throws MiniAuthException if endorsement fails.
+     */
+    public abstract OutgoingRequest endorse(String signature) throws MiniAuthException;
+
     
     /**
      * Returns true if this request has been "endorsed"
@@ -193,6 +224,7 @@ public abstract class OutgoingRequest extends RequestBase
      * @return the "endorsement" state of this request.
      */
     public abstract boolean isEndorsed();
-
+    
+    
     
 }

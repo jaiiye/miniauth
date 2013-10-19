@@ -122,7 +122,7 @@ public final class OAuthOutgoingRequestBuilder
     }
     public OAuthOutgoingRequest build(AccessIdentity accessIdentity) throws MiniAuthException
     {
-        outgoingRequest.buildOAuthParamMap(accessIdentity);
+        outgoingRequest.prepare(accessIdentity);
         return outgoingRequest;
     }
 

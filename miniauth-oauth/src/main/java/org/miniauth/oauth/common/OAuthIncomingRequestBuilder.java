@@ -117,7 +117,7 @@ public final class OAuthIncomingRequestBuilder
 
     public OAuthIncomingRequest build() throws MiniAuthException
     {
-        incomingRequest.buildOAuthParamMap();
+        incomingRequest.prepare();
         return incomingRequest;
     }
 

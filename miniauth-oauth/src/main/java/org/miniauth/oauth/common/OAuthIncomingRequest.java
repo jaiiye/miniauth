@@ -9,6 +9,7 @@ import org.miniauth.MiniAuthException;
 import org.miniauth.common.IncomingRequest;
 import org.miniauth.common.RequestBase;
 import org.miniauth.core.AuthScheme;
+import org.miniauth.exception.BadRequestException;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
 
 
@@ -100,16 +101,59 @@ public class OAuthIncomingRequest extends IncomingRequest
         return oauthParamMap;
     }
 
-    
-    
+
+    /**
+     * Put this request object in a "ready" state.
+     * The request object can be verified only if it's in a ready state.
+     * @return this object.
+     * @throws MiniAuthException if preparation fails, or the object cannot be put into the "ready" state.
+     */
     @Override
-    protected RequestBase setAuthHeader(String authHeaderStr)
-            throws MiniAuthException
+    public IncomingRequest prepare() throws MiniAuthException
     {
-        super.setAuthHeader(authHeaderStr, AuthScheme.OAUTH);
-//        setVerified(false);   // Done in super.
+        buildOAuthParamMap();
         return this;
     }
+
+    /**
+     * Put this request object in a "verified" state. 
+     * This is the second of the two "state changing" operations.
+     * This can be called only if the current state == ready.
+     * Note that it does not actually "verify" anything.
+     * The verification should be done by the caller.
+     * @return this object.
+     * @throws MiniAuthException if the IncomingRequest cannot be put into the "verified" state.
+     */
+    @Override
+    public IncomingRequest verify() throws MiniAuthException
+    {
+        if(! isEndorsed()) {
+            throw new BadRequestException("Cannot change the state to verfied because the IncomingRequest is not endorsed in the first place.");
+        }
+        return super.verify();
+    }
+
+    
+    
+    /**
+     * Returns true if this incoming request has been "endorsed" (e.g., by the client/caller)
+     *    (e.g., if it includes the oauth_signature param in the case of OAuth, etc.).
+     *    Endorsed==true does not mean it's verified.
+     * @return the "endorsement" state of this request.
+     */
+    @Override
+    public boolean isEndorsed() throws MiniAuthException
+    {
+        // if(! isReady()) {
+        //     return false;    // ????
+        // }
+        return (oauthParamMap != null && oauthParamMap.isSignatureSet());
+//        return this.endorsed;
+    }
+//    protected void setEndorsed(boolean endorsed)
+//    {
+//        this.endorsed = endorsed;
+//    }
 
 
     // This is necessary to make these setters accessible from the builder class.
@@ -129,6 +173,13 @@ public class OAuthIncomingRequest extends IncomingRequest
     protected RequestBase setBaseURI(String baseUri) throws MiniAuthException
     {
         return super.setBaseURI(baseUri);
+    }
+    @Override
+    protected RequestBase setAuthHeader(String authHeaderStr)
+            throws MiniAuthException
+    {
+        super.setAuthHeader(authHeaderStr, AuthScheme.OAUTH);     // Note. Oauth hard-coded here.
+        return this;
     }
     @Override
     protected RequestBase setAuthHeader(Map<String, String> authHeader)
@@ -191,28 +242,8 @@ public class OAuthIncomingRequest extends IncomingRequest
         return super.addQueryParam(key, value);
     }
 
-    
-    
-    /**
-     * Returns true if this request has been "endorsed"
-     *    (e.g., if it includes the oauth_signature param in the case of OAuth, etc.).
-     *    Endorsed==true does not mean it's verified.
-     * @return the "endorsement" state of this request.
-     */
-    @Override
-    public boolean isEndorsed() throws MiniAuthException
-    {
-        if(! isReady()) {
-            return false;    // ????
-        }
-        return oauthParamMap.isSignatureSet();
-//        return this.endorsed;
-    }
-//    protected void setEndorsed(boolean endorsed)
-//    {
-//        this.endorsed = endorsed;
-//    }
 
+    
     // For debugging...
     @Override
     public String toString()
@@ -224,8 +255,6 @@ public class OAuthIncomingRequest extends IncomingRequest
                 + getAuthHeader() + ", getFormParams()=" + getFormParams()
                 + ", getQueryParams()=" + getQueryParams() + "]";
     }
-
-    
-    
+   
     
 }
