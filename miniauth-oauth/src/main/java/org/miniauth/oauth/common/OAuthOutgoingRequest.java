@@ -194,18 +194,26 @@ public class OAuthOutgoingRequest extends OutgoingRequest
             throw new InvalidStateException("The request is not prepared. Cannot perform endorse().");
         }
 
-        // TBD: What about other OAuth required params ???
-        if(oauthParamMap == null || ! oauthParamMap.isSignatureSet()) {
-            // Can this happen???
-            // If we have failed to generate a signature, 
-            //    we should have thrown exception earlier in the call chain.
-            throw new AuthSignatureException("Signature is not set. The request cannot be endorsed.");
-        }
+//        // TBD: What about other OAuth required params ???
+//        if(oauthParamMap == null || ! oauthParamMap.isSignatureSet()) {
+//            // Can this happen???
+//            // If we have failed to generate a signature, 
+//            //    we should have thrown exception earlier in the call chain.
+//            throw new AuthSignatureException("Signature is not set. The request cannot be endorsed.");
+//        }
 
         if(this.oauthParamMap == null) {
             this.oauthParamMap = new OAuthParamMap(oauthParamMap);
         } else {
             this.oauthParamMap.updateParams(oauthParamMap);
+        }
+
+        // TBD: What about other OAuth required params ???
+        if(this.oauthParamMap == null || ! this.oauthParamMap.isSignatureSet()) {
+            // Can this happen???
+            // If we have failed to generate a signature, 
+            //    we should have thrown exception earlier in the call chain.
+            throw new AuthSignatureException("Signature is not set. The request cannot be endorsed.");
         }
         
         // Now, we need to update the internal vars based on the new oauthParamMap
@@ -249,6 +257,10 @@ public class OAuthOutgoingRequest extends OutgoingRequest
 
         OAuthParamMap oauthParamMap = new OAuthParamMap();
         oauthParamMap.setSignature(signature);
+        
+//        log.warning(">>>>>>>>>>>>>>>>> signature = " + signature);
+//        log.warning(">>>>>>>>>>>>>>>>> oauthParamMap = " + oauthParamMap);
+        
         endorse(oauthParamMap);
         return this;
     }

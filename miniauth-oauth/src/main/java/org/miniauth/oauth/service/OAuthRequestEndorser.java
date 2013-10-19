@@ -25,8 +25,8 @@ public class OAuthRequestEndorser implements RequestEndorser
     private static final Logger log = Logger.getLogger(OAuthRequestEndorser.class.getName());
 
     // TBD: 
-    // private SignatureGenerator signatureGenerator = null;
-    private OAuthSignatureGenerator signatureGenerator = null;
+    private SignatureGenerator signatureGenerator = null;
+    // private OAuthSignatureGenerator signatureGenerator = null;
     
     // Singleton.
     private OAuthRequestEndorser()
@@ -49,7 +49,7 @@ public class OAuthRequestEndorser implements RequestEndorser
      * Returns true if the oauthRequest has been successfully "endorsed".
      * (Note: it never returns false. If error occurs, it throws exceptions.)
      * @param credential Access credential needed to endorse/sign the request.
-     * @param request Partial outgoing request wrapper object. "In-out" param.
+     * @param request Outgoing request wrapper object. "In-out" param. It should be in a "ready" state.
      * @return true if the operation was successful.
      * @throws MiniAuthException
      */
@@ -72,12 +72,15 @@ public class OAuthRequestEndorser implements RequestEndorser
             authCredential = credential.toReadOnlyMap();
         }
         
-        // validate reqeust?
+        // validate request ??
+
+
+//        OAuthParamMap newOAuthParamMap = signatureGenerator.generateOAuthParamMap(authCredential, oauthRequest.getHttpMethod(), oauthRequest.getBaseURI(), oauthRequest.getAuthHeader(), oauthRequest.getFormParams(), oauthRequest.getQueryParams());
+//        oauthRequest.endorse(newOAuthParamMap);
+
+        String signature = signatureGenerator.generate(authCredential, oauthRequest.getHttpMethod(), oauthRequest.getBaseURI(), oauthRequest.getAuthHeader(), oauthRequest.getFormParams(), oauthRequest.getQueryParams());
+        oauthRequest.endorse(signature);
         
-
-        OAuthParamMap newOAuthParamMap = signatureGenerator.generateOAuthParamMap(authCredential, oauthRequest.getHttpMethod(), oauthRequest.getBaseURI(), oauthRequest.getAuthHeader(), oauthRequest.getFormParams(), oauthRequest.getQueryParams());
-        oauthRequest.endorse(newOAuthParamMap);
-
         if(log.isLoggable(Level.FINE)) log.fine("oauthRequest = " + oauthRequest);
         return true;
     }

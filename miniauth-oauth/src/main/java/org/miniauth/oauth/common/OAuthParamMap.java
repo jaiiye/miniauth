@@ -321,6 +321,8 @@ public final class OAuthParamMap implements Serializable
     {
         String signature = getSignature();
         String signatureMethod = getSignatureMethod();
+        
+        // return (signature != null && !signature.isEmpty());
         return (SignatureMethod.isValid(signatureMethod) && (signature != null && !signature.isEmpty()));
     }
 

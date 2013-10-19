@@ -22,22 +22,12 @@ import org.miniauth.oauth.service.OAuthRequestEndorser;
 public class OAuthOutgoingRequestTest
 {
 
-    @Before
-    public void setUp() throws Exception
-    {
-    }
-
-    @After
-    public void tearDown() throws Exception
-    {
-    }
-
     @Test
     public void testOpenEndorsedURLConnection()
     {
         try {
             String httpMethod = HttpMethod.GET;
-            String baseUri = "http://www.google.com/";
+            String baseUri = "http://www.miniauth.org/";
     
             Map<String,String> authHeader = new HashMap<>();
             authHeader.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, SignatureMethod.HMAC_SHA1);
@@ -100,8 +90,6 @@ public class OAuthOutgoingRequestTest
         } catch (MiniAuthException | IOException e) {
             e.printStackTrace();
         }
-
-        
     }
 
 }
