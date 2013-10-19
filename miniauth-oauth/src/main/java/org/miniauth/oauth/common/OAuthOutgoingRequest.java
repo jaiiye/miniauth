@@ -16,6 +16,7 @@ import org.miniauth.common.BaseURIInfo;
 import org.miniauth.common.OutgoingRequest;
 import org.miniauth.common.RequestBase;
 import org.miniauth.core.AuthScheme;
+import org.miniauth.core.HttpMethod;
 import org.miniauth.core.ParameterTransmissionType;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.AuthSignatureException;
@@ -414,32 +415,44 @@ public class OAuthOutgoingRequest extends OutgoingRequest
 
 
     // TBD:
+    /**
+     * Opens an HttpURLConnection based on this outgoing request information.
+     * @return the HttpURLConnection opened from the URL specified by this request.
+     * @throws MiniAuthException
+     * @throws IOException
+     */
     public HttpURLConnection openEndorsedURLConnection() throws MiniAuthException, IOException
     {
         if(! isEndorsed()) {
             throw new InvalidStateException("The request has not been endorsed/signed. Cannot open a URLConnection.");
         }
         
-        // TBD:
-//        URI uri = null;
-//        if(this.getQueryParams() != null && ! this.getQueryParams().isEmpty()) {
-//            uri = this.getURI();
-//        } else {
-//            uri = this.getBaseURI();
+        // URL is built from baseURI + queryParams.
+        // ...
+        
+//        // TBD:
+////        URI uri = null;
+////        if(this.getQueryParams() != null && ! this.getQueryParams().isEmpty()) {
+////            uri = this.getURI();
+////        } else {
+////            uri = this.getBaseURI();
+////        }
+//        URI uri = this.getURI();  // includes queryParams if not null.
+        URL url = this.getURL();  // includes queryParams if not null.
+//        try {
+//            url = uri.toURL();
+//        } catch (MalformedURLException e) {
+//            throw new InvalidInputException("Failed get URL from this request object.", e);
 //        }
-        URI uri = this.getURI();  // includes queryParams if not null.
-        URL url = null;
-        try {
-            url = uri.toURL();
-        } catch (MalformedURLException e) {
-            throw new InvalidInputException("Failed get URL from this request object.", e);
+        if(url == null) {
+            throw new InvalidInputException("Failed to build URL from this request object.");
         }
         URLConnection urlConn = url.openConnection();
         HttpURLConnection httpConn = null;
         try {
             httpConn = (HttpURLConnection) urlConn;
         } catch(Exception e) {
-            throw new InvalidInputException("Failed get HttpURLConnection from this request object.", e);
+            throw new InvalidInputException("Failed to get HttpURLConnection from this request object.", e);
         }
 
         
@@ -448,19 +461,26 @@ public class OAuthOutgoingRequest extends OutgoingRequest
         
         httpConn.setRequestMethod(this.getHttpMethod());
         if(this.getAuthHeader() != null && ! this.getAuthHeader().isEmpty()) {  // check if authParamTransmissionType == OAuth ???
-            String authHeaderStr = AuthScheme.getAuthorizationHeaderAuthScheme(AuthScheme.OAUTH) + " " + OAuthAuthorizationValueUtil.buildOAuthAuthorizationValueString(getAuthHeader(), ParameterTransmissionType.HEADER);
+            // String authHeaderStr = AuthScheme.getAuthorizationHeaderAuthScheme(AuthScheme.OAUTH) + " " + OAuthAuthorizationValueUtil.buildOAuthAuthorizationValueString(getAuthHeader(), ParameterTransmissionType.HEADER);
+            String authHeaderStr = this.getAuthHeaderAuthorizationString(AuthScheme.OAUTH);
             httpConn.setRequestProperty("Authorization", authHeaderStr);
+            // httpConn.addRequestProperty("Authorization", authHeaderStr);
+            // log.warning(">>>>>>>>>>>>>>>>>>> authHeaderStr = " + authHeaderStr);
         }
         
+        // TBD:
+        // Does this really make sense??
         if(this.getFormParams() != null && ! this.getFormParams().isEmpty()) {
+            httpConn.setRequestMethod(HttpMethod.POST);
             httpConn.setDoOutput(true);   // This works with POST/PUT but not with GET....
-            String formBody = FormParamUtil.buildUrlEncodedFormParamString(getFormParams());
-            
+            httpConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            // String formBody = FormParamUtil.buildUrlEncodedFormParamString(getFormParams());
+            String formBody = this.getFormParamString();
+
             OutputStreamWriter out = new OutputStreamWriter(httpConn.getOutputStream());
+            out.write(formBody);
             // ....
-            
         }
-        
         
         return httpConn;
     }
