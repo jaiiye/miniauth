@@ -136,7 +136,26 @@ public abstract class RequestBase implements Serializable
     {
         return (baseURI == null ? null : baseURI.toString());
     }
-    
+    public URI getURI()
+    {
+        if(baseURI == null) {
+            return null;
+        }
+        BaseURIInfo uriInfo = new BaseURIInfo(baseURI);
+        URI uri = null;
+        try {
+            uri = uriInfo.buildURI(queryParams);
+        } catch (MiniAuthException e) {
+            // What to do ???
+            log.log(Level.INFO, "Failed to build URI with queryParams = " + queryParams, e);
+        }
+        return uri;
+    }
+    public String getURIString()
+    {
+        URI uri = getURI();
+        return (uri == null ? null : uri.toString());
+    }
 
     protected RequestBase setBaseURI(URI baseURI) throws MiniAuthException
     {
