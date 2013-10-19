@@ -44,21 +44,21 @@ public class OAuthLocalCredentialMapper extends OAuthCredentialMapper implements
 
 
     @Override
-    public String getCredentialSecret(String credentialName, String credentialKey)
+    public String getCredentialSecret(String credentialType, String credentialKey)
     {
-        if(! superRegistry.containsKey(credentialName)) {
+        if(! superRegistry.containsKey(credentialType)) {
             return null;
         }
         Map<String,String> credentialRegistry = superRegistry.get(credentialKey);
         return credentialRegistry.get(credentialKey);
     }
     @Override
-    public String putCredentialSecret(String credentialName, String credentialKey, String credentialSecret)
+    public String putCredentialSecret(String credentialType, String credentialKey, String credentialSecret)
     {
         Map<String,String> credentialRegistry = null;
-        if(! superRegistry.containsKey(credentialName)) {
+        if(! superRegistry.containsKey(credentialType)) {
             credentialRegistry = new HashMap<>();
-            superRegistry.put(credentialName, credentialRegistry);
+            superRegistry.put(credentialType, credentialRegistry);
         }
         return credentialRegistry.put(credentialKey, credentialSecret);
     }

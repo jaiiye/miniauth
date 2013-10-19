@@ -3,6 +3,7 @@ package org.miniauth.oauth.service;
 import java.util.logging.Logger;
 
 import org.miniauth.callback.CredentialMapper;
+import org.miniauth.oauth.callback.OAuthCredentialMapper;
 import org.miniauth.service.CredentialService;
 
 
@@ -10,10 +11,10 @@ public abstract class OAuthCredentialService implements CredentialService
 {
     private static final Logger log = Logger.getLogger(OAuthCredentialService.class.getName());
 
-    private CredentialMapper credentialMapper = null;
+    private OAuthCredentialMapper credentialMapper = null;
     
 
-    public OAuthCredentialService(CredentialMapper credentialMapper)
+    public OAuthCredentialService(OAuthCredentialMapper credentialMapper)
     {
         this.credentialMapper = credentialMapper;
     }

@@ -1,9 +1,9 @@
 package org.miniauth.oauth.callback;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.miniauth.callback.CredentialMapper;
+import org.miniauth.credential.AccessCredential;
+import org.miniauth.credential.AccessIdentity;
+import org.miniauth.oauth.credential.OAuthAccessCredential;
 
 
 /**
@@ -30,7 +30,7 @@ public abstract class OAuthCredentialMapper implements CredentialMapper
 
 
     @Override
-    public abstract String getCredentialSecret(String credentialName, String credentialKey);
+    public abstract String getCredentialSecret(String credentialType, String credentialKey);
     public abstract String putCredentialSecret(String credentialName, String credentialKey, String credentialSecret);
 
 
@@ -52,5 +52,30 @@ public abstract class OAuthCredentialMapper implements CredentialMapper
         return putCredentialSecret(TOKEN_CREDENTIAL, accessToken, tokenSecret);
     }
 
+    public AccessCredential getAccesssCredential(AccessIdentity accessIdentity)
+    {
+        if(accessIdentity == null) {
+            return null;
+        }
+        String consumerKey = accessIdentity.getConsumerKey();
+        String accessToken = accessIdentity.getAccessToken();
+        String consumerSecret = getConsumerSecret(consumerKey);
+        String tokenSecret = getTokenSecret(accessToken);
+        return new OAuthAccessCredential(consumerSecret, tokenSecret);
+    }
+
+    public AccessCredential putAccesssCredential(AccessIdentity accessIdentity, AccessCredential accessCredential)
+    {
+        if(accessIdentity == null || accessCredential == null) {   // ???
+            return null;
+        }
+        String consumerKey = accessIdentity.getConsumerKey();
+        String accessToken = accessIdentity.getAccessToken();
+        String consumerSecret = accessCredential.getConsumerSecret();
+        String tokenSecret = accessCredential.getTokenSecret();
+        String oldConsumerSecret = putConsumerSecret(consumerKey, consumerSecret);
+        String oldTokenSecret = putTokenSecret(accessToken, tokenSecret);
+        return new OAuthAccessCredential(oldConsumerSecret, oldTokenSecret);
+    }
 
 }

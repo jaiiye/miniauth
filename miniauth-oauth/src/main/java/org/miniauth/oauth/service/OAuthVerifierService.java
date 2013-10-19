@@ -3,8 +3,8 @@ package org.miniauth.oauth.service;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
-import org.miniauth.callback.CredentialMapper;
 import org.miniauth.common.IncomingRequest;
+import org.miniauth.oauth.callback.OAuthCredentialMapper;
 import org.miniauth.service.VerifierService;
 
 
@@ -12,7 +12,7 @@ public class OAuthVerifierService extends OAuthCredentialService implements Veri
 {
     private static final Logger log = Logger.getLogger(OAuthVerifierService.class.getName());
 
-    public OAuthVerifierService(CredentialMapper credentialMapper)
+    public OAuthVerifierService(OAuthCredentialMapper credentialMapper)
     {
         super(credentialMapper);
     }
