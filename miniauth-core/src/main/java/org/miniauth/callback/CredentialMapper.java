@@ -10,7 +10,9 @@ public interface CredentialMapper
 {
     // ?? which is better??
     // [1] 
-    String getCredentialSecret(String credentialKey);
+    // name: consumer, user token, etc.
+    // credentialKey -> credentialSecret.
+    String getCredentialSecret(String crednetialName, String credentialKey);
     // [2]
 //    String getConsumerSecret(String consumerKey);
 //    String getTokenSecret(String accessToken);
