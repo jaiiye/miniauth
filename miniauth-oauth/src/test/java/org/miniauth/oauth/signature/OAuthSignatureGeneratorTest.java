@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.miniauth.MiniAuthException;
-import org.miniauth.core.BaseURIInfo;
+import org.miniauth.common.BaseURIInfo;
 import org.miniauth.core.HttpMethod;
 import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AuthCredentialConstants;

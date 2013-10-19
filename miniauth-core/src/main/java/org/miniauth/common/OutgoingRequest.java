@@ -96,13 +96,13 @@ public abstract class OutgoingRequest extends RequestBase
         return super.setBaseURI(baseUri);
     }
     @Override
-    protected RequestBase setAuthHeader(String authHeaderStr)
+    protected RequestBase setAuthHeaderAuthorizationString(String authHeaderAuthString)
             throws MiniAuthException
     {
         if(isEndorsed()) {
             throw new InvalidStateException("The request is already endorsed. Param cannot be changed.");
         }
-        return super.setAuthHeader(authHeaderStr);
+        return super.setAuthHeaderAuthorizationString(authHeaderAuthString);
     }
     @Override
     protected RequestBase setAuthHeader(Map<String, String> authHeader)

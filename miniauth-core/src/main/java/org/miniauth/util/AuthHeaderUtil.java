@@ -2,13 +2,16 @@ package org.miniauth.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.AuthScheme;
 import org.miniauth.core.HttpHeader;
+import org.miniauth.core.ParameterTransmissionType;
 import org.miniauth.exception.BadRequestException;
 import org.miniauth.exception.InternalErrorException;
 import org.miniauth.exception.InvalidInputException;
@@ -63,7 +66,7 @@ public final class AuthHeaderUtil
                 int len = authHeaders.length;
                 if(len == 1) {
                     String authHeader = authHeaders[0];
-                    return getAuthParams(authHeader);
+                    return parseAuthParamsFromAuthorizationString(authHeader);
                 } else {
                     // Can this happen???
                     throw new BadRequestException("More than one authorization header found: len = " + len);
@@ -74,20 +77,20 @@ public final class AuthHeaderUtil
         }
     }
     
-    public static Map<String,String> getAuthParams(String authHeader) throws MiniAuthException
+    public static Map<String,String> parseAuthParamsFromAuthorizationString(String authHeaderAuthString) throws MiniAuthException
     {
-        return getAuthParams(authHeader, null);
+        return parseAuthParamsFromAuthorizationString(authHeaderAuthString, null);
     }
-    public static Map<String,String> getAuthParams(String authHeader, String expectedAuthScheme) throws MiniAuthException
+    public static Map<String,String> parseAuthParamsFromAuthorizationString(String authHeaderAuthString, String expectedAuthScheme) throws MiniAuthException
     {
-        if(authHeader == null || authHeader.isEmpty()) {
+        if(authHeaderAuthString == null || authHeaderAuthString.isEmpty()) {
             // ???
             return null; 
         }
         
         // TBD:
         // String[] parts = authHeader.split("\\s+", 2);
-        String[] parts = authHeader.split(" ", 2);
+        String[] parts = authHeaderAuthString.split(" ", 2);
         if(parts == null || parts.length < 2) {
             // return null;
             throw new BadRequestException("No OAuth params found in the authorization header.");
@@ -100,20 +103,32 @@ public final class AuthHeaderUtil
                 throw new InvalidInputException("expected: " + expectedAuthScheme + "; Auth scheme found: " + headerAuthScheme);
             }
         }
+
+        String paramString = parts[1].trim();
+        Map<String,String> paramMap = parseAuthParams(paramString);
+        return paramMap;
+    }
+    
+    // authHeader is a string after the auth scheme prefix (e.g., after "OAuth ", etc.)
+    public static Map<String,String> parseAuthParams(String authHeader) throws MiniAuthException
+    {
+        if(authHeader == null || authHeader.isEmpty()) {
+            // ???
+            return null; 
+        }
         
-        
-//        String SEPARATER = "&";
-//        String authScheme = AuthScheme.getAuthSchemeFromAuthorizationHeaderAuthScheme(headerAuthScheme);
-//        if(AuthScheme.OAUTH.equals(authScheme)) {
-//            SEPARATER = ",";
-//        }
+//      String SEPARATER = "&";
+//      String authScheme = AuthScheme.getAuthSchemeFromAuthorizationHeaderAuthScheme(headerAuthScheme);
+//      if(AuthScheme.OAUTH.equals(authScheme)) {
+//          SEPARATER = ",";
+//      }
         // ???
         String SEPARATER = ",";
         // ???
-
-        String paramString = parts[1].trim();
+    
+        String paramString = authHeader;
         String[] pairs = paramString.split(SEPARATER);
-        
+          
         Map<String,String> paramMap = new HashMap<>();
         try {
             for(String p : pairs) {
@@ -142,8 +157,39 @@ public final class AuthHeaderUtil
         } catch (UnsupportedEncodingException e) {
             throw new InternalErrorException("URL decoding error.", e);
         }
-
+    
         return paramMap;
     }
+
+    // This is really applicable to OAuth only...
+    public static String buildAuthString(Map<String,String> authHeader) throws MiniAuthException
+    {
+        if(authHeader == null) {
+            return null;
+        }
+        final String SEPARATOR = ",";
+        StringBuilder sb = new StringBuilder();
+        try {
+            Iterator<String> it = authHeader.keySet().iterator();
+            while(it.hasNext()) {
+                String k = it.next();
+                String encKey = URLEncoder.encode(k, "UTF-8");
+                String v = authHeader.get(k);
+                sb.append(encKey).append("=\"");
+                if(v != null && !v.isEmpty()) {
+                    String encVal = URLEncoder.encode(v, "UTF-8");
+                    sb.append(encVal);
+                }
+                sb.append("\"");
+                if(it.hasNext()) {
+                    sb.append(SEPARATOR);
+                }
+            }
+        } catch (UnsupportedEncodingException e) {
+            throw new InternalErrorException("URL encoding error.", e);
+        }
+        return sb.toString();
+    }
+
 
 }

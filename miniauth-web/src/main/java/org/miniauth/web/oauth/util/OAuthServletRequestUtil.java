@@ -73,7 +73,7 @@ public final class OAuthServletRequestUtil
     public static Map<String,String> getAuthParams(HttpServletRequest request) throws MiniAuthException
     {
         String authHeaderValue = request.getHeader("Authorization");
-        Map<String,String> authParams = AuthHeaderUtil.getAuthParams(authHeaderValue, AuthScheme.OAUTH);
+        Map<String,String> authParams = AuthHeaderUtil.parseAuthParamsFromAuthorizationString(authHeaderValue, AuthScheme.OAUTH);
         return authParams;
     }
     

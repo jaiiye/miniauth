@@ -52,7 +52,7 @@ public final class OAuthOutgoingRequestBuilder
     public OAuthOutgoingRequestBuilder setAuthHeader(String authHeaderStr)
             throws MiniAuthException
     {
-        outgoingRequest.setAuthHeader(authHeaderStr);
+        outgoingRequest.setAuthHeaderAuthorizationString(authHeaderStr);
         return this;
     }
     public OAuthOutgoingRequestBuilder setAuthHeader(Map<String, String> authHeader)

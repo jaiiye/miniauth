@@ -14,7 +14,7 @@ public class AuthHeaderUtilTest
             String paramString = "a=\"b\",c=\"d%72f\"";
             String authHeader = "OAuth " + paramString;
             String expectedAuthScheme = null;
-            Map<String,String> authParams = AuthHeaderUtil.getAuthParams(authHeader, expectedAuthScheme);
+            Map<String,String> authParams = AuthHeaderUtil.parseAuthParamsFromAuthorizationString(authHeader, expectedAuthScheme);
             System.out.println("authParams = " + authParams);
             assertEquals("b", authParams.get("a"));
             assertEquals("drf", authParams.get("c"));

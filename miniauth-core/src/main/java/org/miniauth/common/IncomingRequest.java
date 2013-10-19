@@ -74,10 +74,10 @@ public abstract class IncomingRequest extends RequestBase
         return this;
     }
     @Override
-    protected RequestBase setAuthHeader(String authHeaderStr)
+    protected RequestBase setAuthHeaderAuthorizationString(String authHeaderAuthString)
             throws MiniAuthException
     {
-        super.setAuthHeader(authHeaderStr);
+        super.setAuthHeaderAuthorizationString(authHeaderAuthString);
         setVerified(false);
         return this;
     }

@@ -1,10 +1,11 @@
-package org.miniauth.core;
+package org.miniauth.common;
 
 import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.miniauth.common.BaseURIInfo;
 
 public class BaseURIInfoTest
 {

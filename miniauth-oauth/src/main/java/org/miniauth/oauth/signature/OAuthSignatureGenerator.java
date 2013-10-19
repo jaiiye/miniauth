@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
-import org.miniauth.core.BaseURIInfo;
+import org.miniauth.common.BaseURIInfo;
 import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AuthCredentialConstants;
 import org.miniauth.exception.AuthSignatureException;

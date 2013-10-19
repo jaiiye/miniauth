@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
-import org.miniauth.core.BaseURIInfo;
+import org.miniauth.common.BaseURIInfo;
 import org.miniauth.exception.BadRequestException;
 import org.miniauth.exception.ValidationException;
 import org.miniauth.oauth.core.OAuthConstants;

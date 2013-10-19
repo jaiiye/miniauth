@@ -175,10 +175,10 @@ public class OAuthIncomingRequest extends IncomingRequest
         return super.setBaseURI(baseUri);
     }
     @Override
-    protected RequestBase setAuthHeader(String authHeaderStr)
+    protected RequestBase setAuthHeaderAuthorizationString(String authHeaderAuthString)
             throws MiniAuthException
     {
-        super.setAuthHeader(authHeaderStr, AuthScheme.OAUTH);     // Note. Oauth hard-coded here.
+        super.setAuthHeaderAuthorizationString(authHeaderAuthString, AuthScheme.OAUTH);     // Note. Oauth hard-coded here.
         return this;
     }
     @Override

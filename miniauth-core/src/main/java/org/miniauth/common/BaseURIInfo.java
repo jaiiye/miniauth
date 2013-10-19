@@ -1,12 +1,17 @@
-package org.miniauth.core;
+package org.miniauth.common;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
+import org.miniauth.core.UriScheme;
 import org.miniauth.exception.InvalidInputException;
+import org.miniauth.util.FormParamUtil;
 
 
 /**
@@ -32,8 +37,11 @@ public final class BaseURIInfo
     }
     public BaseURIInfo(URI uri) 
     {
-        // TBD: check if uri != null ???
-        this(uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(), uri.getPath());
+        this(uri==null?null:uri.getScheme(), 
+                uri==null?null:uri.getUserInfo(), 
+                uri==null?null:uri.getHost(), 
+                uri==null?-1:uri.getPort(), 
+                uri==null?null:uri.getPath());
     }
     public BaseURIInfo(String uriScheme, String userInfo, String host, int port, String path)
     {
@@ -110,6 +118,27 @@ public final class BaseURIInfo
         return buildURI(null, null);
     }
     /**
+     * Builds the URI according to the OAuth the requirements after adding the query string to the base URI. 
+     * @param query Query string.
+     * @return The URI equivalent to this BaseUriInfo object.
+     * @throws MiniAuthException 
+     */
+    public URI buildURI(String query) throws MiniAuthException 
+    {
+        return buildURI(query, null);
+    }
+    /**
+     * Builds the URI according to the OAuth the requirements after adding the queryParams. 
+     * @param queryParams Query params.
+     * @return The URI equivalent to this BaseUriInfo object.
+     * @throws MiniAuthException
+     */
+    public URI buildURI(Map<String,String[]> queryParams) throws MiniAuthException 
+    {
+        String query = FormParamUtil.buildUrlEncodedFormParamString(queryParams);
+        return buildURI(query, null);
+    }
+    /**
      * Builds the URI according to the OAuth the requirements. 
      * @param query Query string.
      * @param fragment URL fragment.
@@ -133,16 +162,100 @@ public final class BaseURIInfo
         return uri;
     }
 
+    /**
+     * Builds a URL string.
+     * @return The URL string representation of this object.
+     * @throws MiniAuthException
+     */
     public String buildURIString() throws MiniAuthException 
     {
         return buildURIString(null, null);
     }
+    /**
+     * Builds a URL string after appending the given query string.
+     * @param query QueryString.
+     * @return The URL string representation of this object.
+     * @throws MiniAuthException
+     */
+    public String buildURIString(String query) throws MiniAuthException 
+    {
+        return buildURIString(query, null);
+    }
+    /**
+     * Builds a URL string after appending the given query parameter.
+     * @param queryParams Map of query params.
+     * @return The URL string representation of this object.
+     * @throws MiniAuthException
+     */
+    public String buildURIString(Map<String,String[]> queryParams) throws MiniAuthException 
+    {
+        String query = FormParamUtil.buildUrlEncodedFormParamString(queryParams);
+        return buildURIString(query, null);
+    }
+    /**
+     * Builds a URL string after adding the given query and fragment string.
+     * @param query QueryString.
+     * @param fragment Fragment.
+     * @return The URL string representation of this object.
+     * @throws MiniAuthException
+     */
     public String buildURIString(String query, String fragment) throws MiniAuthException 
     {
         URI uri = buildURI(query, fragment);
         return uri.toString();
     }
-
+    
+    /**
+     * Builds the URL according to the OAuth the requirements. 
+     * @return The URL equivalent to this BaseUriInfo object.
+     * @throws MiniAuthException 
+     */
+    public URL buildURL() throws MiniAuthException 
+    {
+        return buildURL(null, null);
+    }
+    /**
+     * Builds the URL according to the OAuth the requirements after adding the query string to the base URI. 
+     * @param query Query string.
+     * @return The URL equivalent to this BaseUriInfo object.
+     * @throws MiniAuthException 
+     */
+    public URL buildURL(String query) throws MiniAuthException 
+    {
+        return buildURL(query, null);
+    }
+    /**
+     * Builds the URL according to the OAuth the requirements after adding the queryParams. 
+     * @param queryParams Query params.
+     * @return The URL equivalent to this BaseUriInfo object.
+     * @throws MiniAuthException
+     */
+    public URL buildURL(Map<String,String[]> queryParams) throws MiniAuthException 
+    {
+        String query = FormParamUtil.buildUrlEncodedFormParamString(queryParams);
+        return buildURL(query, null);
+    }
+    /**
+     * Builds the URL according to the OAuth the requirements. 
+     * @param query Query string.
+     * @param fragment URL fragment.
+     * @return The URL equivalent to this BaseUriInfo object.
+     * @throws MiniAuthException 
+     */
+    public URL buildURL(String query, String fragment) throws MiniAuthException 
+    {
+        URL url = null;;
+        try {
+            URI uri = buildURI(query, fragment);
+            url = uri.toURL();
+        } catch (MalformedURLException e) {
+            throw new InvalidInputException("Failed to construrct URL.", e);
+        }
+        return url;
+    }
+    
+    
+    
     @Override
     public String toString()
     {

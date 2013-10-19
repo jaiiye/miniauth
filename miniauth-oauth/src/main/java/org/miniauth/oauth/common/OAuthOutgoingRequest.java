@@ -1,6 +1,12 @@
 package org.miniauth.oauth.common;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,11 +19,11 @@ import org.miniauth.core.ParameterTransmissionType;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.AuthSignatureException;
 import org.miniauth.exception.InternalErrorException;
+import org.miniauth.exception.InvalidInputException;
 import org.miniauth.exception.InvalidStateException;
-import org.miniauth.oauth.core.OAuthConstants;
-import org.miniauth.oauth.core.SignatureMethod;
-import org.miniauth.oauth.nonce.NonceGenerator;
+import org.miniauth.oauth.util.OAuthAuthorizationValueUtil;
 import org.miniauth.oauth.util.ParameterTransmissionUtil;
+import org.miniauth.util.FormParamUtil;
 
 
 /**
@@ -292,10 +298,10 @@ public class OAuthOutgoingRequest extends OutgoingRequest
         return this;
     }
     @Override
-    protected RequestBase setAuthHeader(String authHeaderStr)
+    protected RequestBase setAuthHeaderAuthorizationString(String authHeaderAuthString)
             throws MiniAuthException
     {
-        super.setAuthHeader(authHeaderStr, AuthScheme.OAUTH);
+        super.setAuthHeaderAuthorizationString(authHeaderAuthString, AuthScheme.OAUTH);
         setReady(false);
         return this;
     }
@@ -380,6 +386,58 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     }
 
 
+    // TBD:
+    public HttpURLConnection openEndorsedURLConnection() throws MiniAuthException, IOException
+    {
+        if(! isEndorsed()) {
+            throw new InvalidStateException("The request has not been endorsed/signed. Cannot open a URLConnection.");
+        }
+        
+        // TBD:
+        if(this.getQueryParams() != null && ! this.getQueryParams().isEmpty()) {
+            
+        }
+
+        URI uri = this.getBaseURI();
+        URL url = null;
+        try {
+            url = uri.toURL();
+        } catch (MalformedURLException e) {
+            throw new InvalidInputException("Failed get URL from this request object.", e);
+        }
+        URLConnection urlConn = url.openConnection();
+        HttpURLConnection httpConn = null;
+        try {
+            httpConn = (HttpURLConnection) urlConn;
+        } catch(Exception e) {
+            throw new InvalidInputException("Failed get HttpURLConnection from this request object.", e);
+        }
+
+        
+        // TBD:
+        // "Copy" this request object's internal vars to the connection.
+        
+        httpConn.setRequestMethod(this.getHttpMethod());
+        if(this.getAuthHeader() != null && ! this.getAuthHeader().isEmpty()) {  // check if authParamTransmissionType == OAuth ???
+            String authHeaderStr = AuthScheme.getAuthorizationHeaderAuthScheme(AuthScheme.OAUTH) + " " + OAuthAuthorizationValueUtil.buildOAuthAuthorizationValueString(getAuthHeader(), ParameterTransmissionType.HEADER);
+            httpConn.setRequestProperty("Authorization", authHeaderStr);
+        }
+        
+        if(this.getFormParams() != null && ! this.getFormParams().isEmpty()) {
+            httpConn.setDoOutput(true);   // This works with POST/PUT but not with GET....
+            String formBody = FormParamUtil.buildUrlEncodedFormParamString(getFormParams());
+            
+            OutputStreamWriter out = new OutputStreamWriter(httpConn.getOutputStream());
+            // ....
+            
+        }
+        
+        
+        return httpConn;
+    }
+    
+    
+    
     // For debugging...
     @Override
     public String toString()

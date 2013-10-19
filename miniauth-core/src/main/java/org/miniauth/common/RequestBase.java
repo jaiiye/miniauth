@@ -29,7 +29,7 @@ public abstract class RequestBase implements Serializable
     private static final String[] EMPTY_STRING_ARRAY = new String[]{};
 
     private String httpMethod = null;
-    private URI baseURI = null;   // without the query string part, which is included in queryParams.
+    private volatile URI baseURI = null;  // without the query string part, which is included in queryParams.
     private Map<String,String> authHeader = null;
     private Map<String,String[]> formParams = null;
     private Map<String,String[]> queryParams = null;
@@ -128,9 +128,24 @@ public abstract class RequestBase implements Serializable
     {
         return baseURI;
     }
+    public BaseURIInfo getBaseURIInfo()
+    {
+        return new BaseURIInfo(baseURI);
+    }
+    public String getBaseURIString()
+    {
+        return (baseURI == null ? null : baseURI.toString());
+    }
+    
+
     protected RequestBase setBaseURI(URI baseURI) throws MiniAuthException
     {
         this.baseURI = baseURI;
+        return this;
+    }
+    protected RequestBase setBaseURI(BaseURIInfo uriInfo) throws MiniAuthException
+    {
+        this.baseURI = (uriInfo == null ? null : uriInfo.buildURI());
         return this;
     }
     protected RequestBase setBaseURI(String baseUri) throws MiniAuthException
@@ -147,14 +162,38 @@ public abstract class RequestBase implements Serializable
     {
         return authHeader;
     }
-    protected RequestBase setAuthHeader(String authHeaderStr) throws MiniAuthException
+    public String getAuthHeaderString()
     {
-        this.authHeader = AuthHeaderUtil.getAuthParams(authHeaderStr);
+        String authHeaderStr = null;
+        try {
+            authHeaderStr = AuthHeaderUtil.buildAuthString(authHeader);
+        } catch (MiniAuthException e) {
+            // What to do ???
+            log.log(Level.INFO, "Failed to build auth String.", e);
+        }
+        return authHeaderStr;
+    }
+    public String getAuthHeaderAuthorizationString(String authScheme)
+    {
+        String authorizationString = null;
+        String authHeaderStr = getAuthHeaderString();
+        if(authHeaderStr != null) {
+            authorizationString = authScheme + " " + authHeaderStr;
+        }
+        return authorizationString;
+    }
+    protected RequestBase setAuthHeader(String authHeader) throws MiniAuthException
+    {
+        this.authHeader = AuthHeaderUtil.parseAuthParams(authHeader);
         return this;
     }
-    protected RequestBase setAuthHeader(String authHeaderStr, String expectedAuthScheme) throws MiniAuthException
+    protected RequestBase setAuthHeaderAuthorizationString(String authHeaderAuthString) throws MiniAuthException
     {
-        this.authHeader = AuthHeaderUtil.getAuthParams(authHeaderStr, expectedAuthScheme);
+        return setAuthHeaderAuthorizationString(authHeaderAuthString, null);
+    }
+    protected RequestBase setAuthHeaderAuthorizationString(String authHeaderAuthString, String expectedAuthScheme) throws MiniAuthException
+    {
+        this.authHeader = AuthHeaderUtil.parseAuthParamsFromAuthorizationString(authHeaderAuthString, expectedAuthScheme);
         return this;
     }
     protected RequestBase setAuthHeader(Map<String, String> authHeader) throws MiniAuthException
@@ -174,6 +213,17 @@ public abstract class RequestBase implements Serializable
     public Map<String, String[]> getFormParams()
     {
         return formParams;
+    }
+    public String getFormParamString()
+    {
+        String formParamStr = null;
+        try {
+            formParamStr = FormParamUtil.buildUrlEncodedFormParamString(formParams);
+        } catch (MiniAuthException e) {
+            // What to do ???
+            log.log(Level.INFO, "Failed to build form param String.", e);
+        }
+        return formParamStr;
     }
     protected RequestBase setFormParams(String formBody) throws MiniAuthException
     {
@@ -214,6 +264,17 @@ public abstract class RequestBase implements Serializable
     public Map<String, String[]> getQueryParams()
     {
         return queryParams;
+    }
+    public String getQueryParamString()
+    {
+        String queryParamStr = null;
+        try {
+            queryParamStr = FormParamUtil.buildUrlEncodedFormParamString(queryParams);
+        } catch (MiniAuthException e) {
+            // What to do ???
+            log.log(Level.INFO, "Failed to build query param String.", e);
+        }
+        return queryParamStr;
     }
     protected RequestBase setQueryParams(String queryString) throws MiniAuthException
     {

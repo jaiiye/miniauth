@@ -51,7 +51,7 @@ public final class OAuthIncomingRequestBuilder
     public OAuthIncomingRequestBuilder setAuthHeader(String authHeaderStr)
             throws MiniAuthException
     {
-        incomingRequest.setAuthHeader(authHeaderStr);
+        incomingRequest.setAuthHeaderAuthorizationString(authHeaderStr);
         return this;
     }
     public OAuthIncomingRequestBuilder setAuthHeader(Map<String, String> authHeader)

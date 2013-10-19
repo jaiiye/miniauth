@@ -77,7 +77,7 @@ public final class OAuthURLConnectionUtil
     public static Map<String,String> getAuthParams(HttpURLConnection conn) throws MiniAuthException
     {
         String authHeaderValue = conn.getRequestProperty("Authorization");  // ????
-        Map<String,String> authParams = AuthHeaderUtil.getAuthParams(authHeaderValue, AuthScheme.OAUTH);
+        Map<String,String> authParams = AuthHeaderUtil.parseAuthParamsFromAuthorizationString(authHeaderValue, AuthScheme.OAUTH);
         return authParams;
     }
     
