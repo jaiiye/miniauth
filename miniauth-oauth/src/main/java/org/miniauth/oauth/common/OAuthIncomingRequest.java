@@ -157,6 +157,13 @@ public class OAuthIncomingRequest extends IncomingRequest
 //    }
 
 
+    @Override
+    public String getAuthHeaderAuthorizationString()
+    {
+        return getAuthHeaderAuthorizationString(AuthScheme.OAUTH);     // Note. Oauth hard-coded here.
+    }
+
+
     // This is necessary to make these setters accessible from the builder class.
 
     @Override
@@ -186,14 +193,6 @@ public class OAuthIncomingRequest extends IncomingRequest
             throws MiniAuthException
     {
         return super.setAuthHeader(authHeader);
-    }
-    @Override
-    protected RequestBase setAuthHeaderAuthorizationString(
-            String authHeaderAuthString, String expectedAuthScheme)
-            throws MiniAuthException
-    {
-        return super.setAuthHeaderAuthorizationString(authHeaderAuthString,
-                expectedAuthScheme);
     }
     @Override
     protected RequestBase setAuthHeaderAuthorizationString(String authHeaderAuthString)

@@ -62,14 +62,6 @@ public final class OAuthIncomingRequestBuilder
         incomingRequest.setAuthHeader(authHeader);
         return this;
     }
-    public OAuthIncomingRequestBuilder setAuthHeaderAuthorizationString(
-            String authHeaderAuthString, String expectedAuthScheme)
-            throws MiniAuthException
-    {
-        incomingRequest.setAuthHeaderAuthorizationString(authHeaderAuthString,
-                expectedAuthScheme);
-        return this;
-    }
     public OAuthIncomingRequestBuilder setAuthHeaderAuthorizationString(String authHeaderStr)
             throws MiniAuthException
     {

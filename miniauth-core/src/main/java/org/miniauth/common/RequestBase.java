@@ -227,7 +227,8 @@ public abstract class RequestBase implements Serializable
         }
         return authHeaderStr;
     }
-    public String getAuthHeaderAuthorizationString(String authScheme)
+    public abstract String getAuthHeaderAuthorizationString();
+    protected String getAuthHeaderAuthorizationString(String authScheme)
     {
         String authorizationString = null;
         String authHeaderStr = getAuthHeaderString();

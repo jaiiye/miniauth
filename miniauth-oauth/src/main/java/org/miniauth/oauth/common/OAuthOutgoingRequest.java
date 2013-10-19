@@ -273,6 +273,13 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     }
 
 
+    @Override
+    public String getAuthHeaderAuthorizationString()
+    {
+        return getAuthHeaderAuthorizationString(AuthScheme.OAUTH);     // Note. Oauth hard-coded here.
+    }
+
+
     
     // This is necessary to make these setters accessible from the builder class.
     // Also, set ready to false whenver setters are used.
@@ -316,20 +323,10 @@ public class OAuthOutgoingRequest extends OutgoingRequest
         return this;
     }
     @Override
-    protected RequestBase setAuthHeaderAuthorizationString(
-            String authHeaderAuthString, String expectedAuthScheme)
-            throws MiniAuthException
-    {
-        super.setAuthHeaderAuthorizationString(authHeaderAuthString,
-                expectedAuthScheme);
-        setReady(false);
-        return this;
-    }
-    @Override
     protected RequestBase setAuthHeaderAuthorizationString(String authHeaderAuthString)
             throws MiniAuthException
     {
-        super.setAuthHeaderAuthorizationString(authHeaderAuthString, AuthScheme.OAUTH);
+        super.setAuthHeaderAuthorizationString(authHeaderAuthString, AuthScheme.OAUTH);      // Note. Oauth hard-coded here.
         setReady(false);
         return this;
     }
