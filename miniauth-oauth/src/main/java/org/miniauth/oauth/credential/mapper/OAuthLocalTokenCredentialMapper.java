@@ -1,9 +1,9 @@
-package org.miniauth.oauth.callback;
+package org.miniauth.oauth.credential.mapper;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.miniauth.callback.CredentialMapper;
+import org.miniauth.credential.mapper.CredentialMapper;
 
 
 /**

@@ -1,6 +1,6 @@
 package org.miniauth.service;
 
-import org.miniauth.callback.CredentialMapper;
+import org.miniauth.credential.mapper.CredentialMapper;
 
 
 /**

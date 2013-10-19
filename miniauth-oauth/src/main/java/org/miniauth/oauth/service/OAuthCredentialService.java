@@ -2,8 +2,8 @@ package org.miniauth.oauth.service;
 
 import java.util.logging.Logger;
 
-import org.miniauth.callback.CredentialMapper;
-import org.miniauth.oauth.callback.OAuthCredentialMapper;
+import org.miniauth.credential.mapper.CredentialMapper;
+import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
 import org.miniauth.service.CredentialService;
 
 

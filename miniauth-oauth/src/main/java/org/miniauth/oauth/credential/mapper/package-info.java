@@ -7,4 +7,4 @@
 /**
  * MiniAuth OAuth callback interface.
  */
-package org.miniauth.oauth.callback;
+package org.miniauth.oauth.credential.mapper;

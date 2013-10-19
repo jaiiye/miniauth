@@ -1,8 +1,8 @@
-package org.miniauth.oauth.callback;
+package org.miniauth.oauth.credential.mapper;
 
-import org.miniauth.callback.CredentialMapper;
 import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
+import org.miniauth.credential.mapper.CredentialMapper;
 import org.miniauth.oauth.credential.OAuthAccessCredential;
 
 

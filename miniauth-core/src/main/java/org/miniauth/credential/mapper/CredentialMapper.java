@@ -1,4 +1,4 @@
-package org.miniauth.callback;
+package org.miniauth.credential.mapper;
 
 import java.util.Map;
 

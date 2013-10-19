@@ -7,4 +7,4 @@
 /**
  * MiniAuth Core module Callback package.
  */
-package org.miniauth.callback;
+package org.miniauth.credential.mapper;

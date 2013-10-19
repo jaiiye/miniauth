@@ -6,8 +6,8 @@ import org.miniauth.MiniAuthException;
 import org.miniauth.common.IncomingRequest;
 import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
-import org.miniauth.oauth.callback.OAuthCredentialMapper;
 import org.miniauth.oauth.common.OAuthIncomingRequest;
+import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
 import org.miniauth.service.VerifierService;
 
 
