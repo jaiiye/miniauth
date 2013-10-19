@@ -421,11 +421,13 @@ public class OAuthOutgoingRequest extends OutgoingRequest
         }
         
         // TBD:
-        if(this.getQueryParams() != null && ! this.getQueryParams().isEmpty()) {
-            
-        }
-
-        URI uri = this.getBaseURI();
+//        URI uri = null;
+//        if(this.getQueryParams() != null && ! this.getQueryParams().isEmpty()) {
+//            uri = this.getURI();
+//        } else {
+//            uri = this.getBaseURI();
+//        }
+        URI uri = this.getURI();  // includes queryParams if not null.
         URL url = null;
         try {
             url = uri.toURL();

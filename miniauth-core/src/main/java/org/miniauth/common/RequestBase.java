@@ -1,8 +1,10 @@
 package org.miniauth.common;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -128,6 +130,20 @@ public abstract class RequestBase implements Serializable
     {
         return baseURI;
     }
+    public URL getBaseURL()
+    {
+        if(baseURI == null) {
+            return null;
+        }
+        URL url = null;
+        try {
+            url = baseURI.toURL();
+        } catch (MalformedURLException e) {
+            // What to do ???
+            log.log(Level.INFO, "Failed to build URL.", e);
+        }
+        return url;
+    }
     public BaseURIInfo getBaseURIInfo()
     {
         return new BaseURIInfo(baseURI);
@@ -141,6 +157,9 @@ public abstract class RequestBase implements Serializable
         if(baseURI == null) {
             return null;
         }
+        if(queryParams == null || queryParams.isEmpty()) {
+            return baseURI;
+        }
         BaseURIInfo uriInfo = new BaseURIInfo(baseURI);
         URI uri = null;
         try {
@@ -151,11 +170,27 @@ public abstract class RequestBase implements Serializable
         }
         return uri;
     }
+    public URL getURL()
+    {
+        URI uri = getURI();
+        if(uri == null) {
+            return null;
+        }
+        URL url = null;
+        try {
+            url = uri.toURL();
+        } catch (MalformedURLException e) {
+            // What to do ???
+            log.log(Level.INFO, "Failed to build URL with queryParams = " + queryParams, e);
+        }
+        return url;
+    }
     public String getURIString()
     {
         URI uri = getURI();
         return (uri == null ? null : uri.toString());
     }
+    
 
     protected RequestBase setBaseURI(URI baseURI) throws MiniAuthException
     {
