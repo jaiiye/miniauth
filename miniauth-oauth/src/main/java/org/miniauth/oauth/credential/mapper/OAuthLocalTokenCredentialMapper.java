@@ -36,6 +36,13 @@ public class OAuthLocalTokenCredentialMapper extends OAuthCredentialMapper imple
         // ...
     }
 
+    // TBD:
+    // This is a weird singleton.
+    // Note that we are assuming we are using a single consumerKey/Secret within a single app.
+    // ....
+    // Make it a "multiton" (with a consumerKey as a key) ???
+    // ....
+    
     // Initialization-on-demand holder.
     private static final class OAuthLocalCredentialMapperHolder
     {
@@ -51,9 +58,12 @@ public class OAuthLocalTokenCredentialMapper extends OAuthCredentialMapper imple
     {
         return consumerSecret;
     }
-    public void setConsumerSecret(String consumerSecret)
+    // Note: we can do the following:
+    // OAuthLocalTokenCredentialMapper credentialMapper = OAuthLocalTokenCredentialMapper.getInstance().setConsumerSecret(consumerSecret);
+    public OAuthLocalTokenCredentialMapper setConsumerSecret(String consumerSecret)
     {
         this.consumerSecret = consumerSecret;
+        return this;
     }
 
     @Override

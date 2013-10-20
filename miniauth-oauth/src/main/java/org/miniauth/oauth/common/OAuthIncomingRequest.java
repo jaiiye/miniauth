@@ -218,6 +218,7 @@ public class OAuthIncomingRequest extends IncomingRequest
     protected RequestBase setAuthHeader(String authHeader)
             throws MiniAuthException
     {
+        // TBD: validate OAuth authHeader keys ???
         return super.setAuthHeader(authHeader);
     }
     @Override

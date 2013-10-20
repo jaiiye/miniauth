@@ -168,7 +168,11 @@ public class OAuthOutgoingRequest extends OutgoingRequest
         // TBD: --> to utilize oauthParamMap in generating signature???
         refreshHeadersAndParams();
 
-        // setReady(true);
+        // This is a bit tricky.
+        // but, this is probably a right thing to do. 
+        // Once oauthParamMap is built, it's ready for endorsement 
+        //    (even if the params can be potentially changed later, and the ready state becomes false again).
+        setReady(true);
     }
     public OAuthParamMap getOauthParamMap()
     {
@@ -371,6 +375,7 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     protected RequestBase setAuthHeader(String authHeader)
             throws MiniAuthException
     {
+        // TBD: validate OAuth authHeader keys ???
         super.setAuthHeader(authHeader);
         setReady(false);
         return this;

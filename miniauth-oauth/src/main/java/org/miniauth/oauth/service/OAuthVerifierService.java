@@ -6,6 +6,7 @@ import org.miniauth.MiniAuthException;
 import org.miniauth.common.IncomingRequest;
 import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
+import org.miniauth.exception.InvalidCredentialException;
 import org.miniauth.oauth.common.OAuthIncomingRequest;
 import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
 import org.miniauth.service.VerifierService;
@@ -33,6 +34,9 @@ public class OAuthVerifierService extends OAuthCredentialService implements Veri
     {
         AccessIdentity accessIdentity = ((OAuthIncomingRequest) request).getAccessIdentity();
         AccessCredential credential = getOAuthCredentialMapper().getAccesssCredential(accessIdentity);
+        if(credential == null || credential.getTokenSecret() == null) {
+            throw new InvalidCredentialException("AccessCredential not found.");
+        }
         return OAuthRequestVerifier.getInstance().verify(credential, request);
     }
 

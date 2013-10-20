@@ -81,6 +81,7 @@ public final class OAuthOutgoingRequestBuilder
     public OAuthOutgoingRequestBuilder setAuthHeader(String authHeader)
             throws MiniAuthException
     {
+        // TBD: validate OAuth authHeader keys ???
         outgoingRequest.setAuthHeader(authHeader);
         return this;
     }
