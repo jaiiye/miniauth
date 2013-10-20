@@ -517,7 +517,7 @@ public class OAuthOutgoingRequest extends OutgoingRequest
         httpConn.setRequestMethod(this.getHttpMethod());
         if(this.getAuthHeader() != null && ! this.getAuthHeader().isEmpty()) {  // check if authParamTransmissionType == OAuth ???
             // String authHeaderStr = AuthScheme.getAuthorizationHeaderAuthScheme(AuthScheme.OAUTH) + " " + OAuthAuthorizationValueUtil.buildOAuthAuthorizationValueString(getAuthHeader(), ParameterTransmissionType.HEADER);
-            String authHeaderStr = this.getAuthHeaderAuthorizationString(AuthScheme.OAUTH);
+            String authHeaderStr = this.getAuthHeaderAuthorizationString();
             httpConn.setRequestProperty("Authorization", authHeaderStr);
             // httpConn.addRequestProperty("Authorization", authHeaderStr);
             // log.warning(">>>>>>>>>>>>>>>>>>> authHeaderStr = " + authHeaderStr);

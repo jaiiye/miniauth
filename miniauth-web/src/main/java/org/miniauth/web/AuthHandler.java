@@ -1,10 +1,12 @@
 package org.miniauth.web;
 
+import org.miniauth.credential.mapper.CredentialMapper;
+
 
 /**
- * "Marker" Interface for "auth handler" classes.
+ * Top-level Interface for the "auth handler" classes.
  */
 public interface AuthHandler
 {
-    // empty
+    CredentialMapper getCredentialMapper();
 }

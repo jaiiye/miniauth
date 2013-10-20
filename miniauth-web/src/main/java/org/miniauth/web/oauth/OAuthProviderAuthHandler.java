@@ -11,10 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.exception.InvalidInputException;
-import org.miniauth.oauth.signature.OAuthSignatureVerifier;
-import org.miniauth.signature.SignatureVerifier;
+import org.miniauth.oauth.common.OAuthIncomingRequest;
+import org.miniauth.oauth.common.OAuthIncomingRequestBuilder;
+import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
+import org.miniauth.oauth.service.OAuthVerifierService;
 import org.miniauth.web.ProviderAuthHandler;
 import org.miniauth.web.oauth.util.OAuthServletRequestUtil;
+import org.miniauth.web.util.ServletRequestUtil;
 
 
 /**
@@ -25,33 +28,49 @@ public class OAuthProviderAuthHandler extends OAuthAuthHandler implements Provid
     private static final Logger log = Logger.getLogger(OAuthProviderAuthHandler.class.getName());
 
     // TBD: Is it safe to reuse this???
-    private final SignatureVerifier signatureVerifier;
+//    private final SignatureVerifier signatureVerifier;
+    private final OAuthVerifierService verifierService;
     
-    public OAuthProviderAuthHandler()
+    public OAuthProviderAuthHandler(OAuthCredentialMapper credentialMapper)
     {
-        signatureVerifier = new OAuthSignatureVerifier();
+        super(credentialMapper);
+//        signatureVerifier = new OAuthSignatureVerifier();
+        verifierService = new OAuthVerifierService(getOAuthCredentialMapper());
     }
 
     
+    /**
+     * Verifies the request for auth.
+     * @param request the servlet request object.
+     * @return true if the request has valid authorization token/signature.
+     * @throws MiniAuthException
+     * @throws IOException
+     */
     @Override
-    public boolean verifyRequest(Map<String, String> authCredential, HttpServletRequest request) throws MiniAuthException, IOException
+    public boolean verifyRequest(HttpServletRequest request) throws MiniAuthException, IOException
     {
         String httpMethod = request.getMethod();
         String requestUrl = request.getRequestURL().toString();
-        URI baseUri = null;
+        URI baseURI = null;
         try {
-            baseUri = new URI(requestUrl);
+            baseURI = new URI(requestUrl);
         } catch (URISyntaxException e) {
             // ??? This cannot happen.
             throw new InvalidInputException("Invalid requestUrl = " + requestUrl, e);
         }
 
         Map<String,String> authHeader = OAuthServletRequestUtil.getAuthParams(request);
-        Map<String,String[]> requestParams = request.getParameterMap();
+        // Map<String,String[]> requestParams = request.getParameterMap();
+        Map<String,String[]> formParams = ServletRequestUtil.getFormParams(request);
+        Map<String,String[]> queryParams = ServletRequestUtil.getQueryParams(request);
         
-        // SignatureVerifier signatureVerifier = new OAuthSignatureVerifier();
-        boolean verified = signatureVerifier.verify(authCredential, httpMethod, baseUri, authHeader, requestParams);
+        
+//        // SignatureVerifier signatureVerifier = new OAuthSignatureVerifier();
+//        boolean verified = signatureVerifier.verify(authCredential, httpMethod, baseUri, authHeader, requestParams);
 
+        OAuthIncomingRequest incomingRequest = new OAuthIncomingRequestBuilder().setHttpMethod(httpMethod).setBaseURI(baseURI).setAuthHeader(authHeader).setFormParams(formParams).setQueryParams(queryParams).build();
+        boolean verified = verifierService.verify(incomingRequest);
+        
         if(log.isLoggable(Level.FINE)) log.fine("verified = " + verified);
         return verified;
     }

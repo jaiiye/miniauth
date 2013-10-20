@@ -6,4 +6,5 @@ package org.miniauth.web;
  */
 public interface ClientAuthHandler extends AuthHandler
 {
+    
 }

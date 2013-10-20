@@ -1,7 +1,6 @@
 package org.miniauth.web.filter;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.Filter;
@@ -14,11 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.AuthScheme;
-import org.miniauth.credential.CredentialPair;
+import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
 import org.miniauth.web.ProviderAuthHandler;
 import org.miniauth.web.oauth.OAuthProviderAuthHandler;
 
 
+// TBD: Not full implemented....
 // To be used on the "server side" implementation.
 // This filter is included here as sort of a test case.
 // It calls AuthHandler.verifyRequest() method.
@@ -26,13 +26,18 @@ public class OAuthProviderAuthFilter extends ProviderAuthFilter implements Filte
 {
     private static final Logger log = Logger.getLogger(OAuthProviderAuthFilter.class.getName());
 
+    OAuthCredentialMapper credentialMapper = null;
+    
     // This should be multi-thread safe... ???
     private ProviderAuthHandler providerAuthHandler = null;
     // Lazy initialized...
     private ProviderAuthHandler getProviderAuthHandler()
     {
         if(providerAuthHandler == null) {
-            providerAuthHandler = new OAuthProviderAuthHandler();
+            // TBD:
+            // Initialize credentialMapper ????
+            // credentialMapper = null;
+            providerAuthHandler = new OAuthProviderAuthHandler(credentialMapper);
         }
         return providerAuthHandler;
     }
@@ -43,6 +48,11 @@ public class OAuthProviderAuthFilter extends ProviderAuthFilter implements Filte
     {
         super.init(config);;
         super.setAuthScheme(AuthScheme.OAUTH);
+        // TBD:
+        // Initialize OAuthCredentialMapper
+        // how ???
+        credentialMapper = null;
+        // ....
     }
 
     @Override
@@ -54,14 +64,10 @@ public class OAuthProviderAuthFilter extends ProviderAuthFilter implements Filte
         // Verify request oauth signature, etc...
         // ...
         
-        // TBD:
-        // Where do you get the credential pair? (for consumer and user token/secrets)
-        // CredentialPair credentialPair = null;
-        Map<String,String> authCredential = null;
         
         boolean verified = false;
         try {
-            verified = getProviderAuthHandler().verifyRequest(authCredential, (HttpServletRequest) req);
+            verified = getProviderAuthHandler().verifyRequest((HttpServletRequest) req);
         } catch (MiniAuthException e) {
             // temporary
             throw new ServletException("Invalid auth.", e);

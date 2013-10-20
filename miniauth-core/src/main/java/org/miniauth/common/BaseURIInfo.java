@@ -37,6 +37,7 @@ public final class BaseURIInfo
     }
     public BaseURIInfo(URI uri) 
     {
+        // Note that this truncates query params, if any.
         this(uri==null?null:uri.getScheme(), 
                 uri==null?null:uri.getUserInfo(), 
                 uri==null?null:uri.getHost(), 
@@ -53,6 +54,31 @@ public final class BaseURIInfo
         this.path = path;
     }
 
+    public static BaseURIInfo create(URL url) throws MiniAuthException 
+    {
+        BaseURIInfo uriInfo = null;
+        try {
+            // Note that this truncates query params, if any.
+            uriInfo = new BaseURIInfo(url.toURI());
+        } catch (URISyntaxException e) {
+            throw new InvalidInputException("Failed to construrct BaseURIInfo from url = " + url, e);
+        }
+        return uriInfo;
+    }
+    public static URI createBaseURI(URL url) throws MiniAuthException 
+    {
+        URI uri = null;
+        try {
+            // Note that this truncates query params, if any.
+            BaseURIInfo uriInfo = new BaseURIInfo(url.toURI());
+            uri = uriInfo.buildURI();
+        } catch (URISyntaxException e) {
+            throw new InvalidInputException("Failed to construrct URI from url = " + url, e);
+        }
+        return uri;
+    }
+
+    
     public String getUriScheme()
     {
         return uriScheme;
@@ -161,7 +187,8 @@ public final class BaseURIInfo
         }
         return uri;
     }
-
+    
+    
     /**
      * Builds a URL string.
      * @return The URL string representation of this object.
@@ -169,7 +196,7 @@ public final class BaseURIInfo
      */
     public String buildURIString() throws MiniAuthException 
     {
-        return buildURIString(null, null);
+        return buildURIString((String) null);
     }
     /**
      * Builds a URL string after appending the given query string.
@@ -189,8 +216,19 @@ public final class BaseURIInfo
      */
     public String buildURIString(Map<String,String[]> queryParams) throws MiniAuthException 
     {
+        return buildURIString(queryParams, null);
+    }
+    /**
+     * Builds a URL string after appending the given query parameter.
+     * @param queryParams Map of query params.
+     * @param fragment Fragment.
+     * @return The URL string representation of this object.
+     * @throws MiniAuthException
+     */
+    public String buildURIString(Map<String,String[]> queryParams, String fragment) throws MiniAuthException 
+    {
         String query = FormParamUtil.buildUrlEncodedFormParamString(queryParams);
-        return buildURIString(query, null);
+        return buildURIString(query, fragment);
     }
     /**
      * Builds a URL string after adding the given query and fragment string.
@@ -212,7 +250,7 @@ public final class BaseURIInfo
      */
     public URL buildURL() throws MiniAuthException 
     {
-        return buildURL(null, null);
+        return buildURL((String) null);
     }
     /**
      * Builds the URL according to the OAuth the requirements after adding the query string to the base URI. 
@@ -232,8 +270,19 @@ public final class BaseURIInfo
      */
     public URL buildURL(Map<String,String[]> queryParams) throws MiniAuthException 
     {
+        return buildURL(queryParams, null);
+    }
+    /**
+     * Builds the URL according to the OAuth the requirements after adding the queryParams. 
+     * @param queryParams Query params.
+     * @param fragment URL fragment.
+     * @return The URL equivalent to this BaseUriInfo object.
+     * @throws MiniAuthException
+     */
+    public URL buildURL(Map<String,String[]> queryParams, String fragment) throws MiniAuthException 
+    {
         String query = FormParamUtil.buildUrlEncodedFormParamString(queryParams);
-        return buildURL(query, null);
+        return buildURL(query, fragment);
     }
     /**
      * Builds the URL according to the OAuth the requirements. 
@@ -254,6 +303,60 @@ public final class BaseURIInfo
         return url;
     }
     
+
+    /**
+     * Create URL from baseURI and queryParams.
+     * @param baseURI
+     * @param queryParams
+     * @return URL with query params.
+     * @throws MiniAuthException
+     */
+    public static URL createURL(URI baseURI, Map<String,String[]> queryParams) throws MiniAuthException 
+    {
+        return createURL(baseURI, queryParams, null);
+    }
+    /**
+     * Create URL from baseURI and queryParams.
+     * @param baseURI
+     * @param queryParams
+     * @param fragment URL fragment.
+     * @return URL with query params.
+     * @throws MiniAuthException
+     */
+    public static URL createURL(URI baseURI, Map<String,String[]> queryParams, String fragment) throws MiniAuthException 
+    {
+        if(baseURI == null) {
+            return null;   // ???
+        }
+        return new BaseURIInfo(baseURI).buildURL(queryParams, fragment);
+    }
+    /**
+     * Create URL from baseURI and query.
+     * @param baseURI
+     * @param query
+     * @return URL with query string.
+     * @throws MiniAuthException
+     */
+    public static URL createURL(URI baseURI, String query) throws MiniAuthException 
+    {
+        return createURL(baseURI, query, null);
+    }
+    /**
+     * Create URL from baseURI and query.
+     * @param baseURI
+     * @param query
+     * @param fragment URL fragment.
+     * @return URL with query string.
+     * @throws MiniAuthException
+     */
+    public static URL createURL(URI baseURI, String query, String fragment) throws MiniAuthException 
+    {
+        if(baseURI == null) {
+            return null;   // ???
+        }
+        return new BaseURIInfo(baseURI).buildURL(query, fragment);
+    }
+
     
     
     @Override

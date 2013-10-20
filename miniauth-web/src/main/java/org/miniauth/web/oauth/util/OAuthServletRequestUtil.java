@@ -77,5 +77,11 @@ public final class OAuthServletRequestUtil
         return authParams;
     }
     
+    
+//    public static String getAccessToken(HttpServletRequest request) throws MiniAuthException
+//    {
+//        
+//    }
+    
 
 }

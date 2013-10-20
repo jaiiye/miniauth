@@ -4,7 +4,7 @@ import org.miniauth.credential.mapper.CredentialMapper;
 
 
 /**
- * Base interface for "services with credential mapppers".
+ * Base interface for "services with credential mappers".
  */
 public interface CredentialService
 {

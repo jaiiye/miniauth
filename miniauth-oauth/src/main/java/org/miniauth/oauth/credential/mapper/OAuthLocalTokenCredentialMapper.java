@@ -3,7 +3,10 @@ package org.miniauth.oauth.credential.mapper;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.miniauth.credential.mapper.CredentialMapper;
+import org.miniauth.credential.AccessIdentity;
+import org.miniauth.credential.ConsumerCredential;
+import org.miniauth.oauth.credential.OAuthAccessIdentity;
+import org.miniauth.oauth.credential.OAuthConsumerCredential;
 
 
 /**
@@ -11,7 +14,7 @@ import org.miniauth.credential.mapper.CredentialMapper;
  * The token credential pairs are stored in a local "registry" (HashMap).
  * (This is just an exemplary implementation. Not for production use, except for a very simple use case.) 
  */
-public class OAuthLocalTokenCredentialMapper extends OAuthCredentialMapper implements CredentialMapper
+public class OAuthLocalTokenCredentialMapper extends OAuthCredentialMapper implements OAuthTokenCredentialMapper
 {
     // TBD:
     // this is just a temporary implementation.
@@ -19,7 +22,7 @@ public class OAuthLocalTokenCredentialMapper extends OAuthCredentialMapper imple
     private final Map<String,String> tokenRegistry = new HashMap<>();
     
     // Consumer credential is hard-coded.
-    // private String consumerKey = null;
+    private String consumerKey = null;
     private String consumerSecret = null;
 
     private OAuthLocalTokenCredentialMapper()
@@ -54,6 +57,18 @@ public class OAuthLocalTokenCredentialMapper extends OAuthCredentialMapper imple
         return OAuthLocalCredentialMapperHolder.INSTANCE;
     }
 
+    @Override
+    public String getConsumerKey()
+    {
+        return this.consumerKey;
+    }
+    public OAuthLocalTokenCredentialMapper setConsumerKey(String consumerKey)
+    {
+        this.consumerKey = consumerKey;
+        return this;
+    }
+
+    @Override
     public String getConsumerSecret()
     {
         return consumerSecret;
@@ -66,6 +81,18 @@ public class OAuthLocalTokenCredentialMapper extends OAuthCredentialMapper imple
         return this;
     }
 
+    @Override
+    public ConsumerCredential getConsumerCredential()
+    {
+        return new OAuthConsumerCredential(getConsumerKey(), getConsumerSecret());
+    }
+    @Override
+    public AccessIdentity getAccessIdentity(String accessToken)
+    {
+        return new OAuthAccessIdentity(getConsumerKey(), accessToken);
+    }
+
+    
     @Override
     public String getCredentialSecret(String credentialType, String credentialKey)
     {
@@ -102,6 +129,5 @@ public class OAuthLocalTokenCredentialMapper extends OAuthCredentialMapper imple
     {
         return tokenRegistry.put(accessToken, tokenSecret);
     }
-
 
 }

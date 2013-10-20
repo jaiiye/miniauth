@@ -15,11 +15,10 @@ public interface ProviderAuthHandler extends AuthHandler
 {
     /**
      * Verifies the request for auth.
-     * @param authCredential Auth credential needed for making a request. 
      * @param request the request object.
      * @return true if the request has valid authorization token.
      * @throws MiniAuthException
      * @throws IOException
      */
-    boolean verifyRequest(Map<String, String> authCredential, HttpServletRequest request) throws MiniAuthException, IOException;
+    boolean verifyRequest(HttpServletRequest request) throws MiniAuthException, IOException;
 }

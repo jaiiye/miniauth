@@ -1,26 +1,26 @@
 package org.miniauth.web.oauth;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.miniauth.MiniAuthException;
-import org.miniauth.builder.AuthStringBuilder;
+import org.miniauth.common.BaseURIInfo;
+import org.miniauth.core.HttpMethod;
 import org.miniauth.core.ParameterTransmissionType;
-import org.miniauth.credential.AuthCredentialConstants;
+import org.miniauth.credential.AccessCredential;
+import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.InternalErrorException;
 import org.miniauth.exception.InvalidInputException;
 import org.miniauth.exception.InvalidStateException;
-import org.miniauth.oauth.builder.OAuthAuthStringBuilder;
-import org.miniauth.oauth.core.OAuthConstants;
-import org.miniauth.oauth.core.SignatureMethod;
-import org.miniauth.signature.SignatureGenerator;
+import org.miniauth.oauth.common.OAuthOutgoingRequest;
+import org.miniauth.oauth.common.OAuthOutgoingRequestBuilder;
+import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
+import org.miniauth.oauth.service.OAuthEndorserService;
 import org.miniauth.web.URLConnectionAuthHandler;
-import org.miniauth.web.oauth.util.OAuthParamUtil;
 import org.miniauth.web.oauth.util.OAuthURLConnectionUtil;
 import org.miniauth.web.util.URLConnectionUtil;
 
@@ -39,30 +39,46 @@ public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements U
 {
 
     // TBD: Is it safe to reuse this???
-    private final AuthStringBuilder authStringBuilder;
-    private final SignatureGenerator signatureGenerator;
+//    private final AuthStringBuilder authStringBuilder;
+//    private final SignatureGenerator signatureGenerator;
+    private final OAuthEndorserService endorserService;
 
-    public OAuthURLConnectionAuthHandler()
+    public OAuthURLConnectionAuthHandler(OAuthCredentialMapper credentialMapper)
     {
-        authStringBuilder = new OAuthAuthStringBuilder();
-        signatureGenerator = ((OAuthAuthStringBuilder) authStringBuilder).getOAuthSignatureGenerator();  // ???
+        super(credentialMapper);
+//        authStringBuilder = new OAuthAuthStringBuilder();
+//        signatureGenerator = ((OAuthAuthStringBuilder) authStringBuilder).getOAuthSignatureGenerator();  // ???
+        endorserService = new OAuthEndorserService(getOAuthCredentialMapper());
     }
     
     // Note that "signing" is the last step.
     // Once the request is signed, it cannot be modified.
-    public boolean isEndorsed(HttpURLConnection conn) throws MiniAuthException, IOException
+    private boolean isEndorsed(HttpURLConnection conn) throws MiniAuthException, IOException
     {
         // TBD: ...
         // return OAuthURLConnectionUtil.isOAuthParamPresent(conn);
         return OAuthURLConnectionUtil.isOAuthSignaturePresent(conn);
     }
 
+    /**
+     * "Signs" or "endorses" the request.
+     * In the context of OAuth, this method should be really called signRequest().
+     * However, we (plan to) use this for other auth schemes,
+     *   hence we use a more generic (but somewhat unusual name), "endorse".
+     * @param accessToken Auth token needed for making a request. 
+     * @param conn URLConnection. conn is an "in-out" param.
+     * @return true if "endorsing" is successful.
+     * @throws MiniAuthException
+     * @throws IOException
+     */
     @Override
-    public boolean endorseRequest(Map<String, String> authCredential, HttpURLConnection conn) throws MiniAuthException, IOException
+    public boolean endorseRequest(String accessToken, HttpURLConnection conn) throws MiniAuthException, IOException
     {
-        return endorseRequest(authCredential, conn, null);
+        AccessIdentity accessIdentity = getOAuthCredentialMapper().getAccessIdentity(accessToken);
+        AccessCredential accessCredential = getOAuthCredentialMapper().getAccesssCredential(accessIdentity);
+        return endorseRequest(accessCredential, conn);
     }
-    public boolean endorseRequest(Map<String, String> authCredential, HttpURLConnection conn, String transmissionType) throws MiniAuthException, IOException
+    public boolean endorseRequest(AccessCredential accessCredential, HttpURLConnection conn) throws MiniAuthException, IOException
     {
         // Note:
         // At this point, conn should not contain any oauth_x parameters.
@@ -81,81 +97,115 @@ public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements U
         // if(transmissionType == null) {
         //     transmissionType = OAuthServletRequestUtil.getOAuthParamTransmissionType(conn);
         // }
-        if(transmissionType == null) {
-            // We always use the header type if it's not already set...
-            transmissionType = ParameterTransmissionType.HEADER;
-        } 
+//        if(transmissionType == null) {
+//            // We always use the header type if it's not already set...
+//            transmissionType = ParameterTransmissionType.HEADER;
+//        } 
         // else validate ????
        
         
         
         // ...
+
+        String httpMethod = conn.getRequestMethod();
         
+        // TBD: Exclude query params...
         URL url = conn.getURL();
         if(url == null) {
             throw new InvalidStateException("Request URL is not set.");
         }
-
-        String httpMethod = conn.getRequestMethod();
-        URI baseURI = null;
-        try {
-            baseURI = url.toURI();
-        } catch (URISyntaxException e) {
-            // ??? This cannot happen.
-            throw new InvalidInputException("Invalid requestUrl = " + url.toString(), e);
-        }
-
+        URI baseURI = BaseURIInfo.createBaseURI(url);
+       
         // ???
         Map<String,String> authHeader = OAuthURLConnectionUtil.getAuthParams(conn);
-        Map<String,String[]> requestParams = URLConnectionUtil.getRequestParams(conn);  // ???
+        // Map<String,String[]> requestParams = URLConnectionUtil.getRequestParams(conn);  // ???
+        Map<String,String[]> formParams = URLConnectionUtil.getFormParams(conn);        // ???
+        Map<String,String[]> queryParams = URLConnectionUtil.getQueryParams(conn);      // ???
         
         // ...
         
         
-        // Add oauth_X params...
+  
+        
+//        // Add oauth_X params...
+//        switch(transmissionType) {
+//        case ParameterTransmissionType.HEADER:
+//            // note that autheHeader should be null at this point (or, maybe an empty map?)
+//            // ...
+//            authHeader = OAuthParamUtil.buildNewOAuthHeaderMap(accessCredential);
+//            
+//            break;
+//        default:
+//            
+//            // TBD:
+//            // This makes sense only if the current form/url params is null (e.g., body is not set), etc...
+//            // ????
+//            
+//            // Not implemented...
+//            throw new InternalErrorException("Not supported/implemented transmissionType: " + transmissionType);
+//            // ....
+//        }
+//        
+//        
+//        String authString = authStringBuilder.generateAuthorizationString(transmissionType, authCredential, httpMethod, baseURI, authHeader, requestParams);
+//
+//        
+//        // add oauth_X params including the signature to conn.
+//        //
+//        switch(transmissionType) {
+//        case ParameterTransmissionType.HEADER:
+//            // ...
+//            // ???
+//            // add a header to the conn
+//            conn.addRequestProperty("Authorization", authString);
+//
+//            break;
+//        default:
+//            // TBD:
+//            // signatureGenerator.generateOAuthParamMap(credential, httpMethod, uriInfo, authHeader, formParams, queryParams);
+//            
+//            // Not implemented...
+//            throw new InternalErrorException("Not supported/implemented transmissionType: " + transmissionType);
+//            // ....
+//        }
+        
+        OAuthOutgoingRequest outgoingRequest = new OAuthOutgoingRequestBuilder().setHttpMethod(httpMethod).setBaseURI(baseURI).setAuthHeader(authHeader).setFormParams(formParams).setQueryParams(queryParams).build();
+        boolean endorsed = endorserService.endorse(outgoingRequest);
+        if(endorsed == false) {
+            throw new InternalErrorException("Failed to endorse the request due to unknown errors.");
+        }
+        
+        
+        String transmissionType = outgoingRequest.getAuthParamTransmissionType();
         switch(transmissionType) {
         case ParameterTransmissionType.HEADER:
-            // note that autheHeader should be null at this point (or, maybe an empty map?)
-            // ...
-            authHeader = OAuthParamUtil.buildNewOAuthHeaderMap(authCredential);
-            
+            String authHeaderStr = outgoingRequest.getAuthHeaderAuthorizationString();
+            conn.setRequestProperty("Authorization", authHeaderStr);
             break;
-        default:
-            
-            // TBD:
-            // This makes sense only if the current form/url params is null (e.g., body is not set), etc...
+        case ParameterTransmissionType.QUERY:
             // ????
-            
-            // Not implemented...
-            throw new InternalErrorException("Not supported/implemented transmissionType: " + transmissionType);
-            // ....
-        }
-        
-        
-        String authString = authStringBuilder.generateAuthorizationString(transmissionType, authCredential, httpMethod, baseURI, authHeader, requestParams);
+//            String newQueryString = request.getQueryParamString();
+//            URL newURL = BaseURIInfo.createURL(baseURI, newQueryString);
+//            conn.setURL(newURL);   // ?????
+//            break;
+            throw new InvalidInputException("Query string cannot be used to include the OAuth signature. ");
+        case ParameterTransmissionType.FORM:
+            // Does this really make sense??
+            conn.setRequestMethod(HttpMethod.POST);
+            conn.setDoOutput(true);   // This works with POST/PUT but not with GET....
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            // String formBody = FormParamUtil.buildUrlEncodedFormParamString(getFormParams());
+            String formBody = outgoingRequest.getFormParamString();
 
-        
-        // add oauth_X params including the signature to conn.
-        //
-        switch(transmissionType) {
-        case ParameterTransmissionType.HEADER:
+            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+            out.write(formBody);
             // ...
-            // ???
-            // add a header to the conn
-            conn.addRequestProperty("Authorization", authString);
-
             break;
         default:
-            // TBD:
-            // signatureGenerator.generateOAuthParamMap(credential, httpMethod, uriInfo, authHeader, formParams, queryParams);
-            
-            // Not implemented...
             throw new InternalErrorException("Not supported/implemented transmissionType: " + transmissionType);
-            // ....
         }
-        
-        
-        return true;
+
+        return endorsed;
     }
     
     

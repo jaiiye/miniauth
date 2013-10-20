@@ -2,6 +2,7 @@ package org.miniauth.oauth.credential.mapper;
 
 import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
+import org.miniauth.credential.ConsumerCredential;
 import org.miniauth.credential.mapper.CredentialMapper;
 import org.miniauth.oauth.credential.OAuthAccessCredential;
 
@@ -10,7 +11,7 @@ import org.miniauth.oauth.credential.OAuthAccessCredential;
  * Service that returns a "secret" given a credential key.
  * Specific implementation (based on the app requirement) should be inherited from this class.
  */
-public abstract class OAuthCredentialMapper implements CredentialMapper
+public abstract class OAuthCredentialMapper implements CredentialMapper, OAuthTokenCredentialMapper
 {
     // temporary
     protected static final String CONSUMER_CREDENTIAL = "consumerCredential";
@@ -51,6 +52,26 @@ public abstract class OAuthCredentialMapper implements CredentialMapper
     {
         return putCredentialSecret(TOKEN_CREDENTIAL, accessToken, tokenSecret);
     }
+
+    @Override
+    public String getConsumerKey()
+    {
+        return null;
+    }
+    @Override
+    public String getConsumerSecret()
+    {
+        return null;
+    }
+    public ConsumerCredential getConsumerCredential()
+    {
+        return null;
+    }
+    public AccessIdentity getAccessIdentity(String accessToken)
+    {
+        return null;
+    }
+
 
     public AccessCredential getAccesssCredential(AccessIdentity accessIdentity)
     {

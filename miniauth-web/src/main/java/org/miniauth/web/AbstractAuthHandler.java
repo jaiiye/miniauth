@@ -1,16 +1,27 @@
 package org.miniauth.web;
 
-import org.miniauth.web.AuthHandler;
+import java.util.logging.Logger;
+
+import org.miniauth.credential.mapper.CredentialMapper;
 
 
-// Place-holder
+// Base class for AuthHandler implementations.
 public abstract class AbstractAuthHandler implements AuthHandler
 {
-    public AbstractAuthHandler()
+    private static final Logger log = Logger.getLogger(AbstractAuthHandler.class.getName());
+
+    private CredentialMapper credentialMapper = null;
+
+    public AbstractAuthHandler(CredentialMapper credentialMapper)
     {
-        
+        this.credentialMapper = credentialMapper;
     }
-    
-    
+
+    @Override
+    public CredentialMapper getCredentialMapper()
+    {
+        return this.credentialMapper;
+    }
+
     
 }
