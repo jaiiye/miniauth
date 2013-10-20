@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.aerysoft.miniauth</groupId>
     <artifactId>miniauth</artifactId>
-    <version>0.8.0</version>
+    <version>0.8.1-SNAPSHOT</version>
   </parent>
 
 <!-- 
@@ -36,19 +36,19 @@
     <dependency>
       <groupId>org.aerysoft.miniauth</groupId>
       <artifactId>miniauth-core</artifactId>
-      <version>0.8.0</version>
+      <version>0.8.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.aerysoft.miniauth</groupId>
       <artifactId>miniauth-oauth</artifactId>
-      <version>0.8.0</version>
+      <version>0.8.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.aerysoft.miniauth</groupId>
       <artifactId>miniauth-oauth2</artifactId>
-      <version>0.8.0</version>
+      <version>0.8.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
 <!-- 
@@ -68,6 +68,6 @@
   </dependencies>
 
   <scm>
-    <tag>v0.8.0</tag>
+    <tag>miniauth-0.1.0</tag>
   </scm>
 </project>
