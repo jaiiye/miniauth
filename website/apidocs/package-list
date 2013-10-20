@@ -1,3 +1,6 @@
-org.miniauth.oauth2
-org.miniauth.oauth2.builder
-org.miniauth.oauth2.util
+org.miniauth.web
+org.miniauth.web.filter
+org.miniauth.web.oauth
+org.miniauth.web.oauth.signature
+org.miniauth.web.oauth.util
+org.miniauth.web.util
