@@ -95,6 +95,15 @@ public final class OAuthTokenCredential implements TokenCredential, Serializable
             return false;
         return true;
     }
+ 
+    
+    // For debugging...
+    @Override
+    public String toString()
+    {
+        return "OAuthTokenCredential [accessToken=" + accessToken
+                + ", tokenSecret=" + tokenSecret + "]";
+    }
 
     
 

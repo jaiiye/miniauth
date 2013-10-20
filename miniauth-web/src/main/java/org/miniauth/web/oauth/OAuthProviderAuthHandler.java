@@ -50,11 +50,12 @@ public class OAuthProviderAuthHandler extends OAuthAuthHandler implements Provid
     public boolean verifyRequest(HttpServletRequest request) throws MiniAuthException, IOException
     {
         String httpMethod = request.getMethod();
-        String requestUrl = request.getRequestURL().toString();
+        String requestUrl = null;
         URI baseURI = null;
         try {
+            requestUrl = request.getRequestURL().toString();
             baseURI = new URI(requestUrl);
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             // ??? This cannot happen.
             throw new InvalidInputException("Invalid requestUrl = " + requestUrl, e);
         }

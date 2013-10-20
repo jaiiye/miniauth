@@ -95,4 +95,14 @@ public final class OAuthConsumerCredential implements ConsumerCredential, Serial
         return true;
     }
 
+    
+    // For debugging...
+    @Override
+    public String toString()
+    {
+        return "OAuthConsumerCredential [consumerKey=" + consumerKey
+                + ", consumerSecret=" + consumerSecret + "]";
+    }
+
+    
 }

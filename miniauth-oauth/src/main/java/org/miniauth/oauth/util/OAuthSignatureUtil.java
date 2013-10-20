@@ -63,6 +63,9 @@ public final class OAuthSignatureUtil
     {
         Map<String,String> params = null;
         String ptType = ParameterTransmissionUtil.getTransmissionType(authHeader, formParams, queryParams);
+        if(ptType == null) {
+            return authHeader;   // ????
+        }
         switch(ptType) {
         case ParameterTransmissionType.HEADER:
             params = authHeader;

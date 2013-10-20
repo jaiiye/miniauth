@@ -170,4 +170,15 @@ public class OAuthCredentialPair implements CredentialPair, Serializable
     }
 
     
+    // For debugging...
+    @Override
+    public String toString()
+    {
+        return "OAuthCredentialPair [consumerCredential=" + consumerCredential
+                + ", tokenCredential=" + tokenCredential + ", accessIdentity="
+                + accessIdentity + ", accessCredential=" + accessCredential
+                + "]";
+    }
+
+    
 }

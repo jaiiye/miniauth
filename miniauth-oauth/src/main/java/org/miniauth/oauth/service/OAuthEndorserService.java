@@ -33,11 +33,13 @@ public class OAuthEndorserService extends OAuthCredentialService implements Endo
     public boolean endorse(OutgoingRequest request) throws MiniAuthException
     {
         AccessIdentity accessIdentity = ((OAuthOutgoingRequest) request).getAccessIdentity();
-        AccessCredential credential = getOAuthCredentialMapper().getAccesssCredential(accessIdentity);
-        if(credential == null || credential.getTokenSecret() == null) {
+        // log.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>> accessIdentity = " + accessIdentity);
+        AccessCredential accessCredential = getOAuthCredentialMapper().getAccesssCredential(accessIdentity);
+        // log.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>> accessCredential = " + accessCredential);
+        if(accessCredential == null || accessCredential.getTokenSecret() == null) {
             throw new InvalidCredentialException("AccessCredential not found.");
         }
-        return OAuthRequestEndorser.getInstance().endorse(credential, request);
+        return OAuthRequestEndorser.getInstance().endorse(accessCredential, request);
     }
     
     

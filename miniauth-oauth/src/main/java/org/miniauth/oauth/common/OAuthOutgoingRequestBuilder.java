@@ -36,19 +36,19 @@ public final class OAuthOutgoingRequestBuilder
     }
 
 
-    protected OAuthOutgoingRequestBuilder setAccessIdentity(AccessIdentity accessIdentity) throws MiniAuthException
+    public OAuthOutgoingRequestBuilder setAccessIdentity(AccessIdentity accessIdentity) throws MiniAuthException
     {
         // TBD:
         outgoingRequest.buildOAuthParamMap(accessIdentity);
         return this;
     }
-    protected OAuthOutgoingRequestBuilder setConsumerKey(String consumerKey) throws MiniAuthException
+    public OAuthOutgoingRequestBuilder setConsumerKey(String consumerKey) throws MiniAuthException
     {
         // TBD:
         outgoingRequest.buildOAuthParamMap(new OAuthAccessIdentity(consumerKey, null));
         return this;
     }
-    protected OAuthOutgoingRequestBuilder setAccessToken(String accessToken) throws MiniAuthException
+    public OAuthOutgoingRequestBuilder setAccessToken(String accessToken) throws MiniAuthException
     {
         // TBD:
         outgoingRequest.buildOAuthParamMap(new OAuthAccessIdentity(null, accessToken));

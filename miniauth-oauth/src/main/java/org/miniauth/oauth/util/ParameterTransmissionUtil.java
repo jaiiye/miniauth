@@ -85,7 +85,10 @@ public final class ParameterTransmissionUtil
         // ????
         // return null;
         // badrequestexception or unauthorizedexception ????
-        throw new InvalidInputException("Auth credential not found.");
+        // throw new InvalidInputException("Auth credential not found.");
+        
+        // The (outgoing) request is being created. (hence, no auth params found.)
+        return getDefaultTransmissionType();
     }
 
 }

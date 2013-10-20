@@ -96,5 +96,14 @@ public final class OAuthAccessCredential implements AccessCredential, Serializab
         return true;
     }
 
+    
+    // For debugging...
+    @Override
+    public String toString()
+    {
+        return "OAuthAccessCredential [consumerSecret=" + consumerSecret
+                + ", tokenSecret=" + tokenSecret + "]";
+    }
+
 
 }

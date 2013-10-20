@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.common.BaseURIInfo;
@@ -37,6 +38,7 @@ import org.miniauth.web.util.URLConnectionUtil;
 // .....
 public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements URLConnectionAuthHandler
 {
+    private static final Logger log = Logger.getLogger(OAuthURLConnectionAuthHandler.class.getName());
 
     // TBD: Is it safe to reuse this???
 //    private final AuthStringBuilder authStringBuilder;
@@ -74,18 +76,15 @@ public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements U
     @Override
     public boolean endorseRequest(String accessToken, HttpURLConnection conn) throws MiniAuthException, IOException
     {
-        AccessIdentity accessIdentity = getOAuthCredentialMapper().getAccessIdentity(accessToken);
-        AccessCredential accessCredential = getOAuthCredentialMapper().getAccesssCredential(accessIdentity);
-        return endorseRequest(accessCredential, conn);
-    }
-    public boolean endorseRequest(AccessCredential accessCredential, HttpURLConnection conn) throws MiniAuthException, IOException
-    {
         // Note:
         // At this point, conn should not contain any oauth_x parameters.
-        if(isEndorsed(conn)) {
-            // return false;
-            throw new InvalidStateException("Request already endorsed.");
-        }
+        // .... 
+        // This seems to call conn.connect() for some reason...
+        // which prevents us from subsequently writing auth headers, etc.
+//        if(isEndorsed(conn)) {
+//            // return false;
+//            throw new InvalidStateException("Request already endorsed.");
+//        }
         // ...
         // 
         // TBD:
@@ -104,7 +103,12 @@ public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements U
         // else validate ????
        
         
-        
+        AccessIdentity accessIdentity = getOAuthCredentialMapper().getAccessIdentity(accessToken);
+        // log.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>> accessIdentity = " + accessIdentity);
+//        AccessCredential accessCredential = getOAuthCredentialMapper().getAccesssCredential(accessIdentity);
+//        log.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>> accessCredential = " + accessCredential);
+
+
         // ...
 
         String httpMethod = conn.getRequestMethod();
@@ -119,7 +123,8 @@ public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements U
         // ???
         Map<String,String> authHeader = OAuthURLConnectionUtil.getAuthParams(conn);
         // Map<String,String[]> requestParams = URLConnectionUtil.getRequestParams(conn);  // ???
-        Map<String,String[]> formParams = URLConnectionUtil.getFormParams(conn);        // ???
+        // Map<String,String[]> formParams = URLConnectionUtil.getFormParams(conn);        // ???
+        Map<String,String[]> formParams = null;        // ???
         Map<String,String[]> queryParams = URLConnectionUtil.getQueryParams(conn);      // ???
         
         // ...
@@ -168,8 +173,11 @@ public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements U
 //            throw new InternalErrorException("Not supported/implemented transmissionType: " + transmissionType);
 //            // ....
 //        }
+
+        // Note that the order of chained methods is important.
+        // Later methods overwrites the previously set value, if they affect the same internal variables.
+        OAuthOutgoingRequest outgoingRequest = new OAuthOutgoingRequestBuilder().setHttpMethod(httpMethod).setBaseURI(baseURI).setAuthHeader(authHeader).setFormParams(formParams).setQueryParams(queryParams).setAccessIdentity(accessIdentity).build();
         
-        OAuthOutgoingRequest outgoingRequest = new OAuthOutgoingRequestBuilder().setHttpMethod(httpMethod).setBaseURI(baseURI).setAuthHeader(authHeader).setFormParams(formParams).setQueryParams(queryParams).build();
         boolean endorsed = endorserService.endorse(outgoingRequest);
         if(endorsed == false) {
             throw new InternalErrorException("Failed to endorse the request due to unknown errors.");
