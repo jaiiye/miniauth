@@ -1,13 +1,6 @@
-org.miniauth
 org.miniauth.basic.builder
 org.miniauth.basic.util
 org.miniauth.common
 org.miniauth.core
 org.miniauth.crypto
-org.miniauth.oauth.common
-org.miniauth.oauth.nonce
-org.miniauth.oauth.service
-org.miniauth.oauth.signature
-org.miniauth.oauth.util
 org.miniauth.util
-org.miniauth.web
