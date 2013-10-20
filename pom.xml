@@ -40,7 +40,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
     <!-- github server corresponds to entry in ~/.m2/settings.xml -->
+<!--
     <github.global.server>github.harrywye</github.global.server>
+-->
+    <github.global.server>github.harrywye.ghsite</github.global.server>
   </properties>
 
   <scm>
@@ -56,11 +59,13 @@
       <name>Temporary Staging Repository</name>
       <url>file://${project.build.directory}/mvn-repo</url>
     </repository>
+<!--
     <site>
       <id>miniauth.home</id>
       <name>MiniAuth Project Home Page</name>
       <url>scp://www.miniauth.org/</url>
     </site>
+-->
   </distributionManagement>
 
   <build>
@@ -107,11 +112,11 @@
 -->
         </configuration>
       </plugin>
-<!-- 
+<!-- -->
       <plugin>
         <groupId>com.github.github</groupId>
         <artifactId>site-maven-plugin</artifactId>
-        <version>0.8</version>
+        <version>0.9</version>
         <executions>
           <execution>
             <id>site.project-website</id>
@@ -119,10 +124,13 @@
               <goal>site</goal>
             </goals>
             <phase>site</phase>
-	        <configuration>
-	          <message>Creating site for ${project.version}</message>
-	        </configuration>
+            <configuration>
+              <message>Creating site for ${project.version}</message>
+              <path>ghsite</path>
+              <merge>false</false>
+            </configuration>
           </execution>
+<!--
           <execution>
             <id>site.maven-repo</id>
             <goals>
@@ -139,9 +147,10 @@
 	          <repositoryName>miniauth</repositoryName>
 	        </configuration>
           </execution>
+-->
         </executions>
       </plugin>
--->
+<!-- -->
     </plugins>
   </build>
 

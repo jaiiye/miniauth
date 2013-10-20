@@ -18,12 +18,14 @@
   <url>http://www.miniauth.org</url>
   <inceptionYear>2013</inceptionYear>
 
+<!--
   <distributionManagement>
     <site>
       <id>miniauth.oauth2</id>
       <url>scp://www.miniauth.org/oauth2</url>
     </site>
   </distributionManagement>
+-->
 
   <dependencies>
     <dependency>
@@ -35,7 +37,28 @@
   </dependencies>
 
 
-  <scm>
-    <tag>miniauth-0.1.0</tag>
-  </scm>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.9</version>
+        <executions>
+          <execution>
+            <id>site.project-website</id>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>site</phase>
+            <configuration>
+              <message>Creating site for ${project.version}</message>
+              <path>ghsite/oauth2</path>
+              <merge>true</false>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>
