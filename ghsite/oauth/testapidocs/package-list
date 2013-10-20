@@ -1,5 +1,0 @@
-org.miniauth.oauth.common
-org.miniauth.oauth.nonce
-org.miniauth.oauth.service
-org.miniauth.oauth.signature
-org.miniauth.oauth.util
