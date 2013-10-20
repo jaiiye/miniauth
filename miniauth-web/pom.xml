@@ -85,7 +85,7 @@
             <configuration>
               <message>Creating site for ${project.version}</message>
               <path>ghsite/web</path>
-              <merge>true</false>
+              <merge>true</merge>
             </configuration>
           </execution>
         </executions>

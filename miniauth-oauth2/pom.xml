@@ -53,7 +53,7 @@
             <configuration>
               <message>Creating site for ${project.version}</message>
               <path>ghsite/oauth2</path>
-              <merge>true</false>
+              <merge>true</merge>
             </configuration>
           </execution>
         </executions>
