@@ -31,7 +31,10 @@
 
   <bannerLeft>
     <name>MiniAuth for Java</name>
+<!--
     <src>http://www.miniauth.org/images/miniauth-logo-v1.png</src>
+-->
+    <src>/images/miniauth-logo-v1.png</src>
     <href>http://www.miniauth.org/</href>
   </bannerLeft>
 <!--

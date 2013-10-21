@@ -13,7 +13,10 @@
 
   <bannerLeft>
     <name>MiniAuth for Java</name>
+<!--
     <src>http://www.miniauth.org/images/miniauth-logo-v1.png</src>
+-->
+    <src>/images/miniauth-logo-v1.png</src>
     <href>http://www.miniauth.org/</href>
   </bannerLeft>
 <!--
@@ -22,10 +25,12 @@
   </bannerRight>
 -->
 
+<!--
   <poweredBy>
     <logo name="Maven" href="http://maven.apache.org/"
           img="http://maven.apache.org/images/logos/maven-feather.png"/>
   </poweredBy>
+-->
 
   <body>
     <links>
