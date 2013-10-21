@@ -21,7 +21,7 @@ How to use it?
 
 If you use Maven, you can build and (locally) install the `MiniAuth` library using standard Maven goals. 
 Note that the project artefacts (jar files) have not been uploaded to any central Maven repository.
-If you don't use Maven, then there is an ant script under `nomaven/scripts`.
+If you don't use Maven, then there is an ant script under _nomaven/scripts_.
 
 
 High Level API Design
@@ -73,7 +73,7 @@ or in the client applications that use URLConnection or HttpClient, etc. (for th
 API
 ---
 
-Please refer to the wiki pages and the API Docs.
+Please refer to [the Project wiki pages](https://github.com/harrywye/miniauth/wiki/_pages) or [the online API Docs](http://www.miniauth.org/repo/apidocs/).
 
 
 
