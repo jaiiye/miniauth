@@ -15,7 +15,7 @@
 
   <name>MiniAuth Core</name>
   <description>MiniAuth OAuth signature library in Java. Core module.</description>
-  <url>http://www.miniauth.org/repo/miniauth-core/</url>
+  <url>http://www.miniauth.org/miniauth-core/</url>
   <inceptionYear>2013</inceptionYear>
 
 <!--

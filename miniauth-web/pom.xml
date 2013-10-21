@@ -15,7 +15,7 @@
 
   <name>MiniAuth Web</name>
   <description>MiniAuth OAuth signature library in Java. Web/Servlet-support module.</description>
-  <url>http://www.miniauth.org/repo/miniauth-web/</url>
+  <url>http://www.miniauth.org/miniauth-web/</url>
   <inceptionYear>2013</inceptionYear>
 
 <!--
