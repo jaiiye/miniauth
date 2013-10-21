@@ -1,6 +1,0 @@
-org.miniauth.web
-org.miniauth.web.filter
-org.miniauth.web.oauth
-org.miniauth.web.oauth.signature
-org.miniauth.web.oauth.util
-org.miniauth.web.util
