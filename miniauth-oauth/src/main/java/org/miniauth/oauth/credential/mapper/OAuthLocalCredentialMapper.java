@@ -49,7 +49,7 @@ public class OAuthLocalCredentialMapper extends OAuthCredentialMapper implements
         if(! superRegistry.containsKey(credentialType)) {
             return null;
         }
-        Map<String,String> credentialRegistry = superRegistry.get(credentialKey);
+        Map<String,String> credentialRegistry = superRegistry.get(credentialType);
         return credentialRegistry.get(credentialKey);
     }
     @Override
@@ -59,6 +59,8 @@ public class OAuthLocalCredentialMapper extends OAuthCredentialMapper implements
         if(! superRegistry.containsKey(credentialType)) {
             credentialRegistry = new HashMap<>();
             superRegistry.put(credentialType, credentialRegistry);
+        } else {
+            credentialRegistry = superRegistry.get(credentialType);
         }
         return credentialRegistry.put(credentialKey, credentialSecret);
     }

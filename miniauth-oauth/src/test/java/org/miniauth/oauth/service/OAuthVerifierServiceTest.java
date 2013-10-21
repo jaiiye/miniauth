@@ -20,19 +20,20 @@ import org.miniauth.oauth.common.OAuthParamMap;
 import org.miniauth.oauth.core.OAuthConstants;
 import org.miniauth.oauth.core.SignatureMethod;
 import org.miniauth.oauth.credential.OAuthAccessCredential;
-import org.miniauth.oauth.credential.mapper.OAuthLocalTokenCredentialMapper;
+import org.miniauth.oauth.credential.mapper.OAuthLocalCredentialMapper;
 
 public class OAuthVerifierServiceTest
 {
     private static final String consumerKey = "_consumer_key_1_";
     private static final String consumerSecret = "_consumer_secret_3_";
-    private OAuthLocalTokenCredentialMapper credentialMapper = null;
+    private OAuthLocalCredentialMapper credentialMapper = null;
     private OAuthVerifierService verifierService = null;
 
     @Before
     public void setUp() throws Exception
     {
-        credentialMapper = OAuthLocalTokenCredentialMapper.getInstance().setConsumerSecret(consumerSecret);
+        credentialMapper = OAuthLocalCredentialMapper.getInstance();
+        credentialMapper.putConsumerSecret(consumerKey, consumerSecret);
         credentialMapper.putTokenSecret("token1", "secret1");
         credentialMapper.putTokenSecret("token2", "secret2");
         credentialMapper.putTokenSecret("_token_1_", "_token_secret_3_");
