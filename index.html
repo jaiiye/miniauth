@@ -36,49 +36,48 @@
     <a href="https://github.com/harrywye/miniauth">MiniAuth OAuth Signature Library in Java</a>.
         </p>
         <p>
-        <a class="btn btn-lg btn-success" href="https://github.com/harrywye/miniauth/fork">Fork me!</a>
+        <a class="btn btn-lg btn-success" href="https://github.com/harrywye/miniauth/fork">Fork me on GitHub!</a>
         </p>
       </div>
 
       <div class="row marketing">
         <div class="col-lg-6">
-          <h4>Goals</h4>
+          <h3>Goals</h3>
           <p>
             <ol>
-            <li>To make request signing less painful on the client side. (Acquiring a user's access token is outside the current scope of MiniAuth).</li>
+            <li>To make request signing less painful on the client side.</li>
             <li>To facilitate easy verification of OAuth signed request on the server side (without having to use a full OAuth server/provider library).</li>
             </ol>
           </p>
 
-          <h4>Features</h4>
+          <h3>Features</h3>
           <p>
             <ul>
             <li>It has no dependency on third party libraries other than JDK (JDK7, see the note below).</li>
             <li>It is light-weight. It does not include full features of OAuth (like "OAuth dance", etc.). </li>
-            <li>The core library (core and oauth modules) does not even use <em>javax.servlet</em> packages.</li>
             </ul>
           </p>
 
-          <h4>Use</h4>
+          <h3>Usage</h3>
           <p>
             If you use Maven, you can build and (locally) install the <code>MiniAuth</code> library using standard Maven goals. 
-            Note that the project artefacts (jar files) have not been uploaded to any central Maven repository.
-            If you don't use Maven, then there is an ant script under <code>nomaven/scripts</code>.
+            If you don't use Maven, then there is an ant script under <em>nomaven/scripts</em>.
           </p>
 
-        </div>
-        <div class="col-lg-6">
-          <h4>API Design</h4>
+          <h3>API Design</h3>
           <p>
             We have three "levels" of APIs, from low to high:
             <ol>
             <li>OAuth (v1) signature generation / verification utils, including crypto support, etc.</li>
-            <li>Generic auth support layer, including generating HTTP "Authorization: " headers, etc.</li>
-            <li>Integration of auth into the <em>java.net.URLConnection</em> and <em>javax.servlet</em> framework.</li>
+            <li>Generic auth support layer, including request signing, etc.</li>
+            <li>Integration of auth into the <em>URLConnection</em> and <em>servlet</em> framework.</li>
             </ol>
           </p>
 
-          <h4>Modules</h4>
+        </div>
+        <div class="col-lg-6">
+
+          <h3>Modules</h3>
             <p>Initially, <code>MiniAuth</code> started as a single module (for OAuth v1.0a). 
             We are currently in the process of refactoring the code to extend the scope of the library to include different authentication methods.
             Please refer to the POM files for module depedencies.</p>
