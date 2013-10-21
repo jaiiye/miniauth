@@ -64,7 +64,7 @@
             <phase>site</phase>
             <configuration>
               <message>Creating site for ${project.version}</message>
-              <path>ghsite/oauth</path>
+              <path>repo/oauth</path>
               <merge>true</merge>
             </configuration>
           </execution>

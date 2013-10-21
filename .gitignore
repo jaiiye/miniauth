@@ -11,4 +11,5 @@ nomaven/build/jar/
 nomaven/build/classes/
 nomaven/build/apidoc/
 
-ghsite
+/ghsite/
+/repo/

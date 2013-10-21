@@ -84,7 +84,7 @@
             <phase>site</phase>
             <configuration>
               <message>Creating site for ${project.version}</message>
-              <path>ghsite/web</path>
+              <path>repo/web</path>
               <merge>true</merge>
             </configuration>
           </execution>

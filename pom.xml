@@ -126,7 +126,7 @@
             <phase>site</phase>
             <configuration>
               <message>Creating site for ${project.version}</message>
-              <path>ghsite</path>
+              <path>repo</path>
               <merge>true</merge>
             </configuration>
           </execution>
