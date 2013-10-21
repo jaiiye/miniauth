@@ -15,7 +15,7 @@
 
   <name>MiniAuth OAuth2</name>
   <description>MiniAuth OAuth signature library in Java. OAuth2 module.</description>
-  <url>http://www.miniauth.org</url>
+  <url>http://www.miniauth.org/repo/miniauth-oauth2/</url>
   <inceptionYear>2013</inceptionYear>
 
 <!--
