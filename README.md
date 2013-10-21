@@ -73,7 +73,7 @@ or in the client applications that use URLConnection or HttpClient, etc. (for th
 API
 ---
 
-(Coming soon...)
+Please refer to the wiki pages and the API Docs.
 
 
 
