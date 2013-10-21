@@ -31,10 +31,7 @@
 
   <bannerLeft>
     <name>MiniAuth for Java</name>
-<!--
     <src>http://www.miniauth.org/images/miniauth-logo-v1.png</src>
--->
-    <src>/images/miniauth-logo-v1.png</src>
     <href>http://www.miniauth.org/</href>
   </bannerLeft>
 <!--
@@ -57,18 +54,19 @@
         document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
       </script>
       <script type="text/javascript">
-        var pageTracker = _gat._getTracker("UA-xxx");
+        var pageTracker = _gat._getTracker("UA-45010819");
         pageTracker._initData();
         pageTracker._trackPageview();
       </script>
     </head>
 
+<!--
     <links>
       <item name="Apache" href="http://www.apache.org/" />
       <item name="Maven 1.0" href="http://maven.apache.org/"/>
       <item name="Maven 2" href="http://maven.apache.org/maven2/"/>
     </links>
-
+-->
     
     <menu ref="parent"/>
     <menu ref="modules"/>
@@ -83,9 +81,11 @@
 <!--
     <footer>Copyright &#169; 2013 Harry Y. All Rights Reserved.</footer>
 -->
+<!--
   <footer>
       <div class="row pull-left">${project.name}. Copyright &#169; 2013 Harry Y. All Rights Reserved.</div>
     </footer>
- 
+-->
+
   </body>
 </project>

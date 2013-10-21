@@ -13,10 +13,7 @@
 
   <bannerLeft>
     <name>MiniAuth for Java</name>
-<!--
     <src>http://www.miniauth.org/images/miniauth-logo-v1.png</src>
--->
-    <src>/images/miniauth-logo-v1.png</src>
     <href>http://www.miniauth.org/</href>
   </bannerLeft>
 <!--
@@ -33,12 +30,13 @@
 -->
 
   <body>
+<!--
     <links>
       <item name="Apache" href="http://www.apache.org/" />
       <item name="Maven 1.0" href="http://maven.apache.org/"/>
       <item name="Maven 2" href="http://maven.apache.org/maven2/"/>
     </links>
-
+-->
     
     <menu ref="parent"/>
     <menu ref="modules"/>
@@ -51,7 +49,9 @@
     </menu>
 -->
 
+<!--
     <footer>Copyright &#169; 2013 Harry Y. All Rights Reserved.</footer>
+-->
 
   </body>
 </project>

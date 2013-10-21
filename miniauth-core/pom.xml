@@ -42,7 +42,7 @@
             <phase>site</phase>
             <configuration>
               <message>Creating site for ${project.version}</message>
-              <path>repo/core</path>
+              <path>repo/miniauth-core</path>
               <merge>true</merge>
             </configuration>
           </execution>

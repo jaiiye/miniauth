@@ -64,7 +64,7 @@
             <phase>site</phase>
             <configuration>
               <message>Creating site for ${project.version}</message>
-              <path>repo/oauth</path>
+              <path>repo/miniauth-oauth</path>
               <merge>true</merge>
             </configuration>
           </execution>

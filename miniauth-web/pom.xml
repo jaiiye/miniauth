@@ -84,7 +84,7 @@
             <phase>site</phase>
             <configuration>
               <message>Creating site for ${project.version}</message>
-              <path>repo/web</path>
+              <path>repo/miniauth-web</path>
               <merge>true</merge>
             </configuration>
           </execution>
