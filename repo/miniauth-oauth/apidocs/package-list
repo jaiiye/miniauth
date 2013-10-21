@@ -1,0 +1,11 @@
+org.miniauth.oauth
+org.miniauth.oauth.builder
+org.miniauth.oauth.common
+org.miniauth.oauth.core
+org.miniauth.oauth.credential
+org.miniauth.oauth.credential.mapper
+org.miniauth.oauth.crypto
+org.miniauth.oauth.nonce
+org.miniauth.oauth.service
+org.miniauth.oauth.signature
+org.miniauth.oauth.util
