@@ -4,7 +4,7 @@
     <property name="classesDir" value="nomaven/build/classes"/>
     <property name="apidocDir" value="nomaven/build/apidoc"/>
     <property name="output" value="nomaven/build/jar"/>
-    <property name="version" value="0.9.0"/>
+    <property name="version" value="0.9.1"/>
 
     <!--  Install these libraries under nomaven/lib (which is not in git repo)  -->
     <property name="httpClientDir" value="nomaven/lib/httpcomponents-client-4.3.1"/>
