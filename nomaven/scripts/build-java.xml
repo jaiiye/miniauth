@@ -6,8 +6,9 @@
     <property name="output" value="nomaven/build/jar"/>
     <property name="version" value="0.9.0"/>
 
-    <!--  Install Apache httpclient under nomaven/lib (which is not git repo)  -->
+    <!--  Install these libraries under nomaven/lib (which is not in git repo)  -->
     <property name="httpClientDir" value="nomaven/lib/httpcomponents-client-4.3.1"/>
+    <property name="gaeSdkDir" value="nomaven/lib/appengine-java-sdk-1.8.6"/>
 
 	<property environment="myenv" />
 	<path id="tomcat.runtime.lib">
@@ -19,6 +20,16 @@
 	    <fileset dir="${httpClientDir}/lib">
 	        <include name="*.jar"/>
 	    </fileset>
+	</path>
+	<path id="google.gaesdk.lib">
+        <fileset dir ="${gaeSdkDir}/lib/user">
+            <include name="**/appengine-api-1.0-sdk*.jar" />
+        </fileset>
+        <fileset dir="${gaeSdkDir}/lib/opt/user">
+          <include name="appengine-api-labs/v1/*.jar" />
+          <include name="appengine-endpoints/v1/*.jar" />
+          <include name="jsr107/v1/*.jar" />
+        </fileset>
 	</path>
 
 
@@ -50,7 +61,14 @@
 			</fileset>
 		</delete>
     </target>
-	<target name="cleanAllClasses" depends="cleanCoreClasses, cleanOAuthClasses, cleanOAuth2Classes, cleanWebClasses">
+	<target name="cleanGAEClasses">
+        <delete failonerror="false">
+		    <fileset dir ="${classesDir}/gae">
+	            <include name="**" />
+			</fileset>
+		</delete>
+    </target>
+	<target name="cleanAllClasses" depends="cleanCoreClasses, cleanOAuthClasses, cleanOAuth2Classes, cleanWebClasses, cleanGAEClasses">
         <delete failonerror="false">
 		    <fileset dir ="${classesDir}/all">
 	            <include name="**" />
@@ -63,6 +81,7 @@
         <mkdir dir="${classesDir}/oauth"/>
         <mkdir dir="${classesDir}/oauth2"/>
         <mkdir dir="${classesDir}/web"/>
+        <mkdir dir="${classesDir}/gae"/>
         <mkdir dir="${output}"/>
     </target>
 
@@ -105,7 +124,19 @@
 -->
         </javac>
     </target>
-	<target name="buildAllClasses" depends="cleanAllClasses, buildCoreClasses, buildOAuthClasses, buildOAuth2Classes, buildWebClasses">
+	<target name="buildGAEClasses" depends="cleanGAEClasses, createOutputDir">
+        <javac srcdir="miniauth-gae/src/main/java"
+                 classpath="${classesDir}/core;${classesDir}/oauth"
+                 destdir="${classesDir}/gae"
+                 debug="on"
+                 source="1.7"
+                 includeantruntime="false">
+<!--
+        	<classpath refid="google.gaesdk.lib"/>
+-->
+        </javac>
+    </target>
+	<target name="buildAllClasses" depends="cleanAllClasses, buildCoreClasses, buildOAuthClasses, buildOAuth2Classes, buildWebClasses, buildGAEClasses">
     </target>
 
 
@@ -131,6 +162,12 @@
         <jar destfile="${output}/miniauth-web-${version}.jar"
              basedir="${classesDir}/web"
              includes="org/miniauth/web/**"
+        />
+    </target>
+    <target name="createGAEJar" depends="buildGAEClasses">
+        <jar destfile="${output}/miniauth-gae-${version}.jar"
+             basedir="${classesDir}/gae"
+             includes="org/miniauth/gae/**"
         />
     </target>
 
@@ -159,6 +196,9 @@
         	<fileset dir ="${classesDir}/web">
 	            <include name="org/miniauth/web/**" />
 			</fileset>
+        	<fileset dir ="${classesDir}/gae">
+	            <include name="org/miniauth/gae/**" />
+			</fileset>
 		</copy>
     </target>
     <target name="createAllJar" depends="copyAllClasses, createOutputDir">
@@ -168,7 +208,7 @@
         />
     </target>
 
-	<target name="exportAllJars" depends="createCoreJar, createOAuthJar, createOAuth2Jar, createWebJar, createAllJar">
+	<target name="exportAllJars" depends="createCoreJar, createOAuthJar, createOAuth2Jar, createWebJar, createGAEJar, createAllJar">
 
 	</target>
 
@@ -189,6 +229,7 @@
         	<classpath refid="tomcat.runtime.lib"/>
 <!--
         	<classpath refid="apache.httpclient.lib"/>
+        	<classpath refid="google.gaesdk.lib"/>
 -->
     	    <packageset dir="miniauth-core/src/main/java" defaultexcludes="yes">
     	      <include name="org/miniauth/**"/>
@@ -201,6 +242,9 @@
     	    </packageset>
     	    <packageset dir="miniauth-web/src/main/java" defaultexcludes="yes">
     	      <include name="org/miniauth/web/**"/>
+     	    </packageset>
+    	    <packageset dir="miniauth-gae/src/main/java" defaultexcludes="yes">
+    	      <include name="org/miniauth/gae/**"/>
      	    </packageset>
 	        <doctitle><![CDATA[<h1>MiniAuth OAuth Library</h1>]]></doctitle>
 	        <bottom><![CDATA[<i>Copyright &#169; 2013 Harry Y. All Rights Reserved.</i>]]></bottom>

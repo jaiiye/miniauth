@@ -184,9 +184,9 @@
     <module>miniauth-oauth</module>
     <module>miniauth-oauth2</module>
     <module>miniauth-web</module>
-<!-- 
+<!-- -->
     <module>miniauth-gae</module>
--->
+<!-- -->
 
   </modules>
 </project>

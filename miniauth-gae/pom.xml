@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.aerysoft.miniauth</groupId>
+    <artifactId>miniauth</artifactId>
+    <version>0.9.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>miniauth-gae</artifactId>
+
+  <name>miniauth-gae</name>
+  <description>MiniAuth OAuth signature library in Java. GAE module.</description>
+  <url>http://www.miniauth.org/miniauth-gae/</url>
+  <inceptionYear>2013</inceptionYear>
+
+<!-- 
+  <repositories>
+    <repository>
+      <id>miniauth.mvn-repo</id>
+      <url>https://raw.github.com/harrywye/miniauth/mvn-repo/</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+-->
+
+<!--
+  <distributionManagement>
+    <site>
+      <id>miniauth.gae</id>
+      <url>scp://www.miniauth.org/gae</url>
+    </site>
+  </distributionManagement>
+-->
+
+  <dependencies>
+    <dependency>
+      <groupId>org.aerysoft.miniauth</groupId>
+      <artifactId>miniauth-core</artifactId>
+      <version>0.9.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.aerysoft.miniauth</groupId>
+      <artifactId>miniauth-oauth</artifactId>
+      <version>0.9.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.aerysoft.miniauth</groupId>
+      <artifactId>miniauth-oauth2</artifactId>
+      <version>0.9.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.appengine</groupId>
+      <artifactId>appengine-api-1.0-sdk</artifactId>
+      <version>1.8.6</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.9</version>
+        <executions>
+          <execution>
+            <id>site.project-website</id>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>site</phase>
+            <configuration>
+              <message>Creating site for ${project.version}</message>
+              <path>repo/miniauth-gae</path>
+              <merge>true</merge>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
