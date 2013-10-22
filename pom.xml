@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
 
 <!--   For OSSRS on SonaType  -->
-<!--  
+<!--  -->
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
     <version>7</version>
   </parent>
--->
+<!--  -->
 
 
 
@@ -66,12 +66,14 @@
 
   <distributionManagement>
 
-<!--  
+<!--  -->
 	<snapshotRepository>
 		<id>sonatype-nexus-snapshots</id>
 		<name>Sonatype Nexus snapshot repository</name>
 		<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 	</snapshotRepository>
+<!--  -->
+<!-- 
 	<repository>
 		<id>sonatype-nexus-staging</id>
 		<name>Sonatype Nexus release staging repository</name>
@@ -188,7 +190,7 @@
       </plugin>
 <!-- -->
 
-        <!--   This will be used during snapshot deploy. Normally this shouldn't be necessary?   -->
+        <!--   This will be used for both snapshot/release deploy.  -->
 <!--  -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
