@@ -1,6 +1,7 @@
 package org.miniauth.oauth.credential.mapper;
 
 import org.miniauth.credential.AccessCredential;
+import org.miniauth.exception.CredentialStoreException;
 
 
 
@@ -10,5 +11,5 @@ import org.miniauth.credential.AccessCredential;
 public interface OAuthConsumerCredentialMapper extends OAuthCredentialMapper
 {
     // ConsumerCredential getConsumerCredential(String consumerKey);
-    AccessCredential getAccesssCredential(String consumerKey);
+    AccessCredential getAccesssCredential(String consumerKey) throws CredentialStoreException;
 }

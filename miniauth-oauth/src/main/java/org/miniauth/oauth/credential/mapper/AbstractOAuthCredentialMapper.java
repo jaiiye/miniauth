@@ -1,7 +1,10 @@
 package org.miniauth.oauth.credential.mapper;
 
+import java.util.logging.Logger;
+
 import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
+import org.miniauth.exception.CredentialStoreException;
 import org.miniauth.oauth.credential.OAuthAccessCredential;
 
 
@@ -11,6 +14,8 @@ import org.miniauth.oauth.credential.OAuthAccessCredential;
  */
 public abstract class AbstractOAuthCredentialMapper implements DynamicOAuthCredentialMapper   //, DynamicOAuthTokenCredentialMapper
 {
+    private static final Logger log = Logger.getLogger(AbstractOAuthCredentialMapper.class.getName());
+
     // temporary
     protected static final String CONSUMER_CREDENTIAL = "consumerCredential";
     protected static final String TOKEN_CREDENTIAL = "tokenCredential";
@@ -34,20 +39,24 @@ public abstract class AbstractOAuthCredentialMapper implements DynamicOAuthCrede
 //    public abstract String putCredentialSecret(String credentialName, String credentialKey, String credentialSecret);
 
 
-    public String getConsumerSecret(String consumerKey)
+    @Override
+    public String getConsumerSecret(String consumerKey) throws CredentialStoreException
     {
         return getCredentialSecret(CONSUMER_CREDENTIAL, consumerKey);
     }
-    public String putConsumerSecret(String consumerKey, String consumerSecret)
+    @Override
+    public String putConsumerSecret(String consumerKey, String consumerSecret) throws CredentialStoreException
     {
         return putCredentialSecret(CONSUMER_CREDENTIAL, consumerKey, consumerSecret);
     }
 
-    public String getTokenSecret(String accessToken)
+    @Override
+    public String getTokenSecret(String accessToken) throws CredentialStoreException
     {
         return getCredentialSecret(TOKEN_CREDENTIAL, accessToken);
     }
-    public String putTokenSecret(String accessToken, String tokenSecret)
+    @Override
+    public String putTokenSecret(String accessToken, String tokenSecret) throws CredentialStoreException
     {
         return putCredentialSecret(TOKEN_CREDENTIAL, accessToken, tokenSecret);
     }
@@ -78,7 +87,8 @@ public abstract class AbstractOAuthCredentialMapper implements DynamicOAuthCrede
 //    }
 
 
-    public AccessCredential getAccesssCredential(AccessIdentity accessIdentity)
+    @Override
+    public AccessCredential getAccesssCredential(AccessIdentity accessIdentity) throws CredentialStoreException
     {
         if(accessIdentity == null) {
             return null;
@@ -90,7 +100,8 @@ public abstract class AbstractOAuthCredentialMapper implements DynamicOAuthCrede
         return new OAuthAccessCredential(consumerSecret, tokenSecret);
     }
 
-    public AccessCredential putAccesssCredential(AccessIdentity accessIdentity, AccessCredential accessCredential)
+    @Override
+    public AccessCredential putAccesssCredential(AccessIdentity accessIdentity, AccessCredential accessCredential) throws CredentialStoreException
     {
         if(accessIdentity == null || accessCredential == null) {   // ???
             return null;

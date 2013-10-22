@@ -2,10 +2,12 @@ package org.miniauth.oauth.credential.mapper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.credential.ConsumerCredential;
+import org.miniauth.exception.CredentialStoreException;
 import org.miniauth.oauth.credential.OAuthAccessCredential;
 import org.miniauth.oauth.credential.OAuthAccessIdentity;
 import org.miniauth.oauth.credential.OAuthConsumerCredential;
@@ -18,6 +20,8 @@ import org.miniauth.oauth.credential.OAuthConsumerCredential;
  */
 public final class OAuthLocalTokenCredentialMapper extends AbstractOAuthCredentialMapper implements DynamicOAuthTokenCredentialMapper
 {
+    private static final Logger log = Logger.getLogger(OAuthLocalTokenCredentialMapper.class.getName());
+
     // TBD:
     // this is just a temporary implementation.
     // the credential should come from persistent storage such as config/DB, etc.
@@ -90,7 +94,7 @@ public final class OAuthLocalTokenCredentialMapper extends AbstractOAuthCredenti
     }
     
     @Override
-    public String getCredentialSecret(String credentialType, String credentialKey)
+    public String getCredentialSecret(String credentialType, String credentialKey) throws CredentialStoreException
     {
         if(CONSUMER_CREDENTIAL.equals(credentialType)) {
             return consumerSecret;
@@ -101,7 +105,7 @@ public final class OAuthLocalTokenCredentialMapper extends AbstractOAuthCredenti
         }
     }
     @Override
-    public String putCredentialSecret(String credentialType, String credentialKey, String credentialSecret)
+    public String putCredentialSecret(String credentialType, String credentialKey, String credentialSecret) throws CredentialStoreException
     {
         if(CONSUMER_CREDENTIAL.equals(credentialType)) {
             String oldConsumerSecret = this.consumerSecret;
@@ -115,34 +119,43 @@ public final class OAuthLocalTokenCredentialMapper extends AbstractOAuthCredenti
     }
 
     @Override
-    public String getTokenSecret(String accessToken)
+    public String getTokenSecret(String accessToken) throws CredentialStoreException
     {
         return tokenRegistry.get(accessToken);
     }
 
     @Override
-    public String putTokenSecret(String accessToken, String tokenSecret)
+    public String putTokenSecret(String accessToken, String tokenSecret) throws CredentialStoreException
     {
         return tokenRegistry.put(accessToken, tokenSecret);
     }
 
     @Override
-    public AccessIdentity getAccessIdentity(String accessToken)
+    public void putTokenSecrets(Map<String, String> tokenCredentials)
+            throws CredentialStoreException
+    {
+        // TBD: Validation ??
+        tokenRegistry.putAll(tokenCredentials);
+    }
+
+    @Override
+    public AccessIdentity getAccessIdentity(String accessToken) throws CredentialStoreException
     {
         return new OAuthAccessIdentity(getConsumerKey(), accessToken);
     }
 
     @Override
-    public AccessCredential getAccesssCredential(String accessToken)
+    public AccessCredential getAccesssCredential(String accessToken) throws CredentialStoreException
     {
         return new OAuthAccessCredential(getConsumerSecret(), getTokenSecret(accessToken));
     }
 
     @Override
-    public AccessCredential putAccesssCredential(String accessToken, String tokenSecret)
+    public AccessCredential putAccesssCredential(String accessToken, String tokenSecret) throws CredentialStoreException
     {
         String oldSecret = tokenRegistry.put(accessToken, tokenSecret);
         return new OAuthAccessCredential(getConsumerSecret(), oldSecret);
     }
+
 
 }

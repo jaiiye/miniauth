@@ -1,5 +1,7 @@
 package org.miniauth.credential.mapper;
 
+import org.miniauth.exception.CredentialStoreException;
+
 
 /**
  * A "credential mapper" provides a method to retrieve a "credential secret" given a "credential key".
@@ -14,8 +16,9 @@ public interface CredentialMapper
      * @param credentialType  Consumer/client credential? Or, user access credential? etc.
      * @param credentialKey Consumer key, access token, username, etc.
      * @return the corresponding secret.
+     * @throws CredentialStoreException TODO
      */
-    String getCredentialSecret(String credentialType, String credentialKey);
+    String getCredentialSecret(String credentialType, String credentialKey) throws CredentialStoreException;
 
     // [2]
 //    String getConsumerSecret(String consumerKey);

@@ -2,6 +2,9 @@ package org.miniauth.oauth.credential.mapper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
+
+import org.miniauth.exception.CredentialStoreException;
 
 
 /**
@@ -11,6 +14,8 @@ import java.util.Map;
  */
 public final class OAuthLocalCredentialMapper extends AbstractOAuthCredentialMapper implements DynamicOAuthCredentialMapper
 {
+    private static final Logger log = Logger.getLogger(OAuthLocalCredentialMapper.class.getName());
+
     // TBD:
     // this is just a temporary implementation.
     // the credential should come from persistent storage such as config/DB, etc.
@@ -42,7 +47,7 @@ public final class OAuthLocalCredentialMapper extends AbstractOAuthCredentialMap
 
 
     @Override
-    public String getCredentialSecret(String credentialType, String credentialKey)
+    public String getCredentialSecret(String credentialType, String credentialKey) throws CredentialStoreException
     {
         if(! superRegistry.containsKey(credentialType)) {
             return null;
@@ -51,7 +56,7 @@ public final class OAuthLocalCredentialMapper extends AbstractOAuthCredentialMap
         return credentialRegistry.get(credentialKey);
     }
     @Override
-    public String putCredentialSecret(String credentialType, String credentialKey, String credentialSecret)
+    public String putCredentialSecret(String credentialType, String credentialKey, String credentialSecret) throws CredentialStoreException
     {
         Map<String,String> credentialRegistry = null;
         if(! superRegistry.containsKey(credentialType)) {

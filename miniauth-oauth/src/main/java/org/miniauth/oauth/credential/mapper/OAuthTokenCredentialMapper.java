@@ -3,6 +3,7 @@ package org.miniauth.oauth.credential.mapper;
 import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.credential.ConsumerCredential;
+import org.miniauth.exception.CredentialStoreException;
 
 
 /**
@@ -32,13 +33,15 @@ public interface OAuthTokenCredentialMapper extends OAuthCredentialMapper
      * Returns a pair of consumer key and access token.
      * @param accessToken
      * @return AccessIdentity comprising a pair of consumer key and access token.
+     * @throws CredentialStoreException TODO
      */
-    AccessIdentity getAccessIdentity(String accessToken);
+    AccessIdentity getAccessIdentity(String accessToken) throws CredentialStoreException;
     
     /**
      * Returns a pair of consumer secret and token secret for the given access token.
      * @param accessToken
      * @return AccessCredential comprising a pair of consumer secret and token secret.
+     * @throws CredentialStoreException TODO
      */
-    AccessCredential getAccesssCredential(String accessToken);
+    AccessCredential getAccesssCredential(String accessToken) throws CredentialStoreException;
 }
