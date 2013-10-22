@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-<!--   For OSSRS on SonaType  -->
+<!--   For OSSRH on SonaType  -->
 <!--  -->
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -66,28 +66,27 @@
 
   <distributionManagement>
 
+<!--   For OSSRH on SonaType  -->
 <!--  -->
 	<snapshotRepository>
 		<id>sonatype-nexus-snapshots</id>
 		<name>Sonatype Nexus snapshot repository</name>
 		<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 	</snapshotRepository>
-<!--  -->
-<!-- 
 	<repository>
 		<id>sonatype-nexus-staging</id>
 		<name>Sonatype Nexus release staging repository</name>
 		<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 	</repository>
--->
-
 <!--  -->
+
+<!--
     <repository>
       <id>internal.repo</id>
       <name>Temporary Staging Repository</name>
       <url>file://${project.build.directory}/mvn-repo</url>
     </repository>
-<!--  -->
+-->
 
 <!--
     <site>
