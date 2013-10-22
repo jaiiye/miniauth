@@ -8,7 +8,7 @@ import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.InvalidCredentialException;
 import org.miniauth.oauth.common.OAuthOutgoingRequest;
-import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
+import org.miniauth.oauth.credential.mapper.OAuthTokenCredentialMapper;
 import org.miniauth.service.EndorserService;
 
 
@@ -18,15 +18,15 @@ public class OAuthEndorserService extends OAuthCredentialService implements Endo
 
     // private OAuthRequestEndorser requestEndorser = null;
     
-    public OAuthEndorserService(OAuthCredentialMapper credentialMapper)
+    public OAuthEndorserService(OAuthTokenCredentialMapper credentialMapper)
     {
         super(credentialMapper);
         // requestEndorser = OAuthRequestEndorser.getInstance();
     }
 
-    public OAuthCredentialMapper getOAuthCredentialMapper()
+    public OAuthTokenCredentialMapper getOAuthTokenCredentialMapper()
     {
-        return (OAuthCredentialMapper) getCredentialMapper();
+        return (OAuthTokenCredentialMapper) getOAuthCredentialMapper();
     }
 
     @Override
@@ -34,6 +34,7 @@ public class OAuthEndorserService extends OAuthCredentialService implements Endo
     {
         AccessIdentity accessIdentity = ((OAuthOutgoingRequest) request).getAccessIdentity();
         // log.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>> accessIdentity = " + accessIdentity);
+//        AccessCredential accessCredential = getOAuthCredentialMapper().getAccesssCredential(accessIdentity);
         AccessCredential accessCredential = getOAuthCredentialMapper().getAccesssCredential(accessIdentity);
         // log.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>> accessCredential = " + accessCredential);
         if(accessCredential == null || accessCredential.getTokenSecret() == null) {

@@ -3,15 +3,13 @@ package org.miniauth.oauth.credential.mapper;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.miniauth.credential.mapper.CredentialMapper;
-
 
 /**
  * Service that returns a "secret" given a credential key.
  * The credential key-secret pairs are stored in a local "registry" (HashMap).
  * (This is just an exemplary implementation. Not for production use, except for a very simple use case.) 
  */
-public class OAuthLocalCredentialMapper extends OAuthCredentialMapper implements CredentialMapper
+public final class OAuthLocalCredentialMapper extends AbstractOAuthCredentialMapper implements DynamicOAuthCredentialMapper
 {
     // TBD:
     // this is just a temporary implementation.

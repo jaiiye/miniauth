@@ -12,14 +12,13 @@ import org.miniauth.MiniAuthException;
 import org.miniauth.common.BaseURIInfo;
 import org.miniauth.core.HttpMethod;
 import org.miniauth.core.ParameterTransmissionType;
-import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.InternalErrorException;
 import org.miniauth.exception.InvalidInputException;
 import org.miniauth.exception.InvalidStateException;
 import org.miniauth.oauth.common.OAuthOutgoingRequest;
 import org.miniauth.oauth.common.OAuthOutgoingRequestBuilder;
-import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
+import org.miniauth.oauth.credential.mapper.OAuthTokenCredentialMapper;
 import org.miniauth.oauth.service.OAuthEndorserService;
 import org.miniauth.web.URLConnectionAuthHandler;
 import org.miniauth.web.oauth.util.OAuthURLConnectionUtil;
@@ -45,14 +44,21 @@ public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements U
 //    private final SignatureGenerator signatureGenerator;
     private final OAuthEndorserService endorserService;
 
-    public OAuthURLConnectionAuthHandler(OAuthCredentialMapper credentialMapper)
+    public OAuthURLConnectionAuthHandler(OAuthTokenCredentialMapper credentialMapper)
     {
         super(credentialMapper);
 //        authStringBuilder = new OAuthAuthStringBuilder();
 //        signatureGenerator = ((OAuthAuthStringBuilder) authStringBuilder).getOAuthSignatureGenerator();  // ???
-        endorserService = new OAuthEndorserService(getOAuthCredentialMapper());
+        endorserService = new OAuthEndorserService(getOAuthTokenCredentialMapper());
     }
+
+    public OAuthTokenCredentialMapper getOAuthTokenCredentialMapper()
+    {
+        return (OAuthTokenCredentialMapper) getOAuthCredentialMapper();
+    }
+
     
+    // TBD:...
     // Note that "signing" is the last step.
     // Once the request is signed, it cannot be modified.
     private boolean isEndorsed(HttpURLConnection conn) throws MiniAuthException, IOException
@@ -103,7 +109,7 @@ public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements U
         // else validate ????
        
         
-        AccessIdentity accessIdentity = getOAuthCredentialMapper().getAccessIdentity(accessToken);
+        AccessIdentity accessIdentity = getOAuthTokenCredentialMapper().getAccessIdentity(accessToken);
         // log.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>> accessIdentity = " + accessIdentity);
 //        AccessCredential accessCredential = getOAuthCredentialMapper().getAccesssCredential(accessIdentity);
 //        log.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>> accessCredential = " + accessCredential);

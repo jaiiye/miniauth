@@ -7,6 +7,9 @@ import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
 import org.miniauth.service.CredentialService;
 
 
+/**
+ * Base class for OAuthEndorserService and OAuthVerifierService.
+ */
 public abstract class OAuthCredentialService implements CredentialService
 {
     private static final Logger log = Logger.getLogger(OAuthCredentialService.class.getName());
@@ -24,6 +27,11 @@ public abstract class OAuthCredentialService implements CredentialService
     {
         return this.credentialMapper;
     }
-    
+
+    public OAuthCredentialMapper getOAuthCredentialMapper()
+    {
+        return (OAuthCredentialMapper) getCredentialMapper();
+    }
+
     
 }

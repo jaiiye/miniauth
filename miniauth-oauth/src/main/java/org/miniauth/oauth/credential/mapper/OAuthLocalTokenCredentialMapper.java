@@ -3,8 +3,10 @@ package org.miniauth.oauth.credential.mapper;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.credential.ConsumerCredential;
+import org.miniauth.oauth.credential.OAuthAccessCredential;
 import org.miniauth.oauth.credential.OAuthAccessIdentity;
 import org.miniauth.oauth.credential.OAuthConsumerCredential;
 
@@ -14,7 +16,7 @@ import org.miniauth.oauth.credential.OAuthConsumerCredential;
  * The token credential pairs are stored in a local "registry" (HashMap).
  * (This is just an exemplary implementation. Not for production use, except for a very simple use case.) 
  */
-public class OAuthLocalTokenCredentialMapper extends OAuthCredentialMapper implements OAuthTokenCredentialMapper
+public final class OAuthLocalTokenCredentialMapper extends AbstractOAuthCredentialMapper implements DynamicOAuthTokenCredentialMapper
 {
     // TBD:
     // this is just a temporary implementation.
@@ -86,12 +88,6 @@ public class OAuthLocalTokenCredentialMapper extends OAuthCredentialMapper imple
     {
         return new OAuthConsumerCredential(getConsumerKey(), getConsumerSecret());
     }
-    @Override
-    public AccessIdentity getAccessIdentity(String accessToken)
-    {
-        return new OAuthAccessIdentity(getConsumerKey(), accessToken);
-    }
-
     
     @Override
     public String getCredentialSecret(String credentialType, String credentialKey)
@@ -128,6 +124,25 @@ public class OAuthLocalTokenCredentialMapper extends OAuthCredentialMapper imple
     public String putTokenSecret(String accessToken, String tokenSecret)
     {
         return tokenRegistry.put(accessToken, tokenSecret);
+    }
+
+    @Override
+    public AccessIdentity getAccessIdentity(String accessToken)
+    {
+        return new OAuthAccessIdentity(getConsumerKey(), accessToken);
+    }
+
+    @Override
+    public AccessCredential getAccesssCredential(String accessToken)
+    {
+        return new OAuthAccessCredential(getConsumerSecret(), getTokenSecret(accessToken));
+    }
+
+    @Override
+    public AccessCredential putAccesssCredential(String accessToken, String tokenSecret)
+    {
+        String oldSecret = tokenRegistry.put(accessToken, tokenSecret);
+        return new OAuthAccessCredential(getConsumerSecret(), oldSecret);
     }
 
 }

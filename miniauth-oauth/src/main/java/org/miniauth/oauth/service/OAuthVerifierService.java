@@ -8,6 +8,7 @@ import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.InvalidCredentialException;
 import org.miniauth.oauth.common.OAuthIncomingRequest;
+import org.miniauth.oauth.credential.mapper.AbstractOAuthCredentialMapper;
 import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
 import org.miniauth.service.VerifierService;
 
@@ -22,11 +23,6 @@ public class OAuthVerifierService extends OAuthCredentialService implements Veri
     {
         super(credentialMapper);
         // requestVerifier = OAuthRequestVerifier.getInstance();
-    }
-
-    public OAuthCredentialMapper getOAuthCredentialMapper()
-    {
-        return (OAuthCredentialMapper) getCredentialMapper();
     }
 
     @Override

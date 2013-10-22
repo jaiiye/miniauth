@@ -13,7 +13,7 @@ import org.miniauth.MiniAuthException;
 import org.miniauth.exception.InvalidInputException;
 import org.miniauth.oauth.common.OAuthIncomingRequest;
 import org.miniauth.oauth.common.OAuthIncomingRequestBuilder;
-import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
+import org.miniauth.oauth.credential.mapper.AbstractOAuthCredentialMapper;
 import org.miniauth.oauth.service.OAuthVerifierService;
 import org.miniauth.web.ProviderAuthHandler;
 import org.miniauth.web.oauth.util.OAuthServletRequestUtil;
@@ -31,7 +31,7 @@ public class OAuthProviderAuthHandler extends OAuthAuthHandler implements Provid
 //    private final SignatureVerifier signatureVerifier;
     private final OAuthVerifierService verifierService;
     
-    public OAuthProviderAuthHandler(OAuthCredentialMapper credentialMapper)
+    public OAuthProviderAuthHandler(AbstractOAuthCredentialMapper credentialMapper)
     {
         super(credentialMapper);
 //        signatureVerifier = new OAuthSignatureVerifier();

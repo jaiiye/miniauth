@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.miniauth.MiniAuthException;
 import org.miniauth.core.AuthScheme;
-import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
+import org.miniauth.oauth.credential.mapper.AbstractOAuthCredentialMapper;
 import org.miniauth.web.ProviderAuthHandler;
 import org.miniauth.web.oauth.OAuthProviderAuthHandler;
 
@@ -26,7 +26,7 @@ public class OAuthProviderAuthFilter extends ProviderAuthFilter implements Filte
 {
     private static final Logger log = Logger.getLogger(OAuthProviderAuthFilter.class.getName());
 
-    OAuthCredentialMapper credentialMapper = null;
+    AbstractOAuthCredentialMapper credentialMapper = null;
     
     // This should be multi-thread safe... ???
     private ProviderAuthHandler providerAuthHandler = null;
