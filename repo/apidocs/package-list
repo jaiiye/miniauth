@@ -10,6 +10,10 @@ org.miniauth.credential
 org.miniauth.credential.mapper
 org.miniauth.crypto
 org.miniauth.exception
+org.miniauth.gae
+org.miniauth.gae.credential.mapper
+org.miniauth.gae.datastore
+org.miniauth.gae.service
 org.miniauth.oauth
 org.miniauth.oauth.builder
 org.miniauth.oauth.common

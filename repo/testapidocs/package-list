@@ -4,6 +4,7 @@ org.miniauth.basic.util
 org.miniauth.common
 org.miniauth.core
 org.miniauth.crypto
+org.miniauth.gae.credential.mapper
 org.miniauth.oauth.common
 org.miniauth.oauth.nonce
 org.miniauth.oauth.service
