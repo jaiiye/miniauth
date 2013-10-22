@@ -10,8 +10,8 @@
 
   <artifactId>miniauth-gae</artifactId>
 
-  <name>miniauth-gae</name>
-  <description>MiniAuth OAuth signature library in Java. GAE module.</description>
+  <name>MiniAuth GAE</name>
+  <description>MiniAuth OAuth signature library in Java. GAE support module.</description>
   <url>http://www.miniauth.org/miniauth-gae/</url>
   <inceptionYear>2013</inceptionYear>
 

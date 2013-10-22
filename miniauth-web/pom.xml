@@ -27,12 +27,14 @@
   </distributionManagement>
 -->
 
+<!--  
   <repositories>
     <repository>
       <id>org.apache.tomcat</id>
       <url>http://repo2.maven.org/maven2/org/apache/tomcat/</url>
     </repository>
   </repositories>
+-->
 
   <dependencies>
     <dependency>
