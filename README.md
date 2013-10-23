@@ -20,8 +20,15 @@ How to use it?
 ---
 
 If you use Maven, you can build and (locally) install the `MiniAuth` library using standard Maven goals. 
-Note that the project artefacts (jar files) have not been uploaded to any central Maven repository.
-If you don't use Maven, then there is an ant script under _nomaven/scripts_.
+(If you don't use Maven, then there is an ant script under _nomaven/scripts_.)
+You can specify the dependency as follows:
+
+  	<dependency>
+      <groupId>org.aerysoft.miniauth</groupId>
+      <artifactId>miniauth-oauth</artifactId>
+      <version>0.9.1</version>
+  	</dependency>
+
 
 
 High Level API Design
