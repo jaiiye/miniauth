@@ -1,7 +1,7 @@
-miniauth
+MiniAuth for Java
 ========
 
-_MiniAuth OAuth signature library in Java_
+_OAuth signature library in Java_
 
 
 What is it?
@@ -19,9 +19,9 @@ What is it?
 How to use it?
 ---
 
-If you use Maven, you can build and (locally) install the `MiniAuth` library using standard Maven goals. 
+If you use Maven, you can download/fork the `MiniAuth` library, and build (locally) using standard Maven goals. 
 (If you don't use Maven, then there is an ant script under _nomaven/scripts_.)
-You can specify the dependency as follows:
+Otherwise, you can specify the dependency as follows:
 
   	<dependency>
       <groupId>org.aerysoft.miniauth</groupId>
