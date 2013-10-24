@@ -1,0 +1,4 @@
+org.miniauth.gae
+org.miniauth.gae.credential.mapper
+org.miniauth.gae.datastore
+org.miniauth.gae.service
