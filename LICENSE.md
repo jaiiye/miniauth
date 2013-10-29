@@ -1,4 +1,4 @@
-The Do-No-Evil License Version 1.0 (DNE-1.0)
+The Do-No-Evil License Version 1.0 ([DNE-1.0](http://www.noevils.org/licenses/donoevil-1.0.html))
 
 _Copyright (c) 2013 Harry Y_
 
