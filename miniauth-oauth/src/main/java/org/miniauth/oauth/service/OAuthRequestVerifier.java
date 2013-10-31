@@ -1,5 +1,6 @@
 package org.miniauth.oauth.service;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,9 +21,10 @@ import org.miniauth.signature.SignatureVerifier;
  * OAuth Request verifier.
  * verify() verifies the OAuth request signature.
  */
-public class OAuthRequestVerifier implements RequestVerifier
+public class OAuthRequestVerifier implements RequestVerifier, Serializable
 {
     private static final Logger log = Logger.getLogger(OAuthRequestVerifier.class.getName());
+    private static final long serialVersionUID = 1L;
 
     // TBD: 
     private SignatureVerifier signatureVerifier = null;

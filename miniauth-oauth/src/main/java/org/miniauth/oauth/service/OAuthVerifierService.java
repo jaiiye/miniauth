@@ -16,6 +16,7 @@ import org.miniauth.service.VerifierService;
 public class OAuthVerifierService extends OAuthCredentialService implements VerifierService
 {
     private static final Logger log = Logger.getLogger(OAuthVerifierService.class.getName());
+    private static final long serialVersionUID = 1L;
 
     // private OAuthRequestVerifier requestVerifier = null;
 

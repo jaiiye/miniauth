@@ -15,6 +15,7 @@ import org.miniauth.service.EndorserService;
 public class OAuthEndorserService extends OAuthCredentialService implements EndorserService
 {
     private static final Logger log = Logger.getLogger(OAuthEndorserService.class.getName());
+    private static final long serialVersionUID = 1L;
 
     // private OAuthRequestEndorser requestEndorser = null;
     

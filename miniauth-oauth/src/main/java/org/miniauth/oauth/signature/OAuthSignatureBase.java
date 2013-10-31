@@ -1,5 +1,6 @@
 package org.miniauth.oauth.signature;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,9 +25,10 @@ import org.miniauth.oauth.util.PercentEncoder;
  * Base class for Signature generator/verifier implementations for OAuth.
  * Cf. http://tools.ietf.org/html/rfc5849#section-3.4 
  */
-public abstract class OAuthSignatureBase
+public abstract class OAuthSignatureBase implements Serializable
 {
     private static final Logger log = Logger.getLogger(OAuthSignatureBase.class.getName());
+    private static final long serialVersionUID = 1L;
 
     protected OAuthSignatureBase()
     {

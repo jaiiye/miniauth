@@ -30,6 +30,7 @@ import org.miniauth.signature.SignatureVerifier;
 public class OAuthSignatureVerifier extends OAuthSignatureBase implements SignatureVerifier
 {
     private static final Logger log = Logger.getLogger(OAuthSignatureVerifier.class.getName());
+    private static final long serialVersionUID = 1L;
 
     public OAuthSignatureVerifier()
     {

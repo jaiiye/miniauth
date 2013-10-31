@@ -1,5 +1,6 @@
 package org.miniauth.oauth.service;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,7 +11,6 @@ import org.miniauth.credential.AccessCredential;
 import org.miniauth.exception.InvalidInputException;
 import org.miniauth.exception.InvalidStateException;
 import org.miniauth.oauth.common.OAuthOutgoingRequest;
-import org.miniauth.oauth.common.OAuthParamMap;
 import org.miniauth.oauth.signature.OAuthSignatureGenerator;
 import org.miniauth.service.RequestEndorser;
 import org.miniauth.signature.SignatureGenerator;
@@ -20,9 +20,10 @@ import org.miniauth.signature.SignatureGenerator;
  * OAuth Request signer implementation.
  * (Using a generic/broader term "endorse" instead of "sign" for future generalization.)
  */
-public class OAuthRequestEndorser implements RequestEndorser
+public class OAuthRequestEndorser implements RequestEndorser, Serializable
 {
     private static final Logger log = Logger.getLogger(OAuthRequestEndorser.class.getName());
+    private static final long serialVersionUID = 1L;
 
     // TBD: 
     private SignatureGenerator signatureGenerator = null;

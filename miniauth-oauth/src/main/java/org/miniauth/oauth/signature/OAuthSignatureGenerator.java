@@ -26,6 +26,7 @@ import org.miniauth.signature.SignatureGenerator;
 public class OAuthSignatureGenerator extends OAuthSignatureBase implements SignatureGenerator
 {
     private static final Logger log = Logger.getLogger(OAuthSignatureGenerator.class.getName());
+    private static final long serialVersionUID = 1L;
 
     public OAuthSignatureGenerator()
     {
