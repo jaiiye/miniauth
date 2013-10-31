@@ -26,7 +26,7 @@ Otherwise, you can specify the dependency as follows:
   	<dependency>
       <groupId>org.aerysoft.miniauth</groupId>
       <artifactId>miniauth-oauth</artifactId>
-      <version>0.9.1</version>
+      <version>0.9.2</version>
   	</dependency>
 
 
