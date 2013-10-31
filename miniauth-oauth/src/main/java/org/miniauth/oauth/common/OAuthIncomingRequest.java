@@ -123,7 +123,7 @@ public class OAuthIncomingRequest extends IncomingRequest
         initAuthParamTransmissionType();
         setReady(true);
     }
-    public OAuthParamMap getOauthParamMap()
+    public OAuthParamMap getOAuthParamMap()
     {
         return oauthParamMap;
     }
