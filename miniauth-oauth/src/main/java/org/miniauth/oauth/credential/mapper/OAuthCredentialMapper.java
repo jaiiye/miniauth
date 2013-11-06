@@ -40,5 +40,11 @@ public interface OAuthCredentialMapper extends CredentialMapper
     AccessCredential getAccesssCredential(AccessIdentity accessIdentity) throws CredentialStoreException;
 
     // AccessCredential getAccesssCredential(String consumerKey, String accessToken);
+    
+    // TBD:
+    // "existsXXX()" methods???
+    // e.g., 
+    // boolean hasConsumerCredential(String consumerKey) throws CredentialStoreException;
+    // etc...
 
 }

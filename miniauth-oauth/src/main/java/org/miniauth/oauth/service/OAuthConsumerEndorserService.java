@@ -8,30 +8,31 @@ import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.InvalidCredentialException;
 import org.miniauth.oauth.common.OAuthOutgoingRequest;
-import org.miniauth.oauth.credential.mapper.OAuthTokenCredentialMapper;
+import org.miniauth.oauth.credential.mapper.OAuthConsumerCredentialMapper;
 import org.miniauth.service.EndorserService;
 
 
 /**
- * An EndorserService can be defined per Consumer.
- * (Consumer credential is implicitly set via the embedded OAuthTokenCredentialMapper.)
+ * An OAuthConsumerEndorserService can be used for Two-Legged OAuth.
+ * It can be reused across multiple consumer credentials.
+ * (Consumer credentials are implicitly set via the embedded OAuthConsumerCredentialMapper.)
  */
-public class OAuthEndorserService extends OAuthCredentialService implements EndorserService
+public class OAuthConsumerEndorserService extends OAuthCredentialService implements EndorserService
 {
-    private static final Logger log = Logger.getLogger(OAuthEndorserService.class.getName());
+    private static final Logger log = Logger.getLogger(OAuthConsumerEndorserService.class.getName());
     private static final long serialVersionUID = 1L;
 
     // private OAuthRequestEndorser requestEndorser = null;
     
-    public OAuthEndorserService(OAuthTokenCredentialMapper credentialMapper)
+    public OAuthConsumerEndorserService(OAuthConsumerCredentialMapper credentialMapper)
     {
         super(credentialMapper);
         // requestEndorser = OAuthRequestEndorser.getInstance();
     }
 
-    public OAuthTokenCredentialMapper getOAuthTokenCredentialMapper()
+    public OAuthConsumerCredentialMapper getOAuthConsumerCredentialMapper()
     {
-        return (OAuthTokenCredentialMapper) getOAuthCredentialMapper();
+        return (OAuthConsumerCredentialMapper) getOAuthCredentialMapper();
     }
 
     @Override

@@ -9,6 +9,10 @@ import org.miniauth.exception.CredentialStoreException;
 import org.miniauth.oauth.credential.OAuthAccessCredential;
 
 
+/**
+ * Default implementation of OAuthConsumerCredentialMapper,
+ *    which is a "credential mapper" for two-legged OAuth (2LO).
+ */
 public final class OAuthLocalConsumerCredentialMapper extends AbstractOAuthCredentialMapper implements DynamicOAuthConsumerCredentialMapper
 {
     private static final Logger log = Logger.getLogger(OAuthLocalConsumerCredentialMapper.class.getName());

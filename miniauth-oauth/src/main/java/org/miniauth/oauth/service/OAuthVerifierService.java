@@ -8,11 +8,16 @@ import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
 import org.miniauth.exception.InvalidCredentialException;
 import org.miniauth.oauth.common.OAuthIncomingRequest;
-import org.miniauth.oauth.credential.mapper.AbstractOAuthCredentialMapper;
 import org.miniauth.oauth.credential.mapper.OAuthCredentialMapper;
 import org.miniauth.service.VerifierService;
 
 
+/**
+ * Default implementation of VerifierService, to be used in OAuth provider/server.
+ * Note that an instance of OAuthVerifierService is used across multiple oauth consumers.
+ * That is, based on IncomingRequest, an appropriate consumer (consumer credential) is selected for verification.
+ * The consumer credential info is implicitly set via the embedded OAuthCredentialMapper object. 
+ */
 public class OAuthVerifierService extends OAuthCredentialService implements VerifierService
 {
     private static final Logger log = Logger.getLogger(OAuthVerifierService.class.getName());

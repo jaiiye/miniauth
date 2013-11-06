@@ -18,7 +18,7 @@ import org.miniauth.oauth.credential.OAuthConsumerCredential;
  * The token credential pairs are stored in a local "registry" (HashMap).
  * (This is just an exemplary implementation. Not for production use, except for a very simple use case.) 
  */
-public final class OAuthLocalTokenCredentialMapper extends AbstractOAuthCredentialMapper implements DynamicOAuthTokenCredentialMapper
+public class OAuthLocalTokenCredentialMapper extends AbstractOAuthCredentialMapper implements DynamicOAuthTokenCredentialMapper
 {
     private static final Logger log = Logger.getLogger(OAuthLocalTokenCredentialMapper.class.getName());
 
@@ -31,10 +31,17 @@ public final class OAuthLocalTokenCredentialMapper extends AbstractOAuthCredenti
     private String consumerKey = null;
     private String consumerSecret = null;
 
-    private OAuthLocalTokenCredentialMapper()
+    public OAuthLocalTokenCredentialMapper()
+    {
+        this(null, null);
+    }
+    public OAuthLocalTokenCredentialMapper(String consumerKey, String consumerSecret)
     {
         super();
+        this.consumerKey = consumerKey;
+        this.consumerSecret = consumerSecret;
     }
+
 
     @Override
     protected void init()
@@ -45,6 +52,14 @@ public final class OAuthLocalTokenCredentialMapper extends AbstractOAuthCredenti
         // ...
     }
 
+
+    // 11/05/13
+    // This does not really make sense.
+    // Singleton can be useful only in apps that require a single consumer key/secret pair...
+    // --> Made the constructor public, for now...
+    // but, in general, being able to "share", or reuse, tokenRegistry is, can be, important....
+    // ....
+    
     // TBD:
     // This is a weird singleton.
     // Note that we are assuming we are using a single consumerKey/Secret within a single app.
@@ -58,10 +73,12 @@ public final class OAuthLocalTokenCredentialMapper extends AbstractOAuthCredenti
         private static final OAuthLocalTokenCredentialMapper INSTANCE = new OAuthLocalTokenCredentialMapper();
     }
     // Singleton method
+    @Deprecated
     public static OAuthLocalTokenCredentialMapper getInstance()
     {
         return OAuthLocalCredentialMapperHolder.INSTANCE;
     }
+
 
     @Override
     public String getConsumerKey()
