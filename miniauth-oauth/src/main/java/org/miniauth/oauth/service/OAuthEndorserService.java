@@ -43,6 +43,7 @@ public class OAuthEndorserService extends OAuthCredentialService implements Endo
         AccessCredential accessCredential = getOAuthCredentialMapper().getAccesssCredential(accessIdentity);
         // log.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>> accessCredential = " + accessCredential);
         // if(accessCredential == null) {
+        // if(accessCredential == null || accessCredential.getConsumerSecret() == null) {
         if(accessCredential == null || (accessCredential.getConsumerSecret() == null && accessCredential.getTokenSecret() == null) ) {
             throw new InvalidCredentialException("AccessCredential not found.");
         }
