@@ -23,7 +23,8 @@ import org.miniauth.oauth.credential.OAuthConsumerCredential;
 public final class OAuthNullTokenCredentialMapper extends AbstractOAuthCredentialMapper implements DynamicOAuthTokenCredentialMapper
 {
     private static final Logger log = Logger.getLogger(OAuthNullTokenCredentialMapper.class.getName());
-    
+    private static final long serialVersionUID = 1L;
+
     // Consumer credential is hard-coded.
     private final String consumerKey;
     private final String consumerSecret;

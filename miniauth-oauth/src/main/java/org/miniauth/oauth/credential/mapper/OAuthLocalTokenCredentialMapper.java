@@ -21,6 +21,7 @@ import org.miniauth.oauth.credential.OAuthConsumerCredential;
 public class OAuthLocalTokenCredentialMapper extends AbstractOAuthCredentialMapper implements DynamicOAuthTokenCredentialMapper
 {
     private static final Logger log = Logger.getLogger(OAuthLocalTokenCredentialMapper.class.getName());
+    private static final long serialVersionUID = 1L;
 
     // TBD:
     // this is just a temporary implementation.

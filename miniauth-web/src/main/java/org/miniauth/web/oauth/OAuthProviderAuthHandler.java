@@ -26,6 +26,7 @@ import org.miniauth.web.util.ServletRequestUtil;
 public class OAuthProviderAuthHandler extends OAuthAuthHandler implements ProviderAuthHandler
 {
     private static final Logger log = Logger.getLogger(OAuthProviderAuthHandler.class.getName());
+    private static final long serialVersionUID = 1L;
 
     // TBD: Is it safe to reuse this???
 //    private final SignatureVerifier signatureVerifier;

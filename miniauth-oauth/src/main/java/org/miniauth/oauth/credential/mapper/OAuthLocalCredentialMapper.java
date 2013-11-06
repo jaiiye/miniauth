@@ -15,6 +15,7 @@ import org.miniauth.exception.CredentialStoreException;
 public final class OAuthLocalCredentialMapper extends AbstractOAuthCredentialMapper implements DynamicOAuthCredentialMapper
 {
     private static final Logger log = Logger.getLogger(OAuthLocalCredentialMapper.class.getName());
+    private static final long serialVersionUID = 1L;
 
     // TBD:
     // this is just a temporary implementation.

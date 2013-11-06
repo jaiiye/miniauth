@@ -10,6 +10,8 @@ import org.miniauth.web.AuthHandler;
  */
 public abstract class OAuthAuthHandler extends AbstractAuthHandler implements AuthHandler
 {
+    private static final long serialVersionUID = 1L;
+
     public OAuthAuthHandler(OAuthCredentialMapper credentialMapper)
     {
         super(credentialMapper);

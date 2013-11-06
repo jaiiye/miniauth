@@ -38,6 +38,7 @@ import org.miniauth.web.util.URLConnectionUtil;
 public class OAuthURLConnectionAuthHandler extends OAuthAuthHandler implements URLConnectionAuthHandler
 {
     private static final Logger log = Logger.getLogger(OAuthURLConnectionAuthHandler.class.getName());
+    private static final long serialVersionUID = 1L;
 
     // TBD: Is it safe to reuse this???
 //    private final AuthStringBuilder authStringBuilder;

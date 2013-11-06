@@ -1,5 +1,6 @@
 package org.miniauth.oauth.credential.mapper;
 
+import java.io.Serializable;
 import java.util.logging.Logger;
 
 import org.miniauth.credential.AccessCredential;
@@ -12,9 +13,10 @@ import org.miniauth.oauth.credential.OAuthAccessCredential;
  * Service that returns a "secret" given a credential key.
  * Specific implementation (based on the app requirement) should be inherited from this class.
  */
-public abstract class AbstractOAuthCredentialMapper implements DynamicOAuthCredentialMapper   //, DynamicOAuthTokenCredentialMapper
+public abstract class AbstractOAuthCredentialMapper implements DynamicOAuthCredentialMapper, Serializable
 {
     private static final Logger log = Logger.getLogger(AbstractOAuthCredentialMapper.class.getName());
+    private static final long serialVersionUID = 1L;
 
     // temporary
     protected static final String CONSUMER_CREDENTIAL = "consumerCredential";
