@@ -126,9 +126,17 @@ public class OAuthSingleConsumerCredentialMapper extends AbstractOAuthCredential
         return new OAuthAccessIdentity(getConsumerKey(), null);
     }
 
-    public AccessCredential getAccesssCredential(String consumerKey) throws CredentialStoreException
+    public AccessCredential getAccesssCredential() throws CredentialStoreException
     {
         return new OAuthAccessCredential(getConsumerSecret(), null);
+    }
+    @Override
+    public AccessCredential getAccesssCredential(String consumerKey) throws CredentialStoreException
+    {
+        // TBD:
+        // assert consumerKey == this.getConsumerKey().
+        // ...
+        return getAccesssCredential();
     }
 
     @Override

@@ -18,10 +18,9 @@ import org.miniauth.exception.InvalidStateException;
 import org.miniauth.oauth.common.OAuthOutgoingRequest;
 import org.miniauth.oauth.common.OAuthOutgoingRequestBuilder;
 import org.miniauth.oauth.credential.mapper.OAuthConsumerCredentialMapper;
-import org.miniauth.oauth.credential.mapper.OAuthSingleConsumerCredentialMapper;
+import org.miniauth.oauth.credential.mapper.OAuthLocalConsumerCredentialMapper;
 import org.miniauth.oauth.service.OAuthConsumerEndorserService;
-import org.miniauth.oauth.service.OAuthSingleConsumerEndorserService;
-import org.miniauth.web.SingleConsumerURLConnectionAuthHandler;
+import org.miniauth.web.ConsumerURLConnectionAuthHandler;
 import org.miniauth.web.oauth.util.OAuthURLConnectionUtil;
 import org.miniauth.web.util.URLConnectionUtil;
 
@@ -36,36 +35,32 @@ import org.miniauth.web.util.URLConnectionUtil;
 // Note:
 // This class has not been fully implemented....
 // .....
-public class OAuthSingleConsumerURLConnectionAuthHandler extends OAuthAuthHandler implements SingleConsumerURLConnectionAuthHandler
+public class OAuthConsumerURLConnectionAuthHandler extends OAuthAuthHandler implements ConsumerURLConnectionAuthHandler
 {
-    private static final Logger log = Logger.getLogger(OAuthSingleConsumerURLConnectionAuthHandler.class.getName());
+    private static final Logger log = Logger.getLogger(OAuthConsumerURLConnectionAuthHandler.class.getName());
     private static final long serialVersionUID = 1L;
 
     // TBD: Is it safe to reuse this???
 //    private final AuthStringBuilder authStringBuilder;
 //    private final SignatureGenerator signatureGenerator;
-    private final OAuthSingleConsumerEndorserService endorserService;
+    private final OAuthConsumerEndorserService endorserService;
 
-    public OAuthSingleConsumerURLConnectionAuthHandler(String consumerKey, String consumerSecret)
+    public OAuthConsumerURLConnectionAuthHandler()
     {
-        this(new OAuthSingleConsumerCredentialMapper(consumerKey, consumerSecret));
+        this(OAuthLocalConsumerCredentialMapper.getInstance());
     }
-    public OAuthSingleConsumerURLConnectionAuthHandler(OAuthSingleConsumerCredentialMapper credentialMapper)
+    public OAuthConsumerURLConnectionAuthHandler(OAuthConsumerCredentialMapper credentialMapper)
     {
         super(credentialMapper);
 //        authStringBuilder = new OAuthAuthStringBuilder();
 //        signatureGenerator = ((OAuthAuthStringBuilder) authStringBuilder).getOAuthSignatureGenerator();  // ???
         
-        endorserService = new OAuthSingleConsumerEndorserService(credentialMapper);
+        endorserService = new OAuthConsumerEndorserService(credentialMapper);
     }
 
     public OAuthConsumerCredentialMapper getOAuthConsumerCredentialMapper()
     {
         return (OAuthConsumerCredentialMapper) getOAuthCredentialMapper();
-    }
-    public OAuthSingleConsumerCredentialMapper getOAuthSingleConsumerCredentialMapper()
-    {
-        return (OAuthSingleConsumerCredentialMapper) getOAuthCredentialMapper();
     }
 
     
@@ -90,13 +85,11 @@ public class OAuthSingleConsumerURLConnectionAuthHandler extends OAuthAuthHandle
      * @throws IOException
      */
     @Override
-    public boolean endorseRequest(HttpURLConnection conn) throws MiniAuthException, IOException
+    public boolean endorseRequest(String consumerKey, HttpURLConnection conn) throws MiniAuthException, IOException
     {
         // Note:
         // At this point, conn should not contain any oauth_x parameters.
         // .... 
-        
-        String consumerKey = getOAuthSingleConsumerCredentialMapper().getConsumerKey();
         
         String httpMethod = conn.getRequestMethod();
         

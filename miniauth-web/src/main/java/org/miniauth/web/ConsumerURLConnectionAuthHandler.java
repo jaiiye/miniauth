@@ -10,7 +10,6 @@ import org.miniauth.MiniAuthException;
 /**
  * Client-side auth handler using HttpURLConnection
  *    when the users do not require authcerendtial, such as in 2-Legged OAuth.
- * (Not implemented yet.)
  */
 public interface ConsumerURLConnectionAuthHandler extends ClientAuthHandler
 {
