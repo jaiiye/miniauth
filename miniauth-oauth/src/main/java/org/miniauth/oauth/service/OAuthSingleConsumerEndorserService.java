@@ -52,7 +52,7 @@ public class OAuthSingleConsumerEndorserService extends OAuthCredentialService i
         // ...
         AccessCredential accessCredential = getOAuthSingleConsumerCredentialMapper().getAccesssCredential();
         // log.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>> accessCredential = " + accessCredential);
-        if(accessCredential == null || accessCredential.getTokenSecret() == null) {
+        if(accessCredential == null || accessCredential.getConsumerSecret() == null) {
             throw new InvalidCredentialException("AccessCredential not found.");
         }
         return OAuthRequestEndorser.getInstance().endorse(accessCredential, request);
