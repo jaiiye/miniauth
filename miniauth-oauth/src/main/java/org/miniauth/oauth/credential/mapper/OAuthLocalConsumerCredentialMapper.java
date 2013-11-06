@@ -95,15 +95,13 @@ public final class OAuthLocalConsumerCredentialMapper extends AbstractOAuthCrede
     }
 
     @Override
-    public AccessCredential getAccesssCredential(String consumerKey)
-            throws CredentialStoreException
+    public AccessCredential getAccesssCredential(String consumerKey) throws CredentialStoreException
     {
         return new OAuthAccessCredential(getConsumerSecret(consumerKey), null);
     }
 
     @Override
-    public AccessCredential putAccesssCredential(String consumerKey,
-            String consumerSecret) throws CredentialStoreException
+    public AccessCredential putAccesssCredential(String consumerKey, String consumerSecret) throws CredentialStoreException
     {
         String oldSecret = consumerRegistry.put(consumerKey, consumerSecret);
         return new OAuthAccessCredential(oldSecret, null);

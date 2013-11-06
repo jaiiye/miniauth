@@ -6,8 +6,10 @@ import org.miniauth.MiniAuthException;
 import org.miniauth.common.OutgoingRequest;
 import org.miniauth.credential.AccessCredential;
 import org.miniauth.credential.AccessIdentity;
+import org.miniauth.exception.CredentialStoreException;
 import org.miniauth.exception.InvalidCredentialException;
 import org.miniauth.oauth.common.OAuthOutgoingRequest;
+import org.miniauth.oauth.credential.OAuthAccessIdentity;
 import org.miniauth.oauth.credential.mapper.OAuthConsumerCredentialMapper;
 import org.miniauth.service.EndorserService;
 
@@ -34,10 +36,18 @@ public class OAuthConsumerEndorserService extends OAuthCredentialService impleme
     {
         return (OAuthConsumerCredentialMapper) getOAuthCredentialMapper();
     }
+    
+    
+    public AccessIdentity getAccessIdentity(String consumerKey)
+    {
+        return new OAuthAccessIdentity(consumerKey, null);
+    }
 
+    
     @Override
     public boolean endorse(OutgoingRequest request) throws MiniAuthException
     {
+        // TBD: This should be the same as getAccessIdentity(request.getConsumerKey())....
         AccessIdentity accessIdentity = ((OAuthOutgoingRequest) request).getAccessIdentity();
         // log.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>> accessIdentity = " + accessIdentity);
 //        AccessCredential accessCredential = getOAuthCredentialMapper().getAccesssCredential(accessIdentity);
