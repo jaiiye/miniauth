@@ -4,11 +4,11 @@
     <property name="classesDir" value="nomaven/build/classes"/>
     <property name="apidocDir" value="nomaven/build/apidoc"/>
     <property name="output" value="nomaven/build/jar"/>
-    <property name="version" value="0.9.5"/>
+    <property name="version" value="0.9.6"/>
 
     <!--  Install these libraries under nomaven/lib (which is not in git repo)  -->
     <property name="httpClientDir" value="nomaven/lib/httpcomponents-client-4.3.1"/>
-    <property name="gaeSdkDir" value="nomaven/lib/appengine-java-sdk-1.8.6"/>
+    <property name="gaeSdkDir" value="nomaven/lib/appengine-java-sdk-1.8.7"/>
 
 	<property environment="myenv" />
 	<path id="tomcat.runtime.lib">
@@ -89,7 +89,7 @@
         <javac srcdir="miniauth-core/src/main/java"
                  destdir="${classesDir}/core"
                  debug="on"
-                 source="1.7"
+                 source="1.6"
                  includeantruntime="false"
         />
     </target>
@@ -98,7 +98,7 @@
                  classpath="${classesDir}/core"
                  destdir="${classesDir}/oauth"
                  debug="on"
-                 source="1.7"
+                 source="1.6"
                  includeantruntime="false"
         />
     </target>
@@ -107,7 +107,7 @@
                  classpath="${classesDir}/core"
                  destdir="${classesDir}/oauth2"
                  debug="on"
-                 source="1.7"
+                 source="1.6"
                  includeantruntime="false"
         />
     </target>
@@ -116,7 +116,7 @@
                  classpath="${classesDir}/core;${classesDir}/oauth"
                  destdir="${classesDir}/web"
                  debug="on"
-                 source="1.7"
+                 source="1.6"
                  includeantruntime="false">
         	<classpath refid="tomcat.runtime.lib"/>
 <!--
@@ -129,7 +129,7 @@
                  classpath="${classesDir}/core;${classesDir}/oauth"
                  destdir="${classesDir}/gae"
                  debug="on"
-                 source="1.7"
+                 source="1.6"
                  includeantruntime="false">
 <!--
         	<classpath refid="google.gaesdk.lib"/>
