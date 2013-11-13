@@ -28,7 +28,7 @@ public final class OAuthConstants
 
     private static final Set<String> sOAuthParams;
     static {
-        sOAuthParams = new HashSet<>();
+        sOAuthParams = new HashSet<String>();
         sOAuthParams.add(PARAM_OAUTH_CONSUMER_KEY);
         sOAuthParams.add(PARAM_OAUTH_TOKEN);
         sOAuthParams.add(PARAM_OAUTH_SIGNATURE);
@@ -42,7 +42,7 @@ public final class OAuthConstants
  
     private static final Set<String> sAllOAuthParams;
     static {
-        sAllOAuthParams = new HashSet<>(sOAuthParams);
+        sAllOAuthParams = new HashSet<String>(sOAuthParams);
         sAllOAuthParams.add(PARAM_REALM);
         // ???
         sAllOAuthParams.add(PARAM_OAUTH_CALLBACK);

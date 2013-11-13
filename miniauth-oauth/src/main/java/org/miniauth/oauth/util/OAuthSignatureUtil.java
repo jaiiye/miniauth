@@ -46,7 +46,7 @@ public final class OAuthSignatureUtil
         if(authHeader != null && !authHeader.isEmpty()) {
             params = authHeader;
         } else if(requestParams != null && requestParams.containsKey(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD) ) {
-            params = new HashMap<>();
+            params = new HashMap<String,String>();
             for(String q : requestParams.keySet()) {
                 if(OAuthConstants.isOAuthParam(q)) {
                     String[] valArr = requestParams.get(q);
@@ -66,19 +66,21 @@ public final class OAuthSignatureUtil
         if(ptType == null) {
             return authHeader;   // ????
         }
-        switch(ptType) {
-        case ParameterTransmissionType.HEADER:
+        // switch(ptType) {
+        // case ParameterTransmissionType.HEADER:
+        if(ptType.equals(ParameterTransmissionType.HEADER)) {
             params = authHeader;
 //            if(containsAnyOAuthParam(formParams) || containsAnyOAuthParam(queryParams)) {
 //                throw new ValidationException("OAuth params found in multiple parameter transmission modes.");
 //            }
-            break;  
-        case ParameterTransmissionType.FORM:
+            // break;  
+        // case ParameterTransmissionType.FORM:
+        } else if(ptType.equals(ParameterTransmissionType.FORM)) {
 //            params = formParams;
 //            if(containsAnyOAuthParam(authHeader) || containsAnyOAuthParam(queryParams)) {
 //                throw new ValidationException("OAuth params found in multiple parameter transmission modes.");
 //            }
-            params = new HashMap<>();
+            params = new HashMap<String,String>();
             for(String k : formParams.keySet()) {
                 if(OAuthConstants.isOAuthParam(k)) {
                     String[] valArr = formParams.get(k);
@@ -88,14 +90,15 @@ public final class OAuthSignatureUtil
                     params.put(k, valArr[0]);
                 }
             }
-            break;  
-        case ParameterTransmissionType.QUERY:
+            // break;  
+        // case ParameterTransmissionType.QUERY:
         // default:  // ???
+        } else if(ptType.equals(ParameterTransmissionType.QUERY)) {
 //            params = queryParams;
 //            if(containsAnyOAuthParam(authHeader) || containsAnyOAuthParam(formParams)) {
 //                throw new ValidationException("OAuth params found in multiple parameter transmission modes.");
 //            }
-            params = new HashMap<>();
+            params = new HashMap<String,String>();
             for(String q : queryParams.keySet()) {
                 if(OAuthConstants.isOAuthParam(q)) {
                     String[] valArr = queryParams.get(q);
@@ -105,7 +108,7 @@ public final class OAuthSignatureUtil
                     params.put(q, valArr[0]);
                 }
             }
-            break;  
+            // break;  
         }
         
         return params;
@@ -312,11 +315,11 @@ public final class OAuthSignatureUtil
     }
     public static Map<String,String[]> mergeRequestParameters(Map<String,String> authHeader, Map<String,String[]> formParams, Map<String,String[]> queryParams) throws MiniAuthException
     {
-        Map<String,List<String>> paramMap = new HashMap<>();
+        Map<String,List<String>> paramMap = new HashMap<String,List<String>>();
         if(authHeader != null) {
             for(String key : authHeader.keySet()) {
                 String value = authHeader.get(key);
-                List<String> valueList = new ArrayList<>();
+                List<String> valueList = new ArrayList<String>();
                 valueList.add(value);
                 paramMap.put(key, valueList);
             }
@@ -326,7 +329,7 @@ public final class OAuthSignatureUtil
                 String[] values = formParams.get(key);
                 List<String> valueList = paramMap.get(key);
                 if(valueList == null) {
-                    valueList = new ArrayList<>();
+                    valueList = new ArrayList<String>();
                     paramMap.put(key, valueList);
                 }
                 // valueList.addAll(Arrays.asList(values));
@@ -340,7 +343,7 @@ public final class OAuthSignatureUtil
                 String[] values = queryParams.get(key);
                 List<String> valueList = paramMap.get(key);
                 if(valueList == null) {
-                    valueList = new ArrayList<>();
+                    valueList = new ArrayList<String>();
                     paramMap.put(key, valueList);
                 }
                 // valueList.addAll(Arrays.asList(values));

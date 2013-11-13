@@ -47,7 +47,7 @@ public final class FormParamUtil
     {
         String[] pairs = formBody.split("&");
         
-        Map<String,String[]> paramMap = new HashMap<>();
+        Map<String,String[]> paramMap = new HashMap<String,String[]>();
         try {
             for(String p : pairs) {
                 String[] pair = p.split("=", 2);

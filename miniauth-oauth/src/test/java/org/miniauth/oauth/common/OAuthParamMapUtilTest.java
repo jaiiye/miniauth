@@ -35,12 +35,12 @@ public class OAuthParamMapUtilTest
         try {
             OAuthOutgoingRequest request = new OAuthOutgoingRequest();
            
-            Map<String,String> authHeader = new HashMap<>();
+            Map<String,String> authHeader = new HashMap<String,String>();
             authHeader.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, SignatureMethod.HMAC_SHA1);
             authHeader.put(OAuthConstants.PARAM_OAUTH_TOKEN, "_token_1_");
             request.setAuthHeader(authHeader);
            
-            Map<String,String[]> queryParams = new HashMap<>();
+            Map<String,String[]> queryParams = new HashMap<String,String[]>();
             queryParams.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, new String[]{SignatureMethod.PLAINTEXT});
             queryParams.put(OAuthConstants.PARAM_OAUTH_TOKEN, new String[]{"_token_2_"});
             queryParams.put(OAuthConstants.PARAM_OAUTH_CONSUMER_KEY, new String[]{"_consumer_key_2_"});
@@ -71,7 +71,7 @@ public class OAuthParamMapUtilTest
         try {
             OAuthIncomingRequest request = new OAuthIncomingRequest();
            
-            Map<String,String> authHeader = new HashMap<>();
+            Map<String,String> authHeader = new HashMap<String,String>();
             authHeader.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, SignatureMethod.HMAC_SHA1);
             // authHeader.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, SignatureMethod.PLAINTEXT);
             authHeader.put(OAuthConstants.PARAM_OAUTH_TOKEN, "_token_1_");
@@ -81,7 +81,7 @@ public class OAuthParamMapUtilTest
             authHeader.put(OAuthConstants.PARAM_OAUTH_NONCE, NonceGenerator.generateRandomNonce());
             request.setAuthHeader(authHeader);
            
-            Map<String,String[]> queryParams = new HashMap<>();
+            Map<String,String[]> queryParams = new HashMap<String,String[]>();
             queryParams.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, new String[]{SignatureMethod.PLAINTEXT});
             queryParams.put(OAuthConstants.PARAM_OAUTH_TOKEN, new String[]{"_token_2_"});
             queryParams.put(OAuthConstants.PARAM_OAUTH_CONSUMER_KEY, new String[]{"_consumer_key_2_"});

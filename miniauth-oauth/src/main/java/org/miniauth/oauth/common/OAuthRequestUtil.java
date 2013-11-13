@@ -23,7 +23,7 @@ public final class OAuthRequestUtil
         }
         Map<String,Object> oauthParams = oauthParamMap.toReadOnlyMap();
         if(authHeader == null) {
-            authHeader = new HashMap<>();
+            authHeader = new HashMap<String,String>();
         }
         for(String key : oauthParams.keySet()) {
             Object obj = oauthParams.get(key);
@@ -45,7 +45,7 @@ public final class OAuthRequestUtil
         }
         Map<String,Object> oauthParams = oauthParamMap.toReadOnlyMap();
         if(params == null) {
-            params = new HashMap<>();
+            params = new HashMap<String,String[]>();
         }
         for(String key : oauthParams.keySet()) {
             Object obj = oauthParams.get(key);

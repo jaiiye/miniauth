@@ -129,7 +129,7 @@ public final class AuthHeaderUtil
         String paramString = authHeader;
         String[] pairs = paramString.split(SEPARATER);
           
-        Map<String,String> paramMap = new HashMap<>();
+        Map<String,String> paramMap = new HashMap<String,String>();
         try {
             for(String p : pairs) {
                 String[] pair = p.split("=", 2);

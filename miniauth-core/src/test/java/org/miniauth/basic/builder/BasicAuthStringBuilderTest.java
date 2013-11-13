@@ -32,7 +32,7 @@ public class BasicAuthStringBuilderTest
     {
         String uname = "Aladdin";
         String pword = "open sesame";
-        Map<String,String> authCredential = new HashMap<>();
+        Map<String,String> authCredential = new HashMap<String,String>();
         authCredential.put(AuthCredentialConstants.USERNAME, uname);
         authCredential.put(AuthCredentialConstants.PASSWORD, pword);
         

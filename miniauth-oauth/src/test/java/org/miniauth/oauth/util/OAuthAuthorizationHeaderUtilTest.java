@@ -28,7 +28,7 @@ public class OAuthAuthorizationHeaderUtilTest
     @Test
     public void testBuildOAuthAuthorizationValueString()
     {
-        Map<String,String> params = new LinkedHashMap<>();  // for tracing, params are ordered...
+        Map<String,String> params = new LinkedHashMap<String,String>();  // for tracing, params are ordered...
         params.put(OAuthConstants.PARAM_OAUTH_CONSUMER_KEY, null);
         params.put(OAuthConstants.PARAM_OAUTH_SIGNATURE, "");
         params.put(OAuthConstants.PARAM_OAUTH_TOKEN, "x#y?z");

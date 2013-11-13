@@ -127,19 +127,22 @@ public class OAuthSingleConsumerURLConnectionAuthHandler extends OAuthAuthHandle
         
         
         String transmissionType = outgoingRequest.getAuthParamTransmissionType();
-        switch(transmissionType) {
-        case ParameterTransmissionType.HEADER:
+        // switch(transmissionType) {
+        // case ParameterTransmissionType.HEADER:
+        if(ParameterTransmissionType.HEADER.equals(transmissionType)) {
             String authHeaderStr = outgoingRequest.getAuthHeaderAuthorizationString();
             conn.setRequestProperty("Authorization", authHeaderStr);
-            break;
-        case ParameterTransmissionType.QUERY:
+            // break;
+        // case ParameterTransmissionType.QUERY:
+        } else if(ParameterTransmissionType.QUERY.equals(transmissionType)) {
             // ????
 //            String newQueryString = request.getQueryParamString();
 //            URL newURL = BaseURIInfo.createURL(baseURI, newQueryString);
 //            conn.setURL(newURL);   // ?????
 //            break;
             throw new InvalidInputException("Query string cannot be used to include the OAuth signature. ");
-        case ParameterTransmissionType.FORM:
+        // case ParameterTransmissionType.FORM:
+        } else if(ParameterTransmissionType.FORM.equals(transmissionType)) {
             // Does this really make sense??
             conn.setRequestMethod(HttpMethod.POST);
             conn.setDoOutput(true);   // This works with POST/PUT but not with GET....
@@ -150,8 +153,9 @@ public class OAuthSingleConsumerURLConnectionAuthHandler extends OAuthAuthHandle
             OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
             out.write(formBody);
             // ...
-            break;
-        default:
+            // break;
+        // default:
+        } else {
             throw new InternalErrorException("Not supported/implemented transmissionType: " + transmissionType);
         }
 

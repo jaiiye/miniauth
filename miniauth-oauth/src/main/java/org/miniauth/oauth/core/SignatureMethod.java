@@ -29,7 +29,7 @@ public final class SignatureMethod
     // ????
     private static Map<String,String> algorithmName;
     static {
-        algorithmName = new HashMap<>();
+        algorithmName = new HashMap<String,String>();
         algorithmName.put(HMAC_SHA1, CryptoAlgorithm.HMAC_SHA1_ALGORITHM);
         algorithmName.put(RSA_SHA1, CryptoAlgorithm.RSA_SHA1_ALGORITHM);
         algorithmName.put(PLAINTEXT, null);  // ????

@@ -34,7 +34,7 @@ public final class OAuthConsumerCredential implements ConsumerCredential, Serial
     @Override
     public Map<String,String> toReadOnlyMap()
     {
-        Map<String,String> map = new HashMap<>();
+        Map<String,String> map = new HashMap<String,String>();
         map.put(AuthCredentialConstants.CONSUMER_KEY, this.consumerKey);
         map.put(AuthCredentialConstants.CONSUMER_SECRET, this.consumerSecret);
         return map;

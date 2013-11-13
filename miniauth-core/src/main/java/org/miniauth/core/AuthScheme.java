@@ -32,10 +32,15 @@ public final class AuthScheme
      */
     public static String getAuthorizationHeaderAuthScheme(String authScheme)
     {
-        switch(authScheme) {
-        case OAUTH2:
+//        switch(authScheme) {
+//        case OAUTH2:
+//            return TOKEN_TYPE_BEARER;
+//        default:
+//            return authScheme;
+//        }
+        if(OAUTH2.equals(authScheme)) {
             return TOKEN_TYPE_BEARER;
-        default:
+        } else {
             return authScheme;
         }
     }
@@ -47,10 +52,15 @@ public final class AuthScheme
      */
     public static String getAuthSchemeFromAuthorizationHeaderAuthScheme(String authorizationHeaderAuthScheme)
     {
-        switch(authorizationHeaderAuthScheme) {
-        case TOKEN_TYPE_BEARER:
+//        switch(authorizationHeaderAuthScheme) {
+//        case TOKEN_TYPE_BEARER:
+//            return OAUTH2;
+//        default:
+//            return authorizationHeaderAuthScheme;
+//        }
+        if(TOKEN_TYPE_BEARER.equals(authorizationHeaderAuthScheme)) {
             return OAUTH2;
-        default:
+        } else {
             return authorizationHeaderAuthScheme;
         }
     }

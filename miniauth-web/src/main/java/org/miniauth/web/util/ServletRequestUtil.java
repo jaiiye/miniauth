@@ -52,21 +52,37 @@ public final class ServletRequestUtil
     // Note: formParams "+" queryParams == requestParams.
     public static Map<String,String[]> getRequestParams(HttpServletRequest request) throws MiniAuthException
     {
-        Map<String,String[]> requestParams = new HashMap<>(request.getParameterMap());
+        Map<String,String[]> requestParams = new HashMap<String,String[]>(request.getParameterMap());
         if(log.isLoggable(Level.FINER)) log.finer("requestParams = " + requestParams);
         return requestParams;        
     }
     
+    // TBD
     public static String readFormBody(HttpServletRequest request) throws IOException 
     {
         StringBuilder sb = new StringBuilder();
         InputStream inputStream = request.getInputStream();
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            if (inputStream != null) {
+//        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+//            if (inputStream != null) {
+//                char[] charBuffer = new char[512];
+//                int bytesRead = -1;
+//                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+//                    sb.append(charBuffer, 0, bytesRead);
+//                }
+//            }
+//        }
+        if (inputStream != null) {
+            BufferedReader bufferedReader = null;
+            try {
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 char[] charBuffer = new char[512];
                 int bytesRead = -1;
                 while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
                     sb.append(charBuffer, 0, bytesRead);
+                }
+            } finally {
+                if(bufferedReader != null) {
+                    bufferedReader.close();
                 }
             }
         }

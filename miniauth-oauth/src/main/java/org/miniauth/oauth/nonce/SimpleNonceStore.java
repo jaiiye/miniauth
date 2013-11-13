@@ -46,7 +46,7 @@ public class SimpleNonceStore implements NonceStore, Serializable
     public SimpleNonceStore(int maxAge)
     {
         this.maxAge = maxAge;
-        nonceMap = new HashMap<>();
+        nonceMap = new HashMap<String, Integer>();
     }
 
     public int getMaxAge()

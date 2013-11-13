@@ -39,7 +39,8 @@ public class HmacSHA1SignatureAlgorithm extends AbstractSignatureAlgorithm imple
     
             // base64-encode the hmac
             signature = Base64Util.encodeBase64(rawHmac);
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException e) {
+        // } catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException e) {
+        } catch (Exception e) {
             throw new AuthSignatureException("Failed to generate HMAC.", e);
         }
         return signature;

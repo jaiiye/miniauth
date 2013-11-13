@@ -28,7 +28,7 @@ public final class OAuthParamUtil
     
     public static Map<String,String> buildNewOAuthHeaderMap(Map<String, String> authCredential)
     {
-        Map<String,String> authHeader = new HashMap<>();
+        Map<String,String> authHeader = new HashMap<String,String>();
         
         authHeader.put(OAuthConstants.PARAM_OAUTH_VERSION, OAuthConstants.OAUTH_VERSION_STRING);
         authHeader.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, SignatureMethod.HMAC_SHA1);

@@ -34,7 +34,7 @@ public final class OAuthTokenCredential implements TokenCredential, Serializable
     @Override
     public Map<String,String> toReadOnlyMap()
     {
-        Map<String,String> map = new HashMap<>();
+        Map<String,String> map = new HashMap<String,String>();
         map.put(AuthCredentialConstants.ACCESS_TOKEN, this.accessToken);
         map.put(AuthCredentialConstants.TOKEN_SECRET, this.tokenSecret);
         return map;

@@ -20,7 +20,7 @@ public final class OAuthLocalCredentialMapper extends AbstractOAuthCredentialMap
     // TBD:
     // this is just a temporary implementation.
     // the credential should come from persistent storage such as config/DB, etc.
-    private final Map<String,Map<String,String>> superRegistry = new HashMap<>();
+    private final Map<String,Map<String,String>> superRegistry = new HashMap<String,Map<String,String>>();
 
     private OAuthLocalCredentialMapper()
     {
@@ -61,7 +61,7 @@ public final class OAuthLocalCredentialMapper extends AbstractOAuthCredentialMap
     {
         Map<String,String> credentialRegistry = null;
         if(! superRegistry.containsKey(credentialType)) {
-            credentialRegistry = new HashMap<>();
+            credentialRegistry = new HashMap<String,String>();
             superRegistry.put(credentialType, credentialRegistry);
         } else {
             credentialRegistry = superRegistry.get(credentialType);

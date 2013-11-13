@@ -57,7 +57,7 @@ public class URLConnectionAuthHandlerTest
             String httpMethod = HttpMethod.GET;
             String baseUri = "http://www.miniauth.org/";
     
-            Map<String,String> authHeader = new HashMap<>();
+            Map<String,String> authHeader = new HashMap<String,String>();
             authHeader.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, SignatureMethod.HMAC_SHA1);
             // authHeader.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, SignatureMethod.PLAINTEXT);
             authHeader.put(OAuthConstants.PARAM_OAUTH_TOKEN, "_token_1_");
@@ -90,7 +90,8 @@ public class URLConnectionAuthHandlerTest
             System.out.println("signature = " + signature);
             // assertEquals("axSB2dUOB+yEHFnktb2ZN8fW+qo=", signature);
             
-        } catch (MiniAuthException | IOException e) {
+        // } catch (MiniAuthException | IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

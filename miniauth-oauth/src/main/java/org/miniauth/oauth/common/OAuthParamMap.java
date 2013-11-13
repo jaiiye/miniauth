@@ -80,7 +80,7 @@ public final class OAuthParamMap implements Serializable
 //                this.paramMap = (Map<String, Object>) paramMap;
 //            }
 //        }
-        this.paramMap = new HashMap<>();
+        this.paramMap = new HashMap<String,Object>();
         updateParams(paramMap, copyOAuthParamOnly);
 //        if(paramMap != null) {
 //            if(copyOAuthParamOnly) {
@@ -193,7 +193,7 @@ public final class OAuthParamMap implements Serializable
         // This is not exactly "read only" in general since the caller can change the object referenced by the value.
         // But, in this case, the value "object" is only string or integer...
         // So, in effect, it's readonly....
-        return new HashMap<>(this.paramMap);
+        return new HashMap<String,Object>(this.paramMap);
     }
 
     

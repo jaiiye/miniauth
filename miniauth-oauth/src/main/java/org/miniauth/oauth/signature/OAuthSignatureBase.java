@@ -136,7 +136,7 @@ public abstract class OAuthSignatureBase implements Serializable
         boolean oauthParamFoundInHeader = false;
         Map<String,List<String>> paramMap = null;
         if(authHeader != null) {
-            paramMap = new HashMap<>();
+            paramMap = new HashMap<String,List<String>>();
             for(String h : authHeader.keySet()) {
                 if(OAuthConstants.isOAuthParam(h)) {
                     oauthParamFoundInHeader = true;
@@ -148,7 +148,7 @@ public abstract class OAuthSignatureBase implements Serializable
                 String value = authHeader.get(h);
                 List<String> encodedList = null;
                 if(value != null) {
-                    encodedList = new ArrayList<>();
+                    encodedList = new ArrayList<String>();
                     String encodedValue = PercentEncoder.encode(value);
                     encodedList.add(encodedValue);
                 }
@@ -158,7 +158,7 @@ public abstract class OAuthSignatureBase implements Serializable
         boolean oauthParamFoundInForm = false;
         if(formParams != null) {
             if(paramMap == null) {
-                paramMap = new HashMap<>();
+                paramMap = new HashMap<String,List<String>>();
             }
             for(String k : formParams.keySet()) {
                 if(OAuthConstants.isOAuthParam(k)) {
@@ -181,7 +181,7 @@ public abstract class OAuthSignatureBase implements Serializable
                 String[] values = formParams.get(k);
                 List<String> encodedList = null;
                 if(values != null) {
-                    encodedList = new ArrayList<>();
+                    encodedList = new ArrayList<String>();
                     for(String v : values) {
                         String encodedValue = PercentEncoder.encode(v);
                         encodedList.add(encodedValue);
@@ -192,7 +192,7 @@ public abstract class OAuthSignatureBase implements Serializable
         }
         if(queryParams != null) {
             if(paramMap == null) {
-                paramMap = new HashMap<>();
+                paramMap = new HashMap<String,List<String>>();
             }
             for(String q : queryParams.keySet()) {
                 if(OAuthConstants.isOAuthParam(q)) {
@@ -210,7 +210,7 @@ public abstract class OAuthSignatureBase implements Serializable
                 String[] values = queryParams.get(q);
                 if(values != null) {
                     if(encodedList == null) {
-                        encodedList = new ArrayList<>();
+                        encodedList = new ArrayList<String>();
                         paramMap.put(encodedKey, encodedList);
                     }
                     for(String v : values) {
@@ -236,7 +236,7 @@ public abstract class OAuthSignatureBase implements Serializable
         boolean oauthParamFoundInHeader = false;
         Map<String,List<String>> paramMap = null;
         if(authHeader != null) {
-            paramMap = new HashMap<>();
+            paramMap = new HashMap<String,List<String>>();
             for(String h : authHeader.keySet()) {
                 if(OAuthConstants.isOAuthParam(h)) {
                     oauthParamFoundInHeader = true;
@@ -248,7 +248,7 @@ public abstract class OAuthSignatureBase implements Serializable
                 String value = authHeader.get(h);
                 List<String> encodedList = null;
                 if(value != null) {
-                    encodedList = new ArrayList<>();
+                    encodedList = new ArrayList<String>();
                     String encodedValue = PercentEncoder.encode(value);
                     encodedList.add(encodedValue);
                 }
@@ -257,7 +257,7 @@ public abstract class OAuthSignatureBase implements Serializable
         }
         if(requestParams != null) {
             if(paramMap == null) {
-                paramMap = new HashMap<>();
+                paramMap = new HashMap<String,List<String>>();
             }
             for(String q : requestParams.keySet()) {
                 if(OAuthConstants.isOAuthParam(q)) {
@@ -275,7 +275,7 @@ public abstract class OAuthSignatureBase implements Serializable
                 String[] values = requestParams.get(q);
                 if(values != null) {
                     if(encodedList == null) {
-                        encodedList = new ArrayList<>();
+                        encodedList = new ArrayList<String>();
                         paramMap.put(encodedKey, encodedList);
                     }
                     for(String v : values) {

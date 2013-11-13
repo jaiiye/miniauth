@@ -40,12 +40,15 @@ public class OAuthSignatureAlgorithmFactory
         if(! SignatureMethod.isValid(signatureMethod)) {
             return null;
         }
-        switch(signatureMethod) {
-        case SignatureMethod.HMAC_SHA1:
+        // switch(signatureMethod) {
+        // case SignatureMethod.HMAC_SHA1:
+        if(signatureMethod.equals(SignatureMethod.HMAC_SHA1)) {
             return sHmacSHA1OAuthSignatureAlgorithm;
-        case SignatureMethod.RSA_SHA1:
+        // case SignatureMethod.RSA_SHA1:
+        } else if(signatureMethod.equals(SignatureMethod.RSA_SHA1)) {
             return sRsaSHA1OAuthSignatureAlgorithm;
-        case SignatureMethod.PLAINTEXT:
+        // case SignatureMethod.PLAINTEXT:
+        } else if(signatureMethod.equals(SignatureMethod.PLAINTEXT)) {
             return sPlainTextOAuthSignatureAlgorithm;
         }
         return null;

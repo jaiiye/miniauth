@@ -29,7 +29,7 @@ public final class NonceStorePool
     // identity: arbitrary identifier....
     private NonceStorePool()
     {
-        nonceStoreMap = new HashMap<>();
+        nonceStoreMap = new HashMap<AccessIdentity, NonceStore>();
     }
 
     // Initialization-on-demand holder.

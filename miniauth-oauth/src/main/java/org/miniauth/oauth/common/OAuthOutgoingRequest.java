@@ -186,20 +186,24 @@ public class OAuthOutgoingRequest extends OutgoingRequest
     // It's sort of the reverse of buildOAuthParamMap().
     private void refreshHeadersAndParams() throws MiniAuthException
     {
-        switch(authParamTransmissionType) {
-        case ParameterTransmissionType.HEADER:
+        // switch(authParamTransmissionType) {
+        // case ParameterTransmissionType.HEADER:
+        if(ParameterTransmissionType.HEADER.equals(authParamTransmissionType)) {
             Map<String,String> newAuthHeader = OAuthRequestUtil.updateOAuthHeaderWithOAuthParamMap(getAuthHeader(), oauthParamMap);
             setAuthHeader(newAuthHeader);
-            break;
-        case ParameterTransmissionType.FORM:
+            // break;
+        // case ParameterTransmissionType.FORM:
+        } else if(ParameterTransmissionType.FORM.equals(authParamTransmissionType)) {
             Map<String,String[]> newFormParams = OAuthRequestUtil.updateParamsWithOAuthParamMap(getFormParams(), oauthParamMap);
             setFormParams(newFormParams);
-            break;
-        case ParameterTransmissionType.QUERY:
+            // break;
+        // case ParameterTransmissionType.QUERY:
+        } else if(ParameterTransmissionType.QUERY.equals(authParamTransmissionType)) {        
             Map<String,String[]> newQueryParams = OAuthRequestUtil.updateParamsWithOAuthParamMap(getQueryParams(), oauthParamMap);
             setQueryParams(newQueryParams);
-            break;
-        default:
+            // break;
+        // default:
+        } else {
             // ??? This should not happen...
             throw new InternalErrorException("Invalid authParamTransmissionType: " + authParamTransmissionType);
         }

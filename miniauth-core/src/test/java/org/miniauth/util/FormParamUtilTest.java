@@ -25,7 +25,7 @@ public class FormParamUtilTest
     @Test
     public void testBuildUrlEncodedFormParamString()
     {
-        Map<String,String[]> params = new LinkedHashMap<>();  // for tracing, params are ordered...
+        Map<String,String[]> params = new LinkedHashMap<String,String[]>();  // for tracing, params are ordered...
         params.put("a?b", new String[]{"x#y"});
         params.put("c-", null);
         params.put("d=", new String[]{});

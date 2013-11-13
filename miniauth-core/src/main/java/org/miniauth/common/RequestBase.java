@@ -74,7 +74,7 @@ public abstract class RequestBase implements Serializable
             }
             Map<String,String> requestAuthHeader = request.getAuthHeader();
             if(requestAuthHeader != null) {
-                this.authHeader = new HashMap<>();
+                this.authHeader = new HashMap<String,String>();
                 for(String k : requestAuthHeader.keySet()) {
                     String v = requestAuthHeader.get(k);
                     this.authHeader.put(k, v);
@@ -82,7 +82,7 @@ public abstract class RequestBase implements Serializable
             }
             Map<String,String[]> requestFormParams = request.getFormParams();
             if(requestFormParams != null) {
-                this.formParams = new HashMap<>();
+                this.formParams = new HashMap<String,String[]>();
                 for(String k : requestFormParams.keySet()) {
                     String[] values = requestFormParams.get(k);
                     String[] vs = null;
@@ -98,7 +98,7 @@ public abstract class RequestBase implements Serializable
             }
             Map<String,String[]> requestQueryParams = request.getQueryParams();
             if(requestQueryParams != null) {
-                this.queryParams = new HashMap<>();
+                this.queryParams = new HashMap<String,String[]>();
                 for(String k : requestQueryParams.keySet()) {
                     String[] values = requestQueryParams.get(k);
                     String[] vs = null;
@@ -259,7 +259,7 @@ public abstract class RequestBase implements Serializable
     protected RequestBase addAuthHeaderParam(String key, String value) throws MiniAuthException
     {
         if(this.authHeader == null) {
-            this.authHeader = new HashMap<>();
+            this.authHeader = new HashMap<String,String>();
         }
         this.authHeader.put(key, value);
         return this;
@@ -293,7 +293,7 @@ public abstract class RequestBase implements Serializable
     protected RequestBase addFormParams(Map<String, String[]> formParams) throws MiniAuthException
     {
         if(this.formParams == null) {
-            this.formParams = new HashMap<>(formParams);
+            this.formParams = new HashMap<String,String[]>(formParams);
         } else {
             this.formParams.putAll(formParams);
         }
@@ -302,7 +302,7 @@ public abstract class RequestBase implements Serializable
     protected RequestBase addFormParam(String key, String value) throws MiniAuthException
     {
         if(this.formParams == null) {
-            this.formParams = new HashMap<>();
+            this.formParams = new HashMap<String,String[]>();
         }
         String[] values = this.formParams.get(key);
         if(values == null || values.length == 0) {
@@ -344,7 +344,7 @@ public abstract class RequestBase implements Serializable
     protected RequestBase addQueryParams(Map<String, String[]> queryParams) throws MiniAuthException
     {
         if(this.queryParams == null) {
-            this.queryParams = new HashMap<>(queryParams);
+            this.queryParams = new HashMap<String,String[]>(queryParams);
         } else {
             this.queryParams.putAll(queryParams);
         }
@@ -353,7 +353,7 @@ public abstract class RequestBase implements Serializable
     protected RequestBase addQueryParam(String key, String value) throws MiniAuthException
     {
         if(this.queryParams == null) {
-            this.queryParams = new HashMap<>();
+            this.queryParams = new HashMap<String,String[]>();
         }
         String[] values = this.queryParams.get(key);
         if(values == null || values.length == 0) {

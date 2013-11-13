@@ -39,7 +39,7 @@ public class OAuthRequestEndorserTest
             String httpMethod = HttpMethod.GET;
             String baseUri = "http://www.example.com:80/a/b";
     
-            Map<String,String> authHeader = new HashMap<>();
+            Map<String,String> authHeader = new HashMap<String,String>();
             authHeader.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, SignatureMethod.HMAC_SHA1);
             // authHeader.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, SignatureMethod.PLAINTEXT);
             authHeader.put(OAuthConstants.PARAM_OAUTH_TOKEN, "_token_1_");

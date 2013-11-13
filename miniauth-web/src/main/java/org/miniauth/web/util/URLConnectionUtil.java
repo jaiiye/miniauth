@@ -62,7 +62,7 @@ public final class URLConnectionUtil
         if(queryParams == null && formParams == null) {
             return null;
         }
-        Map<String,String[]> requestParams = new HashMap<>();
+        Map<String,String[]> requestParams = new HashMap<String,String[]>();
         if(formParams != null) {
             requestParams.putAll(formParams);
         }
@@ -79,12 +79,27 @@ public final class URLConnectionUtil
     {
         StringBuilder sb = new StringBuilder();
         InputStream inputStream = conn.getInputStream();
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            if (inputStream != null) {
+//        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+//            if (inputStream != null) {
+//                char[] charBuffer = new char[512];
+//                int bytesRead = -1;
+//                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+//                    sb.append(charBuffer, 0, bytesRead);
+//                }
+//            }
+//        }
+        if (inputStream != null) {
+            BufferedReader bufferedReader = null;
+            try {
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 char[] charBuffer = new char[512];
                 int bytesRead = -1;
                 while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
                     sb.append(charBuffer, 0, bytesRead);
+                }
+            } finally {
+                if(bufferedReader != null) {
+                    bufferedReader.close();
                 }
             }
         }

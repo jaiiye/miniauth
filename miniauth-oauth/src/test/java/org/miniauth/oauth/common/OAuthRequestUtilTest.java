@@ -29,7 +29,7 @@ public class OAuthRequestUtilTest
     @Test
     public void testUpdateOAuthHeaderWithOAuthParamMap()
     {
-        Map<String,String> authHeader = new HashMap<>();
+        Map<String,String> authHeader = new HashMap<String,String>();
         authHeader.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, SignatureMethod.HMAC_SHA1);
         authHeader.put(OAuthConstants.PARAM_OAUTH_TOKEN, "_token_");
         int oldCnt = authHeader.size();
@@ -51,7 +51,7 @@ public class OAuthRequestUtilTest
     @Test
     public void testUpdateParamsWithOAuthParamMap()
     {
-        Map<String,String[]> queryParams = new HashMap<>();
+        Map<String,String[]> queryParams = new HashMap<String,String[]>();
         queryParams.put(OAuthConstants.PARAM_OAUTH_SIGNATURE_METHOD, new String[]{SignatureMethod.HMAC_SHA1});
         queryParams.put(OAuthConstants.PARAM_OAUTH_TOKEN, new String[]{"_token_"});
         int oldCnt = queryParams.size();

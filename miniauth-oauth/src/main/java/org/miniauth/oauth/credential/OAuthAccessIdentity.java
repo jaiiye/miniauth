@@ -34,7 +34,7 @@ public final class OAuthAccessIdentity implements AccessIdentity, Serializable
     @Override
     public Map<String,String> toReadOnlyMap()
     {
-        Map<String,String> map = new HashMap<>();
+        Map<String,String> map = new HashMap<String,String>();
         map.put(AuthCredentialConstants.CONSUMER_KEY, this.consumerKey);
         map.put(AuthCredentialConstants.ACCESS_TOKEN, this.accessToken);
         return map;

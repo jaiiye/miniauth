@@ -26,7 +26,7 @@ public class OAuthLocalTokenCredentialMapper extends AbstractOAuthCredentialMapp
     // TBD:
     // this is just a temporary implementation.
     // the credential should come from persistent storage such as config/DB, etc.
-    private final Map<String,String> tokenRegistry = new HashMap<>();
+    private final Map<String,String> tokenRegistry = new HashMap<String,String>();
     
     // Consumer credential is hard-coded.
     private String consumerKey = null;

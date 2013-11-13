@@ -53,7 +53,7 @@ public class OAuthSignatureGeneratorTest
         String consumerKey = "9djdj82h48djs9d2";
         String accessToken = "kkk9d7dh3k39sjv7";
 
-        Map<String,String> authHeader = new HashMap<>();
+        Map<String,String> authHeader = new HashMap<String,String>();
         authHeader.put("oauth_consumer_key", consumerKey);
         authHeader.put("oauth_token", accessToken);
         authHeader.put("oauth_signature_method", "HMAC-SHA1");
@@ -62,18 +62,18 @@ public class OAuthSignatureGeneratorTest
         authHeader.put("realm", "Example");
         authHeader.put("oauth_signature", "should not be included in the signature base string");
         
-        Map<String,String[]> formParams = new HashMap<>();
+        Map<String,String[]> formParams = new HashMap<String,String[]>();
         formParams.put("c2", new String[]{});
         formParams.put("a3", new String[]{"2 q"});
 
-        Map<String,String[]> queryParams = new HashMap<>();
+        Map<String,String[]> queryParams = new HashMap<String,String[]>();
         queryParams.put("b5", new String[]{"=%3D"});
         // queryParams.put("a3", new String[]{"a"});
         queryParams.put("c@", new String[]{});
         queryParams.put("a2", new String[]{"r b"});
         
         // AccessCredential credential = new OAuthAccessCredential("_consumer_secret_", "_token_secret_");
-        Map<String,String> credential = new HashMap<>();
+        Map<String,String> credential = new HashMap<String,String>();
         credential.put(AuthCredentialConstants.CONSUMER_SECRET, "_consumer_secret_");
         credential.put(AuthCredentialConstants.TOKEN_SECRET, "_token_secret_");
         try {
@@ -98,7 +98,7 @@ public class OAuthSignatureGeneratorTest
         String path = "/a/b";
         BaseURIInfo uriInfo = new BaseURIInfo(uriScheme, userInfo, host, port, path);
 
-        Map<String,String> authHeader = new HashMap<>();
+        Map<String,String> authHeader = new HashMap<String,String>();
         authHeader.put("oauth_consumer_key", "9djdj82h48djs9d2");
         authHeader.put("oauth_token", "kkk9d7dh3k39sjv7");
         authHeader.put("oauth_signature_method", "HMAC-SHA1");
@@ -107,11 +107,11 @@ public class OAuthSignatureGeneratorTest
         authHeader.put("realm", "Example");
         authHeader.put("oauth_signature", "should not be included in the signature base string");
         
-        Map<String,String[]> formParams = new HashMap<>();
+        Map<String,String[]> formParams = new HashMap<String,String[]>();
         formParams.put("c2", new String[]{});
         formParams.put("a3", new String[]{"2 q"});
 
-        Map<String,String[]> queryParams = new HashMap<>();
+        Map<String,String[]> queryParams = new HashMap<String,String[]>();
         queryParams.put("b5", new String[]{"=%3D"});
         // queryParams.put("a3", new String[]{"a"});
         queryParams.put("c@", new String[]{});
@@ -147,7 +147,7 @@ public class OAuthSignatureGeneratorTest
     @Test
     public void testNormalizeRequestParameters()
     {
-        Map<String,String> authHeader = new HashMap<>();
+        Map<String,String> authHeader = new HashMap<String,String>();
         authHeader.put("oauth_consumer_key", "9djdj82h48djs9d2");
         authHeader.put("oauth_token", "kkk9d7dh3k39sjv7");
         authHeader.put("oauth_signature_method", "HMAC-SHA1");
@@ -156,11 +156,11 @@ public class OAuthSignatureGeneratorTest
         authHeader.put("realm", "Example");
         authHeader.put("oauth_signature", "should not be included in the signature base string");
         
-        Map<String,String[]> formParams = new HashMap<>();
+        Map<String,String[]> formParams = new HashMap<String,String[]>();
         formParams.put("c2", new String[]{});
         formParams.put("a3", new String[]{"2 q"});
 
-        Map<String,String[]> queryParams = new HashMap<>();
+        Map<String,String[]> queryParams = new HashMap<String,String[]>();
         queryParams.put("b5", new String[]{"=%3D"});
         // queryParams.put("a3", new String[]{"a"});
         queryParams.put("c@", new String[]{});

@@ -26,7 +26,7 @@ public final class QueryParamUtil
     {
         String[] pairs = queryString.split("&");
         
-        Map<String,String[]> paramMap = new HashMap<>();
+        Map<String,String[]> paramMap = new HashMap<String,String[]>();
         try {
             for(String p : pairs) {
                 String[] pair = p.split("=", 2);

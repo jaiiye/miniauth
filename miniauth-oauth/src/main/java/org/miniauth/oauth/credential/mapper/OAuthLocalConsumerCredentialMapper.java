@@ -21,7 +21,7 @@ public final class OAuthLocalConsumerCredentialMapper extends AbstractOAuthCrede
     // TBD:
     // this is just a temporary implementation.
     // the credential should come from persistent storage such as config/DB, etc.
-    private final Map<String,String> consumerRegistry = new HashMap<>();
+    private final Map<String,String> consumerRegistry = new HashMap<String,String>();
 
 
     private OAuthLocalConsumerCredentialMapper()

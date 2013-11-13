@@ -48,7 +48,7 @@ public class OAuthCredentialPair implements CredentialPair, Serializable
     @Override
     public Map<String,String> toReadOnlyMap()
     {
-        Map<String,String> map = new HashMap<>();
+        Map<String,String> map = new HashMap<String,String>();
         if(this.consumerCredential != null) {
             map.put(AuthCredentialConstants.CONSUMER_KEY, this.consumerCredential.getConsumerKey());
             map.put(AuthCredentialConstants.CONSUMER_SECRET, this.consumerCredential.getConsumerSecret());

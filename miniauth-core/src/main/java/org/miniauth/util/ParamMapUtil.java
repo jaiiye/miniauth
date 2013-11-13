@@ -35,7 +35,7 @@ public final class ParamMapUtil
         if(inputMap == null) {
             return null;
         }
-        Map<String,Object> outputMap = new HashMap<>();
+        Map<String,Object> outputMap = new HashMap<String,Object>();
         for(String key : inputMap.keySet()) {
             String[] vals = inputMap.get(key);
             Object val = null;
@@ -58,7 +58,7 @@ public final class ParamMapUtil
         if(inputMap == null) {
             return null;
         }
-        Map<String,Object> outputMap = new HashMap<>();
+        Map<String,Object> outputMap = new HashMap<String,Object>();
         for(String key : inputMap.keySet()) {
             List<String> vals = inputMap.get(key);
             Object val = null;
@@ -81,7 +81,7 @@ public final class ParamMapUtil
         if(inputMap == null) {
             return null;
         }
-        Map<String,String[]> outputMap = new HashMap<>();
+        Map<String,String[]> outputMap = new HashMap<String,String[]>();
         for(String key : inputMap.keySet()) {
             List<String> vals = inputMap.get(key);
             String[] val = null;
@@ -104,7 +104,7 @@ public final class ParamMapUtil
         if(inputMap == null) {
             return null;
         }
-        Map<String,String[]> outputMap = new HashMap<>();
+        Map<String,String[]> outputMap = new HashMap<String,String[]>();
         for(String key : inputMap.keySet()) {
             Object obj = inputMap.get(key);
             String[] val = null;
@@ -129,7 +129,7 @@ public final class ParamMapUtil
         if(inputMap == null) {
             return null;
         }
-        Map<String,String> outputMap = new HashMap<>();
+        Map<String,String> outputMap = new HashMap<String,String>();
         for(String key : inputMap.keySet()) {
             Object obj = inputMap.get(key);
             String val = null;

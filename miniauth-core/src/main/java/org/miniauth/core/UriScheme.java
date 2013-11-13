@@ -16,7 +16,7 @@ public final class UriScheme
    
     private static final Map<String,Integer> DEFAULT_PORT;
     static {
-        DEFAULT_PORT = new HashMap<>();
+        DEFAULT_PORT = new HashMap<String,Integer>();
         DEFAULT_PORT.put(HTTP, 80);
         DEFAULT_PORT.put(HTTPS, 443);
         // etc.

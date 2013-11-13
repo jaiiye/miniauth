@@ -56,7 +56,7 @@ public class OAuthSignatureVerifierTest
         String consumerKey = "9djdj82h48djs9d2";
         String accessToken = "kkk9d7dh3k39sjv7";
         
-        Map<String,String> authHeader = new HashMap<>();
+        Map<String,String> authHeader = new HashMap<String,String>();
         authHeader.put("oauth_consumer_key", consumerKey);
         authHeader.put("oauth_token", accessToken);
         authHeader.put("oauth_signature_method", "HMAC-SHA1");
@@ -65,11 +65,11 @@ public class OAuthSignatureVerifierTest
         authHeader.put("realm", "Example");
         authHeader.put("oauth_signature", "should not be included in the signature base string");
         
-        Map<String,String[]> formParams = new HashMap<>();
+        Map<String,String[]> formParams = new HashMap<String,String[]>();
         formParams.put("c2", new String[]{});
         formParams.put("a3", new String[]{"2 q"});
 
-        Map<String,String[]> queryParams = new HashMap<>();
+        Map<String,String[]> queryParams = new HashMap<String,String[]>();
         queryParams.put("b5", new String[]{"=%3D"});
         // queryParams.put("a3", new String[]{"a"});
         queryParams.put("c@", new String[]{});
@@ -81,7 +81,7 @@ public class OAuthSignatureVerifierTest
 //        CredentialPair credential = new OAuthCredentialPair(consumerCredential, tokenCredential);
 //        AccessCredential accessCredential = credential.getAccessCredential();
 
-        Map<String,String> accessCredential = new HashMap<>();
+        Map<String,String> accessCredential = new HashMap<String,String>();
         accessCredential.put(AuthCredentialConstants.CONSUMER_KEY, consumerKey);
         accessCredential.put(AuthCredentialConstants.CONSUMER_SECRET, "_consumer_secret_");
         accessCredential.put(AuthCredentialConstants.ACCESS_TOKEN, accessToken);
