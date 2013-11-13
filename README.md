@@ -26,7 +26,7 @@ Otherwise, you can specify the dependency as follows:
   	<dependency>
       <groupId>org.aerysoft.miniauth</groupId>
       <artifactId>miniauth-oauth</artifactId>
-      <version>0.9.4</version>
+      <version>0.9.5</version>
   	</dependency>
 
 
@@ -87,8 +87,7 @@ Please refer to [the Project wiki pages](https://github.com/harrywye/miniauth/wi
 Notes on the Use of JDK7
 ---
 
-`MiniAuth` uses some of the JDK7 features such as "Switch with string values", "Multi-catch block", "Diamond operator", and "Try with resources", etc.
-If you need to use an earlier version of JDK, then you may have to check out the source code and modify some parts.
-You can easily change the JDK version in the main POM file or nomaven ant script. (Look for "1.7" if you are not familiar with Maven or Ant.)
+`MiniAuth` version 0.9.4 or earlier used some of the JDK7 features such as "Switch with strings", "Multi-catch block", "Diamond operator", and "Try with resources", etc.
+Since the version 0.9.5, however, we now support JDK 1.6.
 
 
