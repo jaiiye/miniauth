@@ -8,7 +8,7 @@ What is it?
 ---
 
 `MiniAuth` is a stand-alone Java library for generating / verifying OAuth signatures (for OAuth 1.0a).
-   * It has no dependency on third party libraries other than JDK (JDK7, see the note below).
+   * It has no dependency on third party libraries other than JDK (JDK 1.6, see the note below).
    * It is light weight. It does not include full features of OAuth (like "OAuth dance", etc.). 
    * The core library (core and oauth modules) does not even use _javax.servlet_ packages.
    * The main purpose of the library is
